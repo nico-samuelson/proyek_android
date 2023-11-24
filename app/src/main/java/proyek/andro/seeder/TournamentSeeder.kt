@@ -1,5 +1,6 @@
-import proyek.andro.seeder.GameSeeder
+package proyek.andro.seeder
 
+import proyek.andro.seeder.GameSeeder
 import android.util.Log
 import proyek.andro.model.Game
 import proyek.andro.model.Tournament

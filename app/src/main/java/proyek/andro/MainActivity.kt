@@ -1,15 +1,14 @@
 package proyek.andro
 
-import TournamentSeeder
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import proyek.andro.seeder.GameSeeder
-
+import proyek.andro.seeder.TournamentSeeder
 
 class MainActivity : AppCompatActivity() {
 
-    var runSeeder = true
+    var runSeeder = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
