@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.carousel.MaskableFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginEnd="16dp"
+    android:id="@+id/carousel_container"
+    android:foreground="?attr/selectableItemBackground"
+    app:shapeAppearance="?attr/shapeAppearanceCornerLarge"
+    >
+
+    <ImageView
+        android:id="@+id/carousel_img"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:scaleType="centerCrop"
+        android:transitionName="image"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/carousel_tournament_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#80FFFFFF"
+            android:padding="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/carousel_tournament_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dec 1 - Dec 5, 2023"
+                android:textColor="@color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/carousel_tournament_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textStyle="bold"
+                android:textSize="24sp"
+                android:textColor="@color/white"
+                android:text="Dec 1 - Dec 5, 2023"
+                app:layout_constraintStart_toStartOf="@+id/carousel_tournament_date"
+                app:layout_constraintTop_toBottomOf="@+id/carousel_tournament_date" />
+
+            <TextView
+                android:id="@+id/carousel_game_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Valorant"
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                app:layout_constraintStart_toStartOf="@+id/carousel_tournament_date"
+                app:layout_constraintTop_toBottomOf="@+id/carousel_tournament_name" />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:contentDescription="CTA Button"
+                app:icon="@drawable/worlds_23"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    
+
+
+</com.google.android.material.carousel.MaskableFrameLayout>

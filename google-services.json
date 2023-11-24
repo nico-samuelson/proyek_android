@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "24639617296",
+    "project_id": "xsports-f14bc",
+    "storage_bucket": "xsports-f14bc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:24639617296:android:d61214bb3ad97054c64d95",
+        "android_client_info": {
+          "package_name": "proyek.andro"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6G7BjtzI8IsbPMgyfe5OFX0FNXC4iarc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
