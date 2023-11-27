@@ -1,16 +1,12 @@
 package proyek.andro.model
 
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.firestore
-import java.time.LocalDate
-
 class Tournament : BaseModel {
     lateinit var id : String
-    lateinit var game : Game
+    lateinit var game_id : String
     lateinit var name : String
     lateinit var start_date : String
     lateinit var end_date : String
-    var prize_pool = 0
+    var prize_pool : Long = 0
     lateinit var organizer : String
     lateinit var type : String
     lateinit var location : List<String>
@@ -18,17 +14,17 @@ class Tournament : BaseModel {
     lateinit var description : String
     lateinit var logo : String
     lateinit var banner : String
-    var status = 0
+    var status : Long = 0
 
     constructor() : super("tbTournament") {}
 
     constructor(
         id: String,
-        game: Game,
+        game_id: String,
         name: String,
         start_date: String,
         end_date: String,
-        prize_pool: Int,
+        prize_pool: Long,
         organizer: String,
         type: String,
         location: List<String>,
@@ -36,10 +32,10 @@ class Tournament : BaseModel {
         description: String,
         logo: String,
         banner: String,
-        status: Int
+        status: Long
     ) : super("tbTournament") {
         this.id = id
-        this.game = game
+        this.game_id = game_id
         this.name = name
         this.start_date = start_date
         this.end_date = end_date
@@ -58,7 +54,7 @@ class Tournament : BaseModel {
         val data = HashMap<String, Any>()
 
         data.put("id", id)
-        data.put("game", game.convertToMap())
+        data.put("game_id", game_id)
         data.put("name", name)
         data.put("start_date", start_date)
         data.put("end_date", end_date)
@@ -75,5 +71,3 @@ class Tournament : BaseModel {
         return data
     }
 }
-
-

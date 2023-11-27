@@ -1,6 +1,5 @@
 package proyek.andro.adapter
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +9,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import proyek.andro.R
 import proyek.andro.model.Tournament
+import java.time.LocalDate
+import java.time.format.TextStyle
+import java.util.Locale
 
 class TournamentCarouselAdapter (
     private val context : Context,
-    private val tournaments : ArrayList<Tournament>
+    private val tournaments : ArrayList<Tournament>,
 ) : RecyclerView.Adapter<TournamentCarouselAdapter.ListViewHolder>() {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
@@ -24,10 +26,10 @@ class TournamentCarouselAdapter (
     }
 
     inner class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var _image: ImageView = itemView.findViewById(R.id.carousel_img)
+        var image: ImageView = itemView.findViewById(R.id.carousel_img)
+        val logo : ImageView = itemView.findViewById(R.id.carousel_tournament_logo)
         val name : TextView = itemView.findViewById(R.id.carousel_tournament_name)
         val date : TextView = itemView.findViewById(R.id.carousel_tournament_date)
-        val game : TextView = itemView.findViewById(R.id.carousel_game_name)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
@@ -40,15 +42,23 @@ class TournamentCarouselAdapter (
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        val image = tournaments.get(position).banner
+        val banner = tournaments.get(position).banner
+        val logo = tournaments.get(position).logo
+        val start_date = LocalDate.parse(tournaments.get(position).start_date)
+        val end_date = LocalDate.parse(tournaments.get(position).end_date)
+        val start = start_date.month.getDisplayName(TextStyle.SHORT, Locale.ENGLISH) + " " + start_date.dayOfMonth
+        val end = end_date.month.getDisplayName(TextStyle.SHORT, Locale.ENGLISH) + " " + end_date.dayOfMonth
 
         holder.name.text = tournaments.get(position).name
-        holder.date.text = "${tournaments.get(position).start_date} - ${tournaments.get(position).end_date}"
-        holder.game.text = tournaments.get(position).game.name
-        val imageRes = context.resources.getIdentifier(image, "drawable", context.packageName)
-        holder._image.setImageResource(imageRes)
+        holder.date.text = "${start} - ${end}, ${end_date.year}"
 
-        holder._image.setOnClickListener {
+        val bannerRes = context.resources.getIdentifier(banner, "drawable", context.packageName)
+        val logoRes = context.resources.getIdentifier(logo, "drawable", context.packageName)
+
+        holder.image.setImageResource(bannerRes)
+        holder.logo.setImageResource(logoRes)
+
+        holder.image.setOnClickListener {
             onItemClickCallback.onItemClicked(tournaments.get(position).banner)
         }
     }

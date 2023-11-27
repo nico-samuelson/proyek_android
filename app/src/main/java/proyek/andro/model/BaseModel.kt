@@ -1,68 +1,88 @@
 package proyek.andro.model
 
+import android.util.Log
 import com.google.firebase.Firebase
-import com.google.firebase.firestore.Exclude
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
+import kotlinx.coroutines.tasks.await
 
 abstract class BaseModel(
     val collection : String,
 ) {
     val db = Firebase.firestore
-    @Exclude
-    fun all() : ArrayList<Any> {
-        val data = ArrayList<Any>()
 
-        db.collection(collection).get().addOnSuccessListener { result ->
-            for (document in result) {
-                data.add(document)
+    fun <T> convertToClass(data: Map<String, Any>) : T {
+        val clazz = this::class.java
+        val constructor = clazz.constructors[1]
+
+        val args = constructor.parameters.map { param ->
+            val key = param.name ?: throw IllegalArgumentException("Parameter name not found")
+            val value = data[key]
+            value
+        }.toTypedArray()
+
+        return constructor.newInstance(*args) as T
+    }
+
+    suspend fun <T> get(
+        limit : Int = 10,
+        offset : Int = 0,
+        order : Array<String> = arrayOf("id", "asc")
+    ) : ArrayList<T> {
+
+        val data = ArrayList<T>()
+
+        val res = db.collection(collection)
+            .orderBy(
+                order[0],
+                if (order[1] === "asc") Query.Direction.ASCENDING else Query.Direction.DESCENDING
+            )
+            .limit(limit.toLong())
+            .startAt(offset.toLong())
+            .get()
+            .await()
+
+            res.forEach{result ->
+                data.add(convertToClass(result.data))
             }
-        }
 
         return data
     }
-    @Exclude
-    fun find(id: String) : Any {
-        lateinit var data : Any
 
-        db.collection(collection).whereEqualTo("id", id).get().addOnSuccessListener { result ->
-            for (document in result) {
-                data = document
-            }
-        }
+    suspend fun <T> find(id: String) : T {
+//        var data : T = this::class.java.constructors.get(0).newInstance() as T
+        val result = db.collection(collection)
+            .document(id)
+            .get()
+            .await()
 
-        return data
+        return convertToClass(result.data!!)
     }
 
-    @Exclude
-    fun insert(data: Any) : Int {
+    suspend fun insertOrUpdate() : Int {
         var status = 0
 
-        db.collection(collection).add(data).addOnSuccessListener {
-            status = 1
-        }
+        val classData : HashMap<String, Any> = this::class.java.getDeclaredMethod("convertToMap").invoke(this) as HashMap<String, Any>
+
+        val res = db.collection(collection)
+            .document(classData["id"].toString())
+            .set(classData)
+            .await()
+
+        if (res != null) status = 1
 
         return status
     }
 
-    @Exclude
-    fun update(data: Any, id : String) : Int {
+    suspend fun delete(doc : String) : Int {
         var status = 0
 
-        db.collection(collection).document(id).set(data).addOnSuccessListener {
-            status = 1
-        }
+        val res = db.collection(collection)
+            .document(doc)
+            .delete()
+            .await()
 
-        return status
-    }
-
-    @Exclude
-    fun delete(doc: String) : Int {
-        var status = 0
-
-        db.collection(collection).document(doc).delete().addOnSuccessListener {
-            status = 1
-        }
+        if (res != null) status = 1
 
         return status
     }

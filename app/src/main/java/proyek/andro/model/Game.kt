@@ -1,9 +1,5 @@
 package proyek.andro.model
 
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.firestore
-import java.time.LocalDate
-
 class Game : BaseModel{
     lateinit var id: String
     lateinit var name: String
@@ -12,6 +8,7 @@ class Game : BaseModel{
     lateinit var logo: String
 
     constructor() : super("tbGame") {}
+
     constructor(id : String, name : String, description : String, release_date : String, logo : String) : super("tbGame")
     {
         this.id = id

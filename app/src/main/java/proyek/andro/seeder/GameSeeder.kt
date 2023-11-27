@@ -69,10 +69,10 @@ class GameSeeder() {
         return games
     }
 
-    fun run() {
+    suspend fun run() {
         seed()
         games.forEach {
-            gameModel.insert(it.convertToMap())
+            it.insertOrUpdate()
         }
     }
 }

@@ -1,20 +1,14 @@
 package proyek.andro.seeder
 
-import proyek.andro.seeder.GameSeeder
-import android.util.Log
-import proyek.andro.model.Game
 import proyek.andro.model.Tournament
-import java.time.LocalDate
 
 class TournamentSeeder() {
     val tournaments = ArrayList<Tournament>()
-    val game = GameSeeder().seed()
-    val tournament = Tournament()
 
-    fun run() {
+    suspend fun run() {
         tournaments.add(Tournament(
             "1",
-            game.find { it.id === "1" } as Game,
+            "1",
             "Valorant Champions 2023",
             "2023-08-06",
             "2023-08-26",
@@ -31,7 +25,7 @@ class TournamentSeeder() {
 
         tournaments.add(Tournament(
             "2",
-            game.find { it.id === "2" } as Game,
+            "2",
             "M5 World Championship 2023",
             "2023-11-23",
             "2023-12-17",
@@ -48,7 +42,7 @@ class TournamentSeeder() {
 
         tournaments.add(Tournament(
             "3",
-            game.find { it.id === "3" } as Game,
+            "3",
             "Worlds 2023",
             "2023-10-10",
             "2023-11-19",
@@ -64,7 +58,7 @@ class TournamentSeeder() {
         ))
 
         tournaments.forEach{
-            tournament.insert(it.convertToMap())
+            it.insertOrUpdate()
         }
     }
 }
