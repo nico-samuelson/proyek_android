@@ -6,11 +6,11 @@ class User : BaseModel {
     lateinit var email: String
     lateinit var password: String
     lateinit var phone: String
-    var age = 0
+    var age : Long = 0
 
     constructor() : super("tbUser") {}
 
-    constructor(id : String, name : String, email : String, password : String, phone : String, age : Int) : super("tbUser")
+    constructor(id : String, name : String, email : String, password : String, phone : String, age : Long) : super("tbUser")
     {
         this.id = id
         this.name = name

@@ -6,7 +6,9 @@
     </style>
 
     <style name="Theme.Proyek_android" parent="Theme.Material3.DayNight.NoActionBar" >
-        <item name="colorPrimary">@color/background</item>
+<!--        <item name="colorPrimary">@color/background</item>-->
+        <item name="colorPrimary">@color/white</item>
         <item name="android:windowBackground">@color/background</item>
+        <item name="android:statusBarColor">@color/background</item>
     </style>
 </resources>

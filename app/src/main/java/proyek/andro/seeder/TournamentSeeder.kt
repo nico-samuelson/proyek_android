@@ -1,14 +1,18 @@
 package proyek.andro.seeder
 
+import proyek.andro.model.Game
 import proyek.andro.model.Tournament
+import java.util.UUID
 
 class TournamentSeeder() {
     val tournaments = ArrayList<Tournament>()
 
     suspend fun run() {
+        val games : ArrayList<Game> = Game().get()
+
         tournaments.add(Tournament(
-            "1",
-            "1",
+            UUID.randomUUID().toString(),
+            games.filter { it.name == "Valorant" }.first().id,
             "Valorant Champions 2023",
             "2023-08-06",
             "2023-08-26",
@@ -24,8 +28,8 @@ class TournamentSeeder() {
         ))
 
         tournaments.add(Tournament(
-            "2",
-            "2",
+            UUID.randomUUID().toString(),
+            games.filter { it.name == "Mobile Legends Bang Bang" }.first().id,
             "M5 World Championship 2023",
             "2023-11-23",
             "2023-12-17",
@@ -41,8 +45,8 @@ class TournamentSeeder() {
         ))
 
         tournaments.add(Tournament(
-            "3",
-            "3",
+            UUID.randomUUID().toString(),
+            games.filter { it.name == "League of Legends" }.first().id,
             "Worlds 2023",
             "2023-10-10",
             "2023-11-19",

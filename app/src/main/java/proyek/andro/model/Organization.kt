@@ -9,11 +9,11 @@ class Organization : BaseModel {
     lateinit var location: String
     lateinit var website: String
     lateinit var ceo: String
-    var status = 1
+    var status : Long = 1
 
     constructor() : super("tbOrganization") {}
 
-    constructor(id : String, name : String, description : String, logo : String, founded : String, location : String, website : String, ceo : String, status : Int) : super("tbOrganization")
+    constructor(id : String, name : String, description : String, logo : String, founded : String, location : String, website : String, ceo : String, status : Long) : super("tbOrganization")
     {
         this.id = id
         this.name = name

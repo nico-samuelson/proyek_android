@@ -33,7 +33,7 @@ class TournamentCarouselAdapter (
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-        val view : View = LayoutInflater.from(context).inflate(R.layout.carousel, parent, false)
+        val view : View = LayoutInflater.from(parent.context).inflate(R.layout.carousel, parent, false)
         return ListViewHolder(view)
     }
 

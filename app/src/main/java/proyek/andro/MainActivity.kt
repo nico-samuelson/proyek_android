@@ -7,6 +7,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import proyek.andro.seeder.GameSeeder
 import proyek.andro.seeder.TournamentSeeder
+import proyek.andro.userActivity.UserActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,12 +19,12 @@ class MainActivity : AppCompatActivity() {
         if (runSeeder) {
             runBlocking {
                 launch {
-                    GameSeeder().run()
-                    TournamentSeeder().run()
+//                    GameSeeder().run()
+//                    TournamentSeeder().run()
                 }
             }
         }
 
-        startActivity(Intent(this, Homepage::class.java))
+        startActivity(Intent(this, UserActivity::class.java))
     }
 }

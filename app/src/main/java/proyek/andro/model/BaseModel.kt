@@ -10,6 +10,7 @@ abstract class BaseModel(
     val collection : String,
 ) {
     val db = Firebase.firestore
+    val collectionRef = db.collection(collection)
 
     fun <T> convertToClass(data: Map<String, Any>) : T {
         val clazz = this::class.java
@@ -32,7 +33,7 @@ abstract class BaseModel(
 
         val data = ArrayList<T>()
 
-        val res = db.collection(collection)
+        val res = collectionRef
             .orderBy(
                 order[0],
                 if (order[1] === "asc") Query.Direction.ASCENDING else Query.Direction.DESCENDING
@@ -42,16 +43,16 @@ abstract class BaseModel(
             .get()
             .await()
 
-            res.forEach{result ->
-                data.add(convertToClass(result.data))
-            }
+        res.forEach { result ->
+            data.add(convertToClass(result.data))
+        }
 
         return data
     }
 
     suspend fun <T> find(id: String) : T {
 //        var data : T = this::class.java.constructors.get(0).newInstance() as T
-        val result = db.collection(collection)
+        val result = collectionRef
             .document(id)
             .get()
             .await()
@@ -64,7 +65,7 @@ abstract class BaseModel(
 
         val classData : HashMap<String, Any> = this::class.java.getDeclaredMethod("convertToMap").invoke(this) as HashMap<String, Any>
 
-        val res = db.collection(collection)
+        val res = collectionRef
             .document(classData["id"].toString())
             .set(classData)
             .await()
@@ -77,7 +78,7 @@ abstract class BaseModel(
     suspend fun delete(doc : String) : Int {
         var status = 0
 
-        val res = db.collection(collection)
+        val res = collectionRef
             .document(doc)
             .delete()
             .await()

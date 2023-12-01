@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:itemIconTint="@color/white" >
+    <item
+        android:id="@+id/item_1"
+        android:enabled="true"
+        android:icon="@drawable/ic_home_24"
+        android:iconTint="@color/white"
+        android:title="Home"
+        app:labelVisibilityMode="unlabeled" />
+    <item
+        android:id="@+id/item_2"
+        android:enabled="true"
+        android:icon="@drawable/ic_explore_24"
+        app:itemIconTint="#ffffff"
+        app:itemTextColor="#ffffff"
+        app:labelVisibilityMode="unlabeled"
+        android:title="Explore" />
+    <item
+        android:id="@+id/item_3"
+        android:enabled="true"
+        android:icon="@drawable/ic_newspaper_24"
+        app:itemIconTint="#ffffff"
+        app:itemTextColor="#ffffff"
+        app:labelVisibilityMode="unlabeled"
+        android:title="News" />
+    <item
+        android:id="@+id/item_4"
+        android:enabled="true"
+        android:icon="@drawable/ic_person_24"
+        app:itemIconTint="#ffffff"
+        app:itemTextColor="#ffffff"
+        app:labelVisibilityMode="unlabeled"
+        android:title="News"/>
+</menu>
