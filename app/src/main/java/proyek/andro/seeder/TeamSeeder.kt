@@ -11,7 +11,7 @@ class TeamSeeder {
 
     suspend fun run() {
         val games : ArrayList<Game> = Game().get()
-        val orgs : ArrayList<Organization> = Organization().get(100)
+        val orgs : ArrayList<Organization> = Organization().get(limit=100)
 
         val valorant = games.filter { it.name == "Valorant" }.first()
         val mlbb = games.filter { it.name == "Mobile Legends Bang Bang" }.first()
@@ -97,6 +97,18 @@ class TeamSeeder {
             "GAIS",
             "2020",
             orgs.filter { it.name == "FUT Esports" }.first().description,
+            1
+        ))
+
+        teams.add(Team(
+            UUID.randomUUID().toString(),
+            orgs.filter { it.name == "Giants Gaming" }.first().id,
+            valorant.id,
+            orgs.filter { it.name == "Giants Gaming" }.first().name,
+            orgs.filter { it.name == "Giants Gaming" }.first().logo,
+            "pipsoN",
+            "2020",
+            orgs.filter { it.name == "Giants Gaming" }.first().description,
             1
         ))
 

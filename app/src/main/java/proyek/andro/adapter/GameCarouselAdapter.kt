@@ -11,12 +11,13 @@ import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Callback
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
+import com.squareup.picasso.RequestCreator
 import proyek.andro.R
 import proyek.andro.model.Game
 
 class GameCarouselAdapter (
     private val games : ArrayList<Game>,
-    private val banners : ArrayList<Uri>
+    private val banners : ArrayList<RequestCreator>
 ) : RecyclerView.Adapter<GameCarouselAdapter.ListViewHolder>() {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
@@ -42,24 +43,20 @@ class GameCarouselAdapter (
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         val banner = games.get(position).banner
 
-//        Picasso.get().load(banners.get(position)).into(holder.banner)
-        storageRef.child("banner/games/${banner}")
-            .downloadUrl
-            .addOnSuccessListener {
-                Picasso.get()
-                    .load(it)
-                    .placeholder(R.drawable.logo_m5)
-                    .networkPolicy(NetworkPolicy.OFFLINE)
-                    .into(holder.banner, object : Callback {
-                        override fun onSuccess() {
-                            Log.d("Picasso", "Image loaded from cache")
-                        }
+        banners.get(position)
+            .into(holder.banner, object : Callback {
+                override fun onSuccess() {
+                }
 
-                        override fun onError(e: Exception?) {
+                override fun onError(e: Exception?) {
+                    storageRef.child("banner/games/${banner}")
+                        .downloadUrl
+                        .addOnSuccessListener {
                             Picasso.get().load(it).into(holder.banner)
                         }
-                    })
-            }
+                }
+            })
+
 
         holder.banner.setOnClickListener {
             onItemClickCallback.onItemClicked(games.get(position).id)

@@ -2,17 +2,20 @@ package proyek.andro.model
 
 import android.util.Log
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
 
 abstract class BaseModel(
-    val collection : String,
+    val collection: String,
 ) {
     val db = Firebase.firestore
     val collectionRef = db.collection(collection)
 
-    fun <T> convertToClass(data: Map<String, Any>) : T {
+    fun <T> convertToClass(data: Map<String, Any>): T {
         val clazz = this::class.java
         val constructor = clazz.constructors[1]
 
@@ -26,22 +29,36 @@ abstract class BaseModel(
     }
 
     suspend fun <T> get(
-        limit : Int = 10,
-        offset : Int = 0,
-        order : Array<String> = arrayOf("id", "asc")
-    ) : ArrayList<T> {
+        filter : Filter? = null,
+        limit: Int = 10,
+        offset: DocumentSnapshot? = null,
+        order: Array<Array<String>> = arrayOf(arrayOf("id", "asc"))
+    ): ArrayList<T> {
 
         val data = ArrayList<T>()
+        var query : Query = collectionRef
 
-        val res = collectionRef
-            .orderBy(
-                order[0],
-                if (order[1] === "asc") Query.Direction.ASCENDING else Query.Direction.DESCENDING
-            )
-            .limit(limit.toLong())
-            .startAt(offset.toLong())
-            .get()
-            .await()
+        if (filter != null)
+            query = query.where(filter)
+
+        query = query.orderBy(
+            order[0][0],
+            if (order[0][1] == "asc") Query.Direction.ASCENDING else Query.Direction.DESCENDING
+        )
+        order.forEachIndexed { index, it ->
+            if (index > 0) {
+                query = query.orderBy(
+                    it[0],
+                    if (it[1] == "asc") Query.Direction.ASCENDING else Query.Direction.DESCENDING
+                )
+            }
+        }
+
+        query = query.limit(limit.toLong())
+
+        if (offset != null) query = query.startAfter(offset)
+
+        val res = query.get().await()
 
         res.forEach { result ->
             data.add(convertToClass(result.data))
@@ -50,7 +67,7 @@ abstract class BaseModel(
         return data
     }
 
-    suspend fun <T> find(id: String) : T {
+    suspend fun <T> find(id: String): T {
 //        var data : T = this::class.java.constructors.get(0).newInstance() as T
         val result = collectionRef
             .document(id)
@@ -60,10 +77,11 @@ abstract class BaseModel(
         return convertToClass(result.data!!)
     }
 
-    suspend fun insertOrUpdate() : Int {
+    suspend fun insertOrUpdate(): Int {
         var status = 0
 
-        val classData : HashMap<String, Any> = this::class.java.getDeclaredMethod("convertToMap").invoke(this) as HashMap<String, Any>
+        val classData: HashMap<String, Any> =
+            this::class.java.getDeclaredMethod("convertToMap").invoke(this) as HashMap<String, Any>
 
         val res = collectionRef
             .document(classData["id"].toString())
@@ -75,7 +93,7 @@ abstract class BaseModel(
         return status
     }
 
-    suspend fun delete(doc : String) : Int {
+    suspend fun delete(doc: String): Int {
         var status = 0
 
         val res = collectionRef

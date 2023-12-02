@@ -7,6 +7,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import proyek.andro.seeder.AdminSeeder
 import proyek.andro.seeder.GameSeeder
+import proyek.andro.seeder.MatchSeeder
 import proyek.andro.seeder.OrganizationSeeder
 import proyek.andro.seeder.TeamSeeder
 import proyek.andro.seeder.TournamentPhaseSeeder
@@ -25,14 +26,15 @@ class MainActivity : AppCompatActivity() {
             runBlocking {
                 launch {
 //                     AdminSeeder().run()
-                     UserSeeder().run()
-                     GameSeeder().run()
+//                     UserSeeder().run()
+//                     GameSeeder().run()
 //                     OrganizationSeeder().run()
-                     TeamSeeder().run()
+//                     TeamSeeder().run()
 //                     PlayerSeeder().run()
-                     TournamentSeeder().run()
-                     TournamentPhaseSeeder().run()
+//                     TournamentSeeder().run()
+//                     TournamentPhaseSeeder().run()
 //                     ParticipantSeeder().run()
+                    MatchSeeder().run()
 //                     PlayerHistorySeeder().run()
                 }
             }
