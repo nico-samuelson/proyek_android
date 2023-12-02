@@ -2,15 +2,15 @@ package proyek.andro.model
 
 class NewsImage : BaseModel {
     lateinit var id: String
-    lateinit var news_id: String
+    lateinit var news: String
     lateinit var image: String
 
     constructor() : super("tbNewsImage") {}
 
-    constructor(id : String, news_id : String, image : String) : super("tbNewsImage")
+    constructor(id : String, news : String, image : String) : super("tbNewsImage")
     {
         this.id = id
-        this.news_id = news_id
+        this.news = news
         this.image = image
     }
 
@@ -18,7 +18,7 @@ class NewsImage : BaseModel {
         val data = HashMap<String, Any>()
 
         data.put("id", id)
-        data.put("news_id", news_id)
+        data.put("news", news)
         data.put("image", image)
 
         return data

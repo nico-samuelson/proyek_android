@@ -39,7 +39,7 @@ class UserActivity : AppCompatActivity() {
                 intArrayOf(0)
             ),
             intArrayOf(
-                ContextCompat.getColor(this, R.color.white),
+                ContextCompat.getColor(this, R.color.primary),
                 ContextCompat.getColor(this, R.color.disabled)
             )
         )

@@ -22,8 +22,8 @@ class TournamentSeeder() {
             listOf("Los Angeles"),
             listOf("Kia Forum"),
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod, nisl eget ultricies aliquam, nisl nisl aliquet nunc, vitae aliquam nisl nisl vitae nisl. Sed euismod, nisl eget ultricies aliquam, nisl nisl aliquet nunc, vitae aliquam nisl nisl vitae nisl.",
-            "logo_valorant_champions_23",
-            "banner_valorant_champions_23",
+            "logo_valorant_champions_23.png",
+            "banner_valorant_champions_23.jpg",
             2,
         ))
 
@@ -39,8 +39,8 @@ class TournamentSeeder() {
             listOf("Selangor", "Manila"),
             listOf("Jio Space", "EVM Convention Center", "Rizal Memorial Coliseum"),
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod, nisl eget ultricies aliquam, nisl nisl aliquet nunc, vitae aliquam nisl nisl vitae nisl. Sed euismod, nisl eget ultricies aliquam, nisl nisl aliquet nunc, vitae aliquam nisl nisl vitae nisl.",
-            "logo_m5",
-            "banner_m5",
+            "logo_m5.png",
+            "banner_m5.jpg",
             1,
         ))
 
@@ -56,8 +56,8 @@ class TournamentSeeder() {
             listOf("Seoul", "Busan"),
             listOf("Gocheok Sky Dome", "Sajik Arena", "KBS Stadium", "LOL Park"),
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod, nisl eget ultricies aliquam, nisl nisl aliquet nunc, vitae aliquam nisl nisl vitae nisl. Sed euismod, nisl eget ultricies aliquam, nisl nisl aliquet nunc, vitae aliquam nisl nisl vitae nisl.",
-            "logo_worlds_23",
-            "banner_worlds_23",
+            "logo_worlds_23.png",
+            "banner_worlds_23.png",
             2,
         ))
 

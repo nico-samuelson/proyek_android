@@ -17,7 +17,8 @@ class GameSeeder() {
                 "Valorant",
                 "Riot Games first person shooter",
                 "2020-06-02",
-                "logo_valorant"
+                "logo_valorant.png",
+                "banner_valorant.jpg",
             )
         )
 
@@ -27,7 +28,8 @@ class GameSeeder() {
                 "Mobile Legends Bang Bang",
                 "Moonton MOBA",
                 "2016-07-14",
-                "logo_mlbb"
+                "logo_mlbb.png",
+                "banner_mlbb.jpg",
             )
         )
 
@@ -37,7 +39,8 @@ class GameSeeder() {
                 "League of Legends",
                 "Riot Games MOBA",
                 "2009-10-27",
-                "logo_LoL"
+                "logo_LoL.png",
+                "banner_LoL.jpg",
             )
         )
 
@@ -47,7 +50,8 @@ class GameSeeder() {
                 "Dota 2",
                 "Valve MOBA",
                 "2013-07-09",
-                "logo_dota2"
+                "logo_dota2.png",
+                "banner_dota2.jpg",
             )
         )
 
@@ -57,7 +61,8 @@ class GameSeeder() {
                 "Counter Strike 2",
                 "Valve FPS",
                 "2023-09-27",
-                "logo_cs2"
+                "logo_cs2.png",
+                "banner_cs2.jpg",
             )
         )
 
@@ -67,7 +72,8 @@ class GameSeeder() {
                 "PUBG",
                 "PUBG Corporation Battle Royale",
                 "2017-12-20",
-                "logo_pubg"
+                "logo_pubg.png",
+                "banner_pubg.jpg",
             )
         )
 
@@ -77,7 +83,8 @@ class GameSeeder() {
                 "Fortnite",
                 "Epic Games Battle Royale",
                 "2017-07-25",
-                "logo_fortnite"
+                "logo_fortnite.png",
+                "banner_fortnite.jpg",
             )
         )
 

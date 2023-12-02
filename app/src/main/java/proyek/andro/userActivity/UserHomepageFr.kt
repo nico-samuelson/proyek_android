@@ -1,5 +1,6 @@
 package proyek.andro.userActivity
 
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -7,15 +8,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.carousel.CarouselSnapHelper
+import com.google.android.material.carousel.CarouselStrategy
 import com.google.android.material.carousel.HeroCarouselStrategy
+import com.google.android.material.carousel.MultiBrowseCarouselStrategy
 import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.storage.FirebaseStorage
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import proyek.andro.R
+import proyek.andro.adapter.GameCarouselAdapter
 import proyek.andro.adapter.TournamentCarouselAdapter
+import proyek.andro.model.Game
 import proyek.andro.model.Tournament
 
 // TODO: Rename parameter arguments, choose names that match
@@ -52,31 +61,36 @@ class UserHomepageFr : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var tournaments : ArrayList<Tournament> = ArrayList()
-//        var games : ArrayList<Game> = ArrayList()
-        var rvCarousel : RecyclerView
-        var adapter : TournamentCarouselAdapter
+        val storageRef = FirebaseStorage.getInstance().reference
 
-        rvCarousel = view.findViewById(R.id.carousel_recycler_view)
+        var tournaments: ArrayList<Tournament>
+        var games: ArrayList<Game>
 
-        val snapHelper = CarouselSnapHelper()
-        snapHelper.attachToRecyclerView(rvCarousel)
-        rvCarousel.layoutManager = CarouselLayoutManager(HeroCarouselStrategy())
+        var rvTournamentCarousel: RecyclerView
+        var rvGameCarousel: RecyclerView
+
+        var tournamentAdapter: TournamentCarouselAdapter
+        var gameAdapter: GameCarouselAdapter
+
+        rvTournamentCarousel = view.findViewById(R.id.carousel_recycler_view)
+        rvGameCarousel = view.findViewById(R.id.games_recycler_view)
+
+        CarouselSnapHelper().attachToRecyclerView(rvTournamentCarousel)
+
+        rvTournamentCarousel.layoutManager = CarouselLayoutManager()
+        rvGameCarousel.layoutManager = CarouselLayoutManager(MultiBrowseCarouselStrategy())
 
         lifecycleScope.launch(Dispatchers.Main) {
-            try {
-                tournaments = Tournament().get()
+            tournaments = Tournament().get()
+            games = Game().get()
 
-                adapter = TournamentCarouselAdapter(view.context, tournaments)
-                rvCarousel.adapter = adapter
-            }
-            catch (e : FirebaseFirestoreException) {
-                tournaments = ArrayList()
-                Log.e("Error", e.message.toString())
+            var gameBanners = ArrayList<Uri>()
 
-                adapter = TournamentCarouselAdapter(view.context, tournaments)
-                rvCarousel.adapter = adapter
-            }
+            tournamentAdapter = TournamentCarouselAdapter(tournaments)
+            rvTournamentCarousel.adapter = tournamentAdapter
+
+            gameAdapter = GameCarouselAdapter(games, gameBanners)
+            rvGameCarousel.adapter = gameAdapter
         }
     }
 

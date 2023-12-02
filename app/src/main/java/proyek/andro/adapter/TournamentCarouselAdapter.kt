@@ -1,24 +1,36 @@
 package proyek.andro.adapter
 
 import android.content.Context
+import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.tasks.Task
+import com.google.firebase.storage.FirebaseStorage
+import com.squareup.picasso.Callback
+import com.squareup.picasso.NetworkPolicy
+import com.squareup.picasso.Picasso
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import proyek.andro.R
+import proyek.andro.helper.StorageHelper
 import proyek.andro.model.Tournament
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
 
 class TournamentCarouselAdapter (
-    private val context : Context,
     private val tournaments : ArrayList<Tournament>,
 ) : RecyclerView.Adapter<TournamentCarouselAdapter.ListViewHolder>() {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
+    val storageRef = FirebaseStorage.getInstance().reference
 
     interface OnItemClickCallback {
         fun onItemClicked(data: String)
@@ -33,7 +45,7 @@ class TournamentCarouselAdapter (
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-        val view : View = LayoutInflater.from(parent.context).inflate(R.layout.carousel, parent, false)
+        val view : View = LayoutInflater.from(parent.context).inflate(R.layout.rv_tournament_carousel, parent, false)
         return ListViewHolder(view)
     }
 
@@ -52,11 +64,29 @@ class TournamentCarouselAdapter (
         holder.name.text = tournaments.get(position).name
         holder.date.text = "${start} - ${end}, ${end_date.year}"
 
-        val bannerRes = context.resources.getIdentifier(banner, "drawable", context.packageName)
-        val logoRes = context.resources.getIdentifier(logo, "drawable", context.packageName)
+        storageRef.child("logo/tournaments/${logo}")
+            .downloadUrl
+            .addOnSuccessListener {
+                Picasso.get().load(it).into(holder.logo)
+            }
 
-        holder.image.setImageResource(bannerRes)
-        holder.logo.setImageResource(logoRes)
+        storageRef.child("banner/tournaments/${banner}")
+            .downloadUrl
+            .addOnSuccessListener {
+                Picasso.get()
+                    .load(it)
+                    .placeholder(R.drawable.banner_m5)
+                    .networkPolicy(NetworkPolicy.OFFLINE)
+                    .into(holder.image, object : Callback {
+                        override fun onSuccess() {
+                            Log.d("Picasso", "Image loaded from cache")
+                        }
+
+                        override fun onError(e: Exception?) {
+                            Picasso.get().load(it).into(holder.image)
+                        }
+                    })
+            }
 
         holder.image.setOnClickListener {
             onItemClickCallback.onItemClicked(tournaments.get(position).banner)
