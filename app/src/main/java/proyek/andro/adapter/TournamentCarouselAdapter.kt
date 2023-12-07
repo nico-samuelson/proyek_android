@@ -1,5 +1,6 @@
 package proyek.andro.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.util.Log
@@ -28,8 +29,8 @@ import java.util.Locale
 
 class TournamentCarouselAdapter (
     private val tournaments : ArrayList<Tournament>,
-    private val banners : ArrayList<RequestCreator>,
-    private val logos : ArrayList<RequestCreator>
+    private val banners : ArrayList<Uri>,
+    private val logos : ArrayList<Uri>
 ) : RecyclerView.Adapter<TournamentCarouselAdapter.ListViewHolder>() {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
@@ -56,26 +57,28 @@ class TournamentCarouselAdapter (
         return tournaments.size
     }
 
-    override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        val start_date = LocalDate.parse(tournaments.get(position).start_date)
-        val end_date = LocalDate.parse(tournaments.get(position).end_date)
+    override fun onBindViewHolder(holder: ListViewHolder, @SuppressLint("RecyclerView") position: Int) {
+        val start_date = if (tournaments.get(position).start_date != "") LocalDate.parse(tournaments.get(position).start_date) else LocalDate.now()
+        val end_date = if (tournaments.get(position).start_date != "") LocalDate.parse(tournaments.get(position).end_date) else LocalDate.now()
         val start = start_date.month.getDisplayName(TextStyle.SHORT, Locale.ENGLISH) + " " + start_date.dayOfMonth
         val end = end_date.month.getDisplayName(TextStyle.SHORT, Locale.ENGLISH) + " " + end_date.dayOfMonth
 
         holder.name.text = tournaments.get(position).name
-        holder.date.text = "${start} - ${end}, ${end_date.year}"
+        holder.date.text = if (tournaments.get(position).start_date != "") "${start} - ${end}, ${end_date.year}" else "TBA"
 
-        val banner = banners.get(position)
-        val logo = logos.get(position)
+//        val banner = banners.get(position)
+//        val logo = logos.get(position)
 
-        banners.get(position)
+        Picasso.get()
+            .load(banners.get(position))
+            .placeholder(R.drawable.card_placeholder)
+            .networkPolicy(NetworkPolicy.OFFLINE)
             .into(holder.image, object : Callback {
                 override fun onSuccess() {
-                    Log.d("Picasso", "Image loaded from cache")
                 }
 
                 override fun onError(e: Exception?) {
-                    storageRef.child("banner/tournaments/${banner}")
+                    storageRef.child("banner/tournaments/${tournaments.get(position).banner}")
                         .downloadUrl
                         .addOnSuccessListener {
                             Picasso.get().load(it).into(holder.image)
@@ -83,19 +86,93 @@ class TournamentCarouselAdapter (
                 }
             })
 
-        logos.get(position)
+        Picasso.get()
+            .load(logos.get(position))
+            .placeholder(R.drawable.card_placeholder)
+            .networkPolicy(NetworkPolicy.OFFLINE)
             .into(holder.logo, object : Callback {
                 override fun onSuccess() {
                 }
 
                 override fun onError(e: Exception?) {
-                    storageRef.child("logo/tournaments/${logo}")
+                    storageRef.child("logo/tournaments/${tournaments.get(position).logo}")
                         .downloadUrl
                         .addOnSuccessListener {
                             Picasso.get().load(it).into(holder.logo)
                         }
                 }
             })
+
+//        storageRef.child("banner/tournaments/${tournaments.get(position).banner}")
+//            .downloadUrl
+//            .addOnSuccessListener {
+//                Picasso.get()
+//                    .load(it)
+//                    .placeholder(R.drawable.card_placeholder)
+//                    .networkPolicy(NetworkPolicy.OFFLINE)
+//                    .into(holder.image, object : Callback {
+//                        override fun onSuccess() {
+//                        }
+//
+//                        override fun onError(e: Exception?) {
+//                            storageRef.child("banner/tournaments/${tournaments.get(position).banner}")
+//                                .downloadUrl
+//                                .addOnSuccessListener {
+//                                    Picasso.get().load(it).into(holder.image)
+//                                }
+//                        }
+//                    })
+//            }
+//
+//        storageRef.child("logo/tournaments/${tournaments.get(position).logo}")
+//            .downloadUrl
+//            .addOnSuccessListener {
+//                Picasso.get()
+//                    .load(it)
+//                    .placeholder(R.drawable.card_placeholder)
+//                    .networkPolicy(NetworkPolicy.OFFLINE)
+//                    .into(holder.logo, object : Callback {
+//                        override fun onSuccess() {
+//                        }
+//
+//                        override fun onError(e: Exception?) {
+//                            storageRef.child("logo/tournaments/${tournaments.get(position).logo}")
+//                                .downloadUrl
+//                                .addOnSuccessListener {
+//                                    Picasso.get().load(it).into(holder.logo)
+//                                }
+//                        }
+//                    })
+//            }
+
+//        banners.get(position)
+//            .into(holder.image, object : Callback {
+//                override fun onSuccess() {
+//                    Log.d("Picasso", "Image loaded from cache")
+//                }
+//
+//                override fun onError(e: Exception?) {
+//                    storageRef.child("banner/tournaments/${banner}")
+//                        .downloadUrl
+//                        .addOnSuccessListener {
+//                            Picasso.get().load(it).into(holder.image)
+//                        }
+//                }
+//            })
+//
+//        logos.get(position)
+//            .into(holder.logo, object : Callback {
+//                override fun onSuccess() {
+//                }
+//
+//                override fun onError(e: Exception?) {
+//                    storageRef.child("logo/tournaments/${logo}")
+//                        .downloadUrl
+//                        .addOnSuccessListener {
+//                            Picasso.get().load(it).into(holder.logo)
+//                        }
+//                }
+//            })
 
         holder.image.setOnClickListener {
             onItemClickCallback.onItemClicked(tournaments.get(position).banner)
@@ -104,5 +181,9 @@ class TournamentCarouselAdapter (
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return 2
     }
 }

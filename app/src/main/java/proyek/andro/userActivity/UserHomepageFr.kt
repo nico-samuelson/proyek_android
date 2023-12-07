@@ -1,11 +1,14 @@
 package proyek.andro.userActivity
 
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.carousel.CarouselSnapHelper
@@ -17,11 +20,14 @@ import com.squareup.picasso.Picasso
 import com.squareup.picasso.RequestCreator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import proyek.andro.R
 import proyek.andro.adapter.GameCarouselAdapter
 import proyek.andro.adapter.MatchCarouselAdapter
 import proyek.andro.adapter.TournamentCarouselAdapter
+import proyek.andro.helper.StorageHelper
 import proyek.andro.model.Game
 import proyek.andro.model.Match
 import proyek.andro.model.Team
@@ -43,6 +49,11 @@ class UserHomepageFr : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    lateinit var rvGameCarousel: RecyclerView
+    lateinit var rvMatchCarousel: RecyclerView
+    lateinit var parent: UserActivity
+    var gameBanners = ArrayList<Uri>()
+    var job: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +61,10 @@ class UserHomepageFr : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+        parent = super.requireActivity() as UserActivity
+
+        if (parent.getMatches().size == 0 || arguments?.getString("refresh") != null)
+            job = parent.getHomepageData()
     }
 
     override fun onCreateView(
@@ -63,86 +78,46 @@ class UserHomepageFr : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var tournaments : ArrayList<Tournament>
-        var games : ArrayList<Game>
-        var teams : ArrayList<Team>
-        var matches : ArrayList<Match>
-
-        var rvTournamentCarousel : RecyclerView
-        var rvGameCarousel : RecyclerView
-        var rvMatchCarousel : RecyclerView
-
-        var tournamentAdapter : TournamentCarouselAdapter
-        var gameAdapter : GameCarouselAdapter
-        var matchAdapter : MatchCarouselAdapter
-
-        rvTournamentCarousel = view.findViewById(R.id.carousel_recycler_view)
         rvGameCarousel = view.findViewById(R.id.games_recycler_view)
         rvMatchCarousel = view.findViewById(R.id.matches_recycler_view)
 
-        CarouselSnapHelper().attachToRecyclerView(rvTournamentCarousel)
-        CarouselSnapHelper().attachToRecyclerView(rvMatchCarousel)
-
-        rvTournamentCarousel.layoutManager = CarouselLayoutManager()
         rvGameCarousel.layoutManager = CarouselLayoutManager(MultiBrowseCarouselStrategy())
         rvMatchCarousel.layoutManager = CarouselLayoutManager()
+        CarouselSnapHelper().attachToRecyclerView(rvMatchCarousel)
 
-        var gameBanners : ArrayList<RequestCreator>
-        var tournamentBanners : ArrayList<RequestCreator>
-        var tournamentLogos : ArrayList<RequestCreator>
-        var matchTeamLogos : ArrayList<RequestCreator>
-
-        CoroutineScope(Dispatchers.Main).launch {
-            // get data
-            tournaments = Tournament().get(
-                filter= Filter.lessThan("status", 3),
-                limit=5,
-                order=arrayOf(arrayOf("status", "asc"), arrayOf("start_date", "desc"))
-            )
-            games = Game().get()
-            teams = Team().get(limit=100)
-            matches = Match().get(order=arrayOf(arrayOf("time", "desc")))
-            Log.d("matches", matches.toString())
-
-            // preload all images
-            tournamentBanners = preloadImages(tournaments.map{ it.banner }, "banner/tournaments")
-            tournamentLogos = preloadImages(tournaments.map{ it.logo }, "logo/tournaments")
-            gameBanners = preloadImages(games.map{ it.banner }, "banner/games")
-
-            matches
-
-            // set adapter
-            rvTournamentCarousel.adapter = TournamentCarouselAdapter(tournaments, tournamentBanners, tournamentLogos)
-            rvGameCarousel.adapter = GameCarouselAdapter(games, gameBanners)
-            rvMatchCarousel.adapter = MatchCarouselAdapter(matches, teams)
+        if (job == null && parent.getMatches().size > 0) {
+            Log.d("fetch data", "data already fetched")
+            CoroutineScope(Dispatchers.Main).launch {
+                showData()
+            }
+        } else {
+            Log.d("fetch data", "data not yet fetched")
+            job?.invokeOnCompletion {
+                CoroutineScope(Dispatchers.Main).launch {
+                    showData()
+                    job = null
+                }
+            }
         }
     }
 
-    suspend fun preloadImages(images : List<String>, directory : String) : ArrayList<RequestCreator> {
-        val gameBanners = ArrayList<RequestCreator>()
-        val storageRef = FirebaseStorage.getInstance().reference
+    suspend fun showData() {
+        if (parent.getGameBanners().size == 0 || arguments?.getString("refresh") != null) {
+            parent.setGameBanners(StorageHelper().preloadImages(parent.getGames().map { it.banner }, "banner/games/"))
 
-        images.forEach { image ->
-            suspendCoroutine { continuation ->
-                storageRef.child("${directory}/${image}")
-                    .downloadUrl
-                    .addOnSuccessListener { uri ->
-                        gameBanners.add(
-                            Picasso.get()
-                                .load(uri)
-                                .placeholder(R.drawable.card_placeholder)
-                                .networkPolicy(NetworkPolicy.OFFLINE)
-                        )
-                        continuation.resume(Unit)
-                    }
-                    .addOnFailureListener {
-                        Log.e("preload image", it.message.toString())
-                        continuation.resume(Unit)
-                    }
-            }
+            rvGameCarousel.adapter = GameCarouselAdapter(parent.getGames(), parent.getGameBanners())
+            rvMatchCarousel.adapter = MatchCarouselAdapter(parent.getMatches(), parent.getTeams())
+
+            rvGameCarousel.recycledViewPool.setMaxRecycledViews(1, 0)
+            rvMatchCarousel.recycledViewPool.setMaxRecycledViews(3, 0)
         }
+        else {
+            rvGameCarousel.adapter = GameCarouselAdapter(parent.getGames(), parent.getGameBanners())
+            rvMatchCarousel.adapter = MatchCarouselAdapter(parent.getMatches(), parent.getTeams())
 
-        return gameBanners
+            rvGameCarousel.recycledViewPool.setMaxRecycledViews(1, 0)
+            rvMatchCarousel.recycledViewPool.setMaxRecycledViews(3, 0)
+        }
     }
 
     companion object {

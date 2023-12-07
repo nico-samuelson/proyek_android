@@ -28,6 +28,7 @@
         android:layout_marginTop="8dp"
         android:background="#00000000"
         android:padding="8dp"
+        android:contentDescription="searchBtn"
         android:src="@drawable/ic_search_32"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageButton2"
@@ -45,39 +46,15 @@
         app:layout_constraintTop_toTopOf="@+id/imageButton" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/carousel_recycler_view"
+        android:id="@+id/matches_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="220dp"
         android:layout_marginTop="32dp"
         android:clipChildren="false"
         android:clipToPadding="false"
         android:paddingStart="24dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <TextView
-        android:id="@+id/matchText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
-        android:text="Recent Matches"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/carousel_recycler_view" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/matches_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="220dp"
-        android:paddingStart="24dp"
-        android:layout_marginTop="32dp"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/matchText" />
 
     <TextView
         android:id="@+id/gamesText"
@@ -95,8 +72,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/games_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="240dp"
-        android:paddingBottom="60dp"
+        android:layout_height="180dp"
         android:paddingStart="24dp"
         android:layout_marginTop="32dp"
         android:clipChildren="false"

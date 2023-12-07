@@ -60,8 +60,6 @@ class MatchCarouselAdapter (
         val team1 = teams.filter { it.id == match.team1 }.first()
         val team2 = teams.filter { it.id == match.team2 }.first()
 
-
-        Log.d("team", teams.filter { it.id == match.team1 }.toString())
         holder.name.text = match.name
         holder.team1Name.text = team1.name
         holder.team2Name.text = team2.name
@@ -126,5 +124,9 @@ class MatchCarouselAdapter (
             .addOnFailureListener {
                 Log.e("preload image", it.message.toString())
             }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return 3
     }
 }
