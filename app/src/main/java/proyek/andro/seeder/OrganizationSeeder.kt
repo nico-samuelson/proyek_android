@@ -465,6 +465,42 @@ class OrganizationSeeder {
             1
         ))
 
+        orgs.add(Organization(
+            UUID.randomUUID().toString(),
+            "Sentinels",
+            "Sentinels is an American esports organization based in Los Angeles. ",
+            "logo_sentinels.png",
+            "2018",
+            "United States",
+            "https://www.sentinels.gg/",
+            "Rob Moore",
+            1
+        ))
+
+        orgs.add(Organization(
+            UUID.randomUUID().toString(),
+            "FULL SENSE",
+            "FULL SENSE is a Thai esports organization.",
+            "logo_full_sense.png",
+            "2020",
+            "Thailand",
+            "https://www.fullsense.gg/",
+            "Taksaya Thanasakdipat",
+            1
+        ))
+
+        orgs.add(Organization(
+            UUID.randomUUID().toString(),
+            "Fancy United",
+            "Fancy United Esports (formerly known as Fancy Unit) is a Vietnamese esports team which entered VALORANT in March 2021.",
+            "logo_fancy_utd.png",
+            "2021",
+            "Vietnam",
+            "https://www.fancyesports.com/",
+            "Trần Ngọc Long",
+            1
+        ))
+
         orgs.forEach {
             it.insertOrUpdate()
         }

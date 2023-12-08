@@ -179,11 +179,15 @@ class UserActivity : AppCompatActivity() {
             // get data
             games = Game().get()
             teams = Team().get(limit = 100)
-            matches = Match().get(limit = 5, order = arrayOf(arrayOf("time", "desc")))
             tournaments = Tournament().get(
                 filter = Filter.lessThan("status", 3),
                 order = arrayOf(arrayOf("status", "asc")),
                 limit = 50
+            )
+            matches = Match().get(
+                filter = Filter.inArray("tournament", tournaments.map { it.id }),
+                order = arrayOf(arrayOf("time", "desc")),
+                limit = 5
             )
         }
     }

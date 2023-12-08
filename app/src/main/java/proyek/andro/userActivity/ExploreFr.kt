@@ -1,5 +1,6 @@
 package proyek.andro.userActivity
 
+import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
@@ -8,23 +9,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.HorizontalScrollView
+import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.carousel.CarouselSnapHelper
 import com.google.android.material.carousel.HeroCarouselStrategy
+import com.google.android.material.carousel.UncontainedCarouselStrategy
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.google.firebase.firestore.Filter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import proyek.andro.R
 import proyek.andro.adapter.ListAdapter
+import proyek.andro.adapter.MatchCarouselAdapter
 import proyek.andro.adapter.TournamentCarouselAdapter
 import proyek.andro.helper.StorageHelper
+import proyek.andro.model.Match
+import proyek.andro.model.Team
 import proyek.andro.model.Tournament
+import java.time.LocalDate
+import java.time.format.TextStyle
+import java.util.Locale
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -40,13 +50,19 @@ class ExploreFr : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
     private lateinit var rvTournamentCarousel: RecyclerView
-    private lateinit var rvOngoing : RecyclerView
-    private lateinit var rvUpcoming : RecyclerView
-    private lateinit var parent : UserActivity
+    private lateinit var rvOngoingTournaments : RecyclerView
+    private lateinit var rvUpcomingTournaments : RecyclerView
+    private lateinit var rvOngoingMatches : RecyclerView
+
     private var tournaments = ArrayList<Tournament>()
-    private var ongoing = ArrayList<Tournament>()
-    private var upcoming = ArrayList<Tournament>()
+    private var ongoingTournaments = ArrayList<Tournament>()
+    private var upcomingTournaments = ArrayList<Tournament>()
+    private var ongoingMatches = ArrayList<Match>()
+    private var matchesTeams = ArrayList<Team>()
+
+    private lateinit var parent : UserActivity
     var job: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,40 +86,77 @@ class ExploreFr : Fragment() {
         return inflater.inflate(R.layout.fragment_explore, container, false)
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         rvTournamentCarousel = view.findViewById(R.id.tournaments_recycler_view)
-        rvOngoing = view.findViewById(R.id.ongoing_tournaments)
-        rvUpcoming = view.findViewById(R.id.upcoming_tournaments)
+        rvOngoingTournaments = view.findViewById(R.id.ongoing_tournaments)
+        rvUpcomingTournaments = view.findViewById(R.id.upcoming_tournaments)
+        rvOngoingMatches = view.findViewById(R.id.rv_ongoing_match)
 
-        rvTournamentCarousel.layoutManager = CarouselLayoutManager(HeroCarouselStrategy())
-        rvOngoing.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        rvTournamentCarousel.layoutManager = CarouselLayoutManager(UncontainedCarouselStrategy())
+        rvOngoingTournaments.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        rvOngoingMatches.layoutManager = CarouselLayoutManager(UncontainedCarouselStrategy())
 
+        CarouselSnapHelper().attachToRecyclerView(rvOngoingMatches)
         CarouselSnapHelper().attachToRecyclerView(rvTournamentCarousel)
-
-//        var selectedChip : Chip? = null
 
         if (job == null && parent.getTournaments().size > 0) {
             tournaments = parent.getTournaments().filter { it.game == parent.getGames().get(parent.getSelectedGame()).id } as ArrayList<Tournament>
             tournaments = tournaments.sortedByDescending { it.start_date }.toMutableList() as ArrayList<Tournament>
 
-            ongoing = tournaments.filter { it.status == 1L } as ArrayList<Tournament>
+            ongoingTournaments = tournaments.filter { it.status == 1L } as ArrayList<Tournament>
+            upcomingTournaments = tournaments.filter { it.status == 0L } as ArrayList<Tournament>
 
             makeChips(view)
-            CoroutineScope(Dispatchers.Main).launch {showData()}
+            CoroutineScope(Dispatchers.Main).launch {
+                if (ongoingTournaments.size > 0) {
+                    Log.d("ongoing", ongoingTournaments.size.toString())
+                    ongoingMatches = Match().get(
+                        filter = Filter.and(
+                            Filter.inArray("tournament", ongoingTournaments.map { it.id }),
+                            Filter.equalTo("status", 1L),
+                        ),
+                        limit = 5,
+                        order = arrayOf(arrayOf("time", "desc"))
+                    )
+
+                    matchesTeams = parent.getTeams().filter { team ->
+                        ongoingMatches.map { it.team1 }.contains(team.id) || ongoingMatches.map { it.team2 }.contains(team.id)
+                    } as ArrayList<Team>
+                }
+
+                showData(view)
+            }
         }
         else if (job != null) {
             job?.invokeOnCompletion {
                 tournaments = parent.getTournaments().filter { it.game == parent.getGames().get(parent.getSelectedGame()).id } as ArrayList<Tournament>
                 tournaments = tournaments.sortedByDescending { it.start_date }.toMutableList() as ArrayList<Tournament>
 
-                ongoing = tournaments.filter { it.status == 1L } as ArrayList<Tournament>
-                upcoming = tournaments.filter { it.status == 0L } as ArrayList<Tournament>
+                ongoingTournaments = tournaments.filter { it.status == 1L } as ArrayList<Tournament>
+                upcomingTournaments = tournaments.filter { it.status == 0L } as ArrayList<Tournament>
 
                 makeChips(view)
                 CoroutineScope(Dispatchers.Main).launch {
-                    showData()
+                    if (ongoingTournaments.size > 0) {
+                        Log.d("ongoing", ongoingTournaments.size.toString())
+                        ongoingMatches = Match().get(
+                            filter = Filter.and(
+                                Filter.inArray("tournament", ongoingTournaments.map { it.id }),
+                                Filter.equalTo("status", 1L),
+                            ),
+                            limit = 5,
+                            order = arrayOf(arrayOf("time", "desc"))
+                        )
+
+                        matchesTeams = parent.getTeams().filter { team ->
+                            ongoingMatches.map { it.team1 }.contains(team.id) || ongoingMatches.map { it.team2 }.contains(team.id)
+                        } as ArrayList<Team>
+                    }
+
+                    showData(view)
                     job = null
                 }
             }
@@ -135,10 +188,7 @@ class ExploreFr : Fragment() {
             chip.text = game.name
             chip.isCheckable = true
 
-            if (index == parent.getSelectedGame()) {
-                chip.isChecked = true
-//                selectedChip = chip
-            }
+            if (index == parent.getSelectedGame()) chip.isChecked = true
             if (chip.isChecked) chip.chipBackgroundColor = colorState
             else chip.chipBackgroundColor = colorState
 
@@ -150,10 +200,30 @@ class ExploreFr : Fragment() {
 
                     tournaments = parent.getTournaments().filter { it.game == parent.getGames().get(chip.id).id } as ArrayList<Tournament>
                     tournaments = tournaments.sortedByDescending { it.start_date }.toMutableList() as ArrayList<Tournament>
-                    ongoing = tournaments.filter { it.status == 1L } as ArrayList<Tournament>
-                    upcoming = tournaments.filter { it.status == 0L } as ArrayList<Tournament>
+                    ongoingTournaments = tournaments.filter { it.status == 1L } as ArrayList<Tournament>
+                    upcomingTournaments = tournaments.filter { it.status == 0L } as ArrayList<Tournament>
 
-                    CoroutineScope(Dispatchers.Main).launch {showData()}
+                    CoroutineScope(Dispatchers.Main).launch {
+                        if (ongoingTournaments.size > 0) {
+                            Log.d("ongoing", ongoingTournaments.size.toString())
+                            ongoingMatches = Match().get(
+                                filter = Filter.and(
+                                    Filter.inArray("tournament", ongoingTournaments.map { it.id }),
+                                    Filter.equalTo("status", 1L),
+                                ),
+                                limit = 5,
+                                order = arrayOf(arrayOf("time", "desc"))
+                            )
+
+                            Log.d("ongoing matches", ongoingMatches.size.toString())
+
+                            matchesTeams = parent.getTeams().filter { team ->
+                                ongoingMatches.map { it.team1 }.contains(team.id) || ongoingMatches.map { it.team2 }.contains(team.id)
+                            } as ArrayList<Team>
+                        }
+
+                        showData(view)
+                    }
                 }
             }
 
@@ -161,9 +231,30 @@ class ExploreFr : Fragment() {
         }
     }
 
-    suspend fun showData() {
+    suspend fun showData(view : View) {
         val helper = StorageHelper()
+        val ongoingGroups = view.findViewById<LinearLayout>(R.id.ongoing_layout_groups)
+        val upcomingGroups = view.findViewById<LinearLayout>(R.id.upcoming_layout_groups)
 
+        Log.d("ongoing tourney", ongoingTournaments.size.toString())
+        Log.d("upcoming tourney", upcomingTournaments.size.toString())
+
+        // check tournament size to determine render output
+        if (tournaments.size == 0) {
+            view.findViewById<LinearLayout>(R.id.no_tournaments_layout).visibility = View.VISIBLE
+            rvTournamentCarousel.visibility = View.GONE
+            ongoingGroups.visibility = View.GONE
+            upcomingGroups.visibility = View.GONE
+            return
+        }
+        else {
+            view.findViewById<LinearLayout>(R.id.no_tournaments_layout).visibility = View.GONE
+            rvTournamentCarousel.visibility = View.VISIBLE
+            ongoingGroups.visibility = View.VISIBLE
+            upcomingGroups.visibility = View.VISIBLE
+        }
+
+        // preload images
         if (parent.getTournamentBanners().size == 0 || arguments?.getString("refresh") != null) {
             parent.setTournamentBanners(
                 helper.preloadImages(
@@ -184,32 +275,57 @@ class ExploreFr : Fragment() {
             parent.getTournamentBanners(),
             parent.getTournamentLogos()
         )
-        val ongoingAdapter = ListAdapter(
-            ongoing.map { it.logo },
-            ongoing.map { it.name },
-            ongoing.map { "${it.start_date} - ${it.end_date}" },
-            "logo/tournaments/"
-        )
-        val upcomingAdapter = ListAdapter(
-            upcoming.map { it.logo },
-            upcoming.map { it.name },
-            upcoming.map { "${it.start_date} - ${it.end_date}" },
-            "logo/tournaments/"
-        )
-
-        ongoingAdapter.setOnItemClickCallback(object : ListAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: String) {
-                Log.d("Clicked", data)
-            }
-
-            override fun delData(pos: Int) {
-                // do nothing
-            }
-        })
-
         rvTournamentCarousel.adapter = tournamentAdapter
-        rvOngoing.adapter = ongoingAdapter
-        rvUpcoming.adapter = upcomingAdapter
+
+        // render ongoing section
+        if (ongoingTournaments.size > 0) {
+            val ongoingTournamentAdapter = ListAdapter(
+                ongoingTournaments.map { it.logo },
+                ongoingTournaments.map { it.name },
+                ongoingTournaments.map {
+                    val start_date = if (it.start_date != "") LocalDate.parse(it.start_date) else LocalDate.now()
+                    val end_date = if (it.start_date != "") LocalDate.parse(it.end_date) else LocalDate.now()
+                    val start = start_date.month.getDisplayName(TextStyle.SHORT, Locale.ENGLISH) + " " + start_date.dayOfMonth
+                    val end = end_date.month.getDisplayName(TextStyle.SHORT, Locale.ENGLISH) + " " + end_date.dayOfMonth
+
+                    if (it.start_date != "") "${start} - ${end}, ${end_date.year}" else "TBA"
+                },
+                "logo/tournaments/"
+            )
+            val ongoingMatchesAdapter = MatchCarouselAdapter(ongoingMatches, matchesTeams)
+
+            ongoingTournamentAdapter.setOnItemClickCallback(object :
+                ListAdapter.OnItemClickCallback {
+                override fun onItemClicked(data: String) {
+                    Log.d("Clicked", data)
+                }
+
+                override fun delData(pos: Int) {
+                    // do nothing
+                }
+            })
+
+            rvOngoingTournaments.adapter = ongoingTournamentAdapter
+            rvOngoingMatches.adapter = ongoingMatchesAdapter
+        }
+        else {
+            ongoingGroups.visibility = View.GONE
+        }
+
+        // render upcoming section
+        if (upcomingTournaments.size > 0) {
+            val upcomingAdapter = ListAdapter(
+                upcomingTournaments.map { it.logo },
+                upcomingTournaments.map { it.name },
+                upcomingTournaments.map { "${it.start_date} - ${it.end_date}" },
+                "logo/tournaments/"
+            )
+
+            rvUpcomingTournaments.adapter = upcomingAdapter
+        }
+        else {
+            upcomingGroups.visibility = View.GONE
+        }
     }
 
     companion object {

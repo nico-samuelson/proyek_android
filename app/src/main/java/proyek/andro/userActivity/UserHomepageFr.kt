@@ -1,5 +1,6 @@
 package proyek.andro.userActivity
 
+import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.carousel.CarouselSnapHelper
 import com.google.android.material.carousel.MultiBrowseCarouselStrategy
+import com.google.android.material.carousel.UncontainedCarouselStrategy
 import com.google.firebase.firestore.Filter
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.NetworkPolicy
@@ -75,14 +77,15 @@ class UserHomepageFr : Fragment() {
         return inflater.inflate(R.layout.fragment_user_homepage, container, false)
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         rvGameCarousel = view.findViewById(R.id.games_recycler_view)
         rvMatchCarousel = view.findViewById(R.id.matches_recycler_view)
 
-        rvGameCarousel.layoutManager = CarouselLayoutManager(MultiBrowseCarouselStrategy())
-        rvMatchCarousel.layoutManager = CarouselLayoutManager()
+        rvGameCarousel.layoutManager = CarouselLayoutManager(UncontainedCarouselStrategy())
+        rvMatchCarousel.layoutManager = CarouselLayoutManager(UncontainedCarouselStrategy())
         CarouselSnapHelper().attachToRecyclerView(rvMatchCarousel)
 
         if (job == null && parent.getMatches().size > 0) {
@@ -103,22 +106,56 @@ class UserHomepageFr : Fragment() {
 
     suspend fun showData() {
         if (parent.getGameBanners().size == 0 || arguments?.getString("refresh") != null) {
-            parent.setGameBanners(StorageHelper().preloadImages(parent.getGames().map { it.banner }, "banner/games/"))
-
-            rvGameCarousel.adapter = GameCarouselAdapter(parent.getGames(), parent.getGameBanners())
-            rvMatchCarousel.adapter = MatchCarouselAdapter(parent.getMatches(), parent.getTeams())
-
-            rvGameCarousel.recycledViewPool.setMaxRecycledViews(1, 0)
-            rvMatchCarousel.recycledViewPool.setMaxRecycledViews(3, 0)
+            parent.setGameBanners(
+                StorageHelper().preloadImages(
+                    parent.getGames().map { it.banner },
+                    "banner/games/"
+                )
+            )
         }
-        else {
-            rvGameCarousel.adapter = GameCarouselAdapter(parent.getGames(), parent.getGameBanners())
-            rvMatchCarousel.adapter = MatchCarouselAdapter(parent.getMatches(), parent.getTeams())
 
-            rvGameCarousel.recycledViewPool.setMaxRecycledViews(1, 0)
-            rvMatchCarousel.recycledViewPool.setMaxRecycledViews(3, 0)
-        }
+        val gameCarouselAdapter = GameCarouselAdapter(parent.getGames(), parent.getGameBanners())
+        val mFragmentManager = parentFragmentManager
+        val explore = ExploreFr()
+
+        gameCarouselAdapter.setOnItemClickCallback(object :
+            GameCarouselAdapter.OnItemClickCallback {
+            override fun onItemClicked(data: Game) {
+                Log.d("game clicked", data.toString())
+                parent.setSelectedGame(parent.getGames().indexOfFirst { it.id == data.id })
+                mFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainer, explore, explore::class.java.simpleName)
+                    .addToBackStack(null)
+                    .commit()
+            }
+        })
+
+        rvGameCarousel.adapter = gameCarouselAdapter
+        rvMatchCarousel.adapter = MatchCarouselAdapter(parent.getMatches(), parent.getTeams())
+
+        rvGameCarousel.recycledViewPool.setMaxRecycledViews(1, 0)
+        rvMatchCarousel.recycledViewPool.setMaxRecycledViews(3, 0)
     }
+//        else {
+//            val gameCarouselAdapter = GameCarouselAdapter(parent.getGames(), parent.getGameBanners())
+//            gameCarouselAdapter.setOnItemClickCallback(object : GameCarouselAdapter.OnItemClickCallback {
+//                override fun onItemClicked(data: Game) {
+//                    Log.d("game clicked", data.toString())
+//                    parent.setSelectedGame(parent.getGames().indexOfFirst { it.id == data.id })
+//                    mFragmentManager.beginTransaction()
+//                        .replace(R.id.fragmentContainer, explore, explore::class.java.simpleName)
+//                        .addToBackStack(null)
+//                        .commit()
+//                }
+//            })
+//
+//            rvGameCarousel.adapter = gameCarouselAdapter
+//            rvMatchCarousel.adapter = MatchCarouselAdapter(parent.getMatches(), parent.getTeams())
+//
+//            rvGameCarousel.recycledViewPool.setMaxRecycledViews(1, 0)
+//            rvMatchCarousel.recycledViewPool.setMaxRecycledViews(3, 0)
+//        }
+//    }
 
     companion object {
         /**

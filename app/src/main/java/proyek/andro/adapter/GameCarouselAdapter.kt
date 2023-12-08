@@ -26,7 +26,7 @@ class GameCarouselAdapter (
     val storageRef = FirebaseStorage.getInstance().reference
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: String)
+        fun onItemClicked(data: Game)
     }
 
     inner class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -65,7 +65,7 @@ class GameCarouselAdapter (
         holder.setIsRecyclable(false)
 
         holder.banner.setOnClickListener {
-            onItemClickCallback.onItemClicked(games.get(position).id)
+            onItemClickCallback.onItemClicked(games.get(position))
         }
     }
 

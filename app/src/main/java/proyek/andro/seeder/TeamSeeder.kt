@@ -472,6 +472,42 @@ class TeamSeeder {
             1
         ))
 
+        teams.add(Team(
+            UUID.randomUUID().toString(),
+            orgs.filter { it.name == "Sentinels" }.first().id,
+            valorant.id,
+            orgs.filter { it.name == "Sentinels" }.first().name,
+            orgs.filter { it.name == "Sentinels" }.first().logo,
+            "kaplan",
+            "2020",
+            orgs.filter { it.name == "Sentinels" }.first().description,
+            1
+        ))
+
+        teams.add(Team(
+            UUID.randomUUID().toString(),
+            orgs.filter { it.name == "FULL SENSE" }.first().id,
+            valorant.id,
+            orgs.filter { it.name == "FULL SENSE" }.first().name,
+            orgs.filter { it.name == "FULL SENSE" }.first().logo,
+            "Dojayut",
+            "2021",
+            orgs.filter { it.name == "FULL SENSE" }.first().description,
+            1
+        ))
+
+        teams.add(Team(
+            UUID.randomUUID().toString(),
+            orgs.filter { it.name == "Fancy United" }.first().id,
+            valorant.id,
+            orgs.filter { it.name == "Fancy United" }.first().name,
+            orgs.filter { it.name == "Fancy United" }.first().logo,
+            "Kawa",
+            "2021",
+            orgs.filter { it.name == "Fancy United" }.first().description,
+            1
+        ))
+
         teams.forEach {
             it.insertOrUpdate()
         }

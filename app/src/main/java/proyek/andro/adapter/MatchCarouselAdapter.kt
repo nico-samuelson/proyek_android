@@ -63,18 +63,20 @@ class MatchCarouselAdapter (
         holder.name.text = match.name
         holder.team1Name.text = team1.name
         holder.team2Name.text = team2.name
-        holder.team1Score.text = match.score.split("-")[0]
-        holder.team2Score.text = match.score.split("-")[1]
+        holder.team1Score.text = if (match.score == "") "" else match.score.split("-")[0]
+        holder.team2Score.text = if (match.score == "") "" else match.score.split("-")[1]
 
-        if (scores[0] > scores[1]) {
-            holder.team1Score.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
-            holder.team2Score.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
-        } else if (scores[0] < scores[1]) {
-            holder.team1Score.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
-            holder.team2Score.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
-        } else {
-            holder.team1Score.setTextColor(holder.itemView.context.resources.getColor(R.color.disabled))
-            holder.team2Score.setTextColor(holder.itemView.context.resources.getColor(R.color.disabled))
+        if (match.score != "") {
+            if (scores[0] > scores[1]) {
+                holder.team1Score.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
+                holder.team2Score.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
+            } else if (scores[0] < scores[1]) {
+                holder.team1Score.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
+                holder.team2Score.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
+            } else {
+                holder.team1Score.setTextColor(holder.itemView.context.resources.getColor(R.color.disabled))
+                holder.team2Score.setTextColor(holder.itemView.context.resources.getColor(R.color.disabled))
+            }
         }
 
         storageRef.child("logo/orgs/${team1.logo}")

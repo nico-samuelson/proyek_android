@@ -174,6 +174,37 @@ class TournamentPhaseSeeder {
             )
         )
 
+        phases.add(
+            TournamentPhase(
+                UUID.randomUUID().toString(),
+                tournaments.filter { it.name == "AfreecaTV Valorant League" }.first().id,
+                "Group Stage",
+                "2023-12-05",
+                "2023-12-08",
+                listOf(
+                    "Two Double-Elimination Format (GSL) Groups",
+                    "Each group has 4 teams",
+                    "All matches are Bo3",
+                    "Top 2 teams from each group advance to Playoffs",
+                )
+            )
+        )
+
+        phases.add(
+            TournamentPhase(
+                UUID.randomUUID().toString(),
+                tournaments.filter { it.name == "AfreecaTV Valorant League" }.first().id,
+                "Playoffs",
+                "2023-12-09",
+                "2023-12-10",
+                listOf(
+                    "Single-Elimination bracket",
+                    "Semifinals are Bo3",
+                    "Grand Final is Bo5",
+                )
+            )
+        )
+
         phases.forEach {
             it.insertOrUpdate()
         }

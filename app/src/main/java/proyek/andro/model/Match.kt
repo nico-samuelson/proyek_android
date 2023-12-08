@@ -9,6 +9,7 @@ class Match : BaseModel {
     lateinit var winner : String
     lateinit var time : String
     lateinit var score : String
+    lateinit var tournament : String
     var status : Long = 0
 
     constructor() : super("tbMatch") {}
@@ -21,6 +22,7 @@ class Match : BaseModel {
         winner: String,
         time: String,
         score : String,
+        tournament: String,
         status: Long
     ) : super("tbMatch") {
         this.id = id
@@ -31,6 +33,7 @@ class Match : BaseModel {
         this.winner = winner
         this.score = score
         this.time = time
+        this.tournament = tournament
         this.status = status
     }
 
@@ -45,6 +48,7 @@ class Match : BaseModel {
         data.put("winner", winner)
         data.put("time", time)
         data.put("score", score)
+        data.put("tournament", tournament)
         data.put("status", status)
 
         return data
