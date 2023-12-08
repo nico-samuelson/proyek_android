@@ -1,27 +1,18 @@
 package proyek.andro.adapter
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.net.Uri
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.tasks.Task
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Callback
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
-import com.squareup.picasso.RequestCreator
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import proyek.andro.R
-import proyek.andro.helper.StorageHelper
 import proyek.andro.model.Tournament
 import java.time.LocalDate
 import java.time.format.TextStyle
@@ -102,77 +93,6 @@ class TournamentCarouselAdapter (
                         }
                 }
             })
-
-//        storageRef.child("banner/tournaments/${tournaments.get(position).banner}")
-//            .downloadUrl
-//            .addOnSuccessListener {
-//                Picasso.get()
-//                    .load(it)
-//                    .placeholder(R.drawable.card_placeholder)
-//                    .networkPolicy(NetworkPolicy.OFFLINE)
-//                    .into(holder.image, object : Callback {
-//                        override fun onSuccess() {
-//                        }
-//
-//                        override fun onError(e: Exception?) {
-//                            storageRef.child("banner/tournaments/${tournaments.get(position).banner}")
-//                                .downloadUrl
-//                                .addOnSuccessListener {
-//                                    Picasso.get().load(it).into(holder.image)
-//                                }
-//                        }
-//                    })
-//            }
-//
-//        storageRef.child("logo/tournaments/${tournaments.get(position).logo}")
-//            .downloadUrl
-//            .addOnSuccessListener {
-//                Picasso.get()
-//                    .load(it)
-//                    .placeholder(R.drawable.card_placeholder)
-//                    .networkPolicy(NetworkPolicy.OFFLINE)
-//                    .into(holder.logo, object : Callback {
-//                        override fun onSuccess() {
-//                        }
-//
-//                        override fun onError(e: Exception?) {
-//                            storageRef.child("logo/tournaments/${tournaments.get(position).logo}")
-//                                .downloadUrl
-//                                .addOnSuccessListener {
-//                                    Picasso.get().load(it).into(holder.logo)
-//                                }
-//                        }
-//                    })
-//            }
-
-//        banners.get(position)
-//            .into(holder.image, object : Callback {
-//                override fun onSuccess() {
-//                    Log.d("Picasso", "Image loaded from cache")
-//                }
-//
-//                override fun onError(e: Exception?) {
-//                    storageRef.child("banner/tournaments/${banner}")
-//                        .downloadUrl
-//                        .addOnSuccessListener {
-//                            Picasso.get().load(it).into(holder.image)
-//                        }
-//                }
-//            })
-//
-//        logos.get(position)
-//            .into(holder.logo, object : Callback {
-//                override fun onSuccess() {
-//                }
-//
-//                override fun onError(e: Exception?) {
-//                    storageRef.child("logo/tournaments/${logo}")
-//                        .downloadUrl
-//                        .addOnSuccessListener {
-//                            Picasso.get().load(it).into(holder.logo)
-//                        }
-//                }
-//            })
 
         holder.image.setOnClickListener {
             onItemClickCallback.onItemClicked(tournaments.get(position).banner)

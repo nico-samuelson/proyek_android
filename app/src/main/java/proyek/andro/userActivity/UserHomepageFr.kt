@@ -64,7 +64,7 @@ class UserHomepageFr : Fragment() {
         parent = super.requireActivity() as UserActivity
 
         if (parent.getMatches().size == 0 || arguments?.getString("refresh") != null)
-            job = parent.getHomepageData()
+            job = parent.getData()
     }
 
     override fun onCreateView(

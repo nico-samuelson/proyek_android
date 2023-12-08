@@ -31,10 +31,10 @@ class MainActivity : AppCompatActivity() {
 //                     OrganizationSeeder().run()
 //                     TeamSeeder().run()
 //                     PlayerSeeder().run()
-//                     TournamentSeeder().run()
+                     TournamentSeeder().run()
 //                     TournamentPhaseSeeder().run()
 //                     ParticipantSeeder().run()
-                    MatchSeeder().run()
+//                    MatchSeeder().run()
 //                     PlayerHistorySeeder().run()
                 }
             }

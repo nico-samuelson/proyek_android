@@ -61,6 +61,23 @@ class TournamentSeeder() {
             2,
         ))
 
+        tournaments.add(Tournament(
+            UUID.randomUUID().toString(),
+            games.filter { it.name == "Valorant" }.first().id,
+            "AfreecaTV Valorant League",
+            "2023-12-05",
+            "2023-12-10",
+            80000,
+            "AfreecaTV",
+            "Offline",
+            listOf("Seoul"),
+            listOf("Afreeca Colosseum"),
+            "AfreecaTV VALORANT LEAGUE is one of the biggest OFF//SEASON tournaments within the region and will invite 8 teams from 6 countries.",
+            "logo_avl_23.png",
+            "banner_avl_23.avif",
+            2,
+        ))
+
         tournaments.forEach{
             it.insertOrUpdate()
         }

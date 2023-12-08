@@ -24,6 +24,7 @@ import proyek.andro.model.Game
 import proyek.andro.model.Match
 import proyek.andro.model.Team
 import proyek.andro.model.Tournament
+import proyek.andro.model.TournamentPhase
 
 class UserActivity : AppCompatActivity() {
     private var tournaments = ArrayList<Tournament>()
@@ -35,6 +36,8 @@ class UserActivity : AppCompatActivity() {
 
     private var teams = ArrayList<Team>()
     private var matches = ArrayList<Match>()
+
+    private var selectedGame = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -163,23 +166,38 @@ class UserActivity : AppCompatActivity() {
         this.gameBanners = banners
     }
 
-    fun getHomepageData(): Job {
+    fun setSelectedGame(game: Int) {
+        this.selectedGame = game
+    }
+
+    fun getSelectedGame(): Int {
+        return this.selectedGame
+    }
+
+    fun getData(): Job {
         return CoroutineScope(Dispatchers.Main).launch {
             // get data
             games = Game().get()
             teams = Team().get(limit = 100)
             matches = Match().get(limit = 5, order = arrayOf(arrayOf("time", "desc")))
-        }
-    }
-
-    fun getExploreData(): Job {
-        return CoroutineScope(Dispatchers.Main).launch {
-            // get data
             tournaments = Tournament().get(
                 filter = Filter.lessThan("status", 3),
-                limit = 5,
-                order = arrayOf(arrayOf("status", "asc"), arrayOf("start_date", "desc"))
+                order = arrayOf(arrayOf("status", "asc")),
+                limit = 50
             )
         }
     }
+
+//    fun getExploreData(game : String): Job {
+//        return CoroutineScope(Dispatchers.Main).launch {
+//            tournaments = Tournament().get(
+//                filter = Filter.and(
+//                    Filter.equalTo("game", games.filter { it.name == game }.get(0).id),
+//                    Filter.lessThan("status", 3)
+//                ),
+//                limit = 5,
+//                order = arrayOf(arrayOf("status", "asc"), arrayOf("start_date", "desc"))
+//            )
+//        }
+//    }
 }

@@ -67,11 +67,11 @@ class MatchCarouselAdapter (
         holder.team2Score.text = match.score.split("-")[1]
 
         if (scores[0] > scores[1]) {
-            holder.team1Score.setTextColor(holder.itemView.context.resources.getColor(R.color.green))
-            holder.team2Score.setTextColor(holder.itemView.context.resources.getColor(R.color.red))
+            holder.team1Score.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
+            holder.team2Score.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
         } else if (scores[0] < scores[1]) {
-            holder.team1Score.setTextColor(holder.itemView.context.resources.getColor(R.color.red))
-            holder.team2Score.setTextColor(holder.itemView.context.resources.getColor(R.color.green))
+            holder.team1Score.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
+            holder.team2Score.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
         } else {
             holder.team1Score.setTextColor(holder.itemView.context.resources.getColor(R.color.disabled))
             holder.team2Score.setTextColor(holder.itemView.context.resources.getColor(R.color.disabled))

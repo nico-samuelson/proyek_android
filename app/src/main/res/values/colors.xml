@@ -4,6 +4,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="background">#1d222c</color>
     <color name="primary">#9575DE</color>
+    <color name="secondary">#5f5a9b</color>
+    <color name="light">#cdcaff</color>
     <color name="disabled">#888888</color>
     <color name="green">#5fd968</color>
     <color name="red">#e76361</color>

@@ -1,15 +1,19 @@
 package proyek.andro.userActivity
 
-import android.net.Uri
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.HorizontalScrollView
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.carousel.CarouselSnapHelper
+import com.google.android.material.carousel.HeroCarouselStrategy
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import kotlinx.coroutines.CoroutineScope
@@ -17,10 +21,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import proyek.andro.R
-import proyek.andro.adapter.GameCarouselAdapter
-import proyek.andro.adapter.MatchCarouselAdapter
+import proyek.andro.adapter.ListAdapter
 import proyek.andro.adapter.TournamentCarouselAdapter
 import proyek.andro.helper.StorageHelper
+import proyek.andro.model.Tournament
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -37,9 +41,12 @@ class ExploreFr : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var rvTournamentCarousel: RecyclerView
+    private lateinit var rvOngoing : RecyclerView
+    private lateinit var rvUpcoming : RecyclerView
     private lateinit var parent : UserActivity
-    private lateinit var tournamentBanners: ArrayList<Uri>
-    private lateinit var tournamentLogos: ArrayList<Uri>
+    private var tournaments = ArrayList<Tournament>()
+    private var ongoing = ArrayList<Tournament>()
+    private var upcoming = ArrayList<Tournament>()
     var job: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +59,7 @@ class ExploreFr : Fragment() {
         parent = super.requireActivity() as UserActivity
 
         if (parent.getTournaments().size == 0 || arguments?.getString("refresh") != null)
-            job = parent.getExploreData()
+            job = parent.getData()
     }
 
     override fun onCreateView(
@@ -66,34 +73,35 @@ class ExploreFr : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var chips = view.findViewById<ChipGroup>(R.id.gameChips)
-
-        parent.getGames().forEachIndexed { index, game ->
-            val chip = Chip(context)
-            chip.chipBackgroundColor = resources.getColorStateList(R.color.background, null)
-            chip.setTextColor(resources.getColor(R.color.white, null))
-            chip.chipStrokeColor = resources.getColorStateList(R.color.primary, null)
-            chip.minHeight = 56
-            chip.chipCornerRadius = 50f
-            chip.text = game.name
-            chip.isCheckable = true
-            if (index == 0) chip.isChecked = true
-
-            chips.addView(chip)
-        }
-
         rvTournamentCarousel = view.findViewById(R.id.tournaments_recycler_view)
-        rvTournamentCarousel.layoutManager = CarouselLayoutManager()
+        rvOngoing = view.findViewById(R.id.ongoing_tournaments)
+        rvUpcoming = view.findViewById(R.id.upcoming_tournaments)
+
+        rvTournamentCarousel.layoutManager = CarouselLayoutManager(HeroCarouselStrategy())
+        rvOngoing.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
         CarouselSnapHelper().attachToRecyclerView(rvTournamentCarousel)
 
+//        var selectedChip : Chip? = null
+
         if (job == null && parent.getTournaments().size > 0) {
-            Log.d("fetch data", "data already fetched")
-            CoroutineScope(Dispatchers.Main).launch {
-                showData()
-            }
-        } else {
-            Log.d("fetch data", "data not yet fetched")
+            tournaments = parent.getTournaments().filter { it.game == parent.getGames().get(parent.getSelectedGame()).id } as ArrayList<Tournament>
+            tournaments = tournaments.sortedByDescending { it.start_date }.toMutableList() as ArrayList<Tournament>
+
+            ongoing = tournaments.filter { it.status == 1L } as ArrayList<Tournament>
+
+            makeChips(view)
+            CoroutineScope(Dispatchers.Main).launch {showData()}
+        }
+        else if (job != null) {
             job?.invokeOnCompletion {
+                tournaments = parent.getTournaments().filter { it.game == parent.getGames().get(parent.getSelectedGame()).id } as ArrayList<Tournament>
+                tournaments = tournaments.sortedByDescending { it.start_date }.toMutableList() as ArrayList<Tournament>
+
+                ongoing = tournaments.filter { it.status == 1L } as ArrayList<Tournament>
+                upcoming = tournaments.filter { it.status == 0L } as ArrayList<Tournament>
+
+                makeChips(view)
                 CoroutineScope(Dispatchers.Main).launch {
                     showData()
                     job = null
@@ -102,29 +110,106 @@ class ExploreFr : Fragment() {
         }
     }
 
+    fun makeChips(view : View) {
+        var chips = view.findViewById<ChipGroup>(R.id.gameChips)
+        val hsv : HorizontalScrollView = view.findViewById(R.id.horizontalScrollView)
+        val colorState = ColorStateList(
+            arrayOf(
+                intArrayOf(android.R.attr.state_checked),
+                intArrayOf(0)
+            ),
+            intArrayOf(
+                ContextCompat.getColor(parent, R.color.primary),
+                ContextCompat.getColor(parent, R.color.background)
+            )
+        )
+
+        parent.getGames().forEachIndexed { index, game ->
+            val chip = Chip(context)
+
+            chip.id = index
+            chip.setTextColor(resources.getColor(R.color.white, null))
+            chip.chipStrokeColor = resources.getColorStateList(R.color.primary, null)
+            chip.minHeight = 56
+            chip.chipCornerRadius = 50f
+            chip.text = game.name
+            chip.isCheckable = true
+
+            if (index == parent.getSelectedGame()) {
+                chip.isChecked = true
+//                selectedChip = chip
+            }
+            if (chip.isChecked) chip.chipBackgroundColor = colorState
+            else chip.chipBackgroundColor = colorState
+
+            chip.setOnClickListener {
+                CoroutineScope(Dispatchers.Main).launch {
+                    parent.setTournamentBanners(ArrayList())
+                    parent.setTournamentLogos(ArrayList())
+                    parent.setSelectedGame(chip.id)
+
+                    tournaments = parent.getTournaments().filter { it.game == parent.getGames().get(chip.id).id } as ArrayList<Tournament>
+                    tournaments = tournaments.sortedByDescending { it.start_date }.toMutableList() as ArrayList<Tournament>
+                    ongoing = tournaments.filter { it.status == 1L } as ArrayList<Tournament>
+                    upcoming = tournaments.filter { it.status == 0L } as ArrayList<Tournament>
+
+                    CoroutineScope(Dispatchers.Main).launch {showData()}
+                }
+            }
+
+            chips.addView(chip)
+        }
+    }
+
     suspend fun showData() {
         val helper = StorageHelper()
 
         if (parent.getTournamentBanners().size == 0 || arguments?.getString("refresh") != null) {
-            parent.setTournamentBanners(helper.preloadImages(parent.getTournaments().map { it.banner }, "banner/tournaments/"))
-            parent.setTournamentLogos(helper.preloadImages(parent.getTournaments().map { it.logo }, "logo/tournaments/"))
-
-            rvTournamentCarousel.adapter = TournamentCarouselAdapter(
-                parent.getTournaments(),
-                parent.getTournamentBanners(),
-                parent.getTournamentLogos()
+            parent.setTournamentBanners(
+                helper.preloadImages(
+                    tournaments.map { it.banner },
+                    "banner/tournaments/"
+                )
             )
-            rvTournamentCarousel.recycledViewPool.setMaxRecycledViews(2, 0)
-        }
-        else {
-            rvTournamentCarousel.adapter = TournamentCarouselAdapter(
-                parent.getTournaments(),
-                parent.getTournamentBanners(),
-                parent.getTournamentLogos()
+            parent.setTournamentLogos(
+                helper.preloadImages(
+                    tournaments.map { it.logo },
+                    "logo/tournaments/"
+                )
             )
-            rvTournamentCarousel.recycledViewPool.setMaxRecycledViews(2, 0)
         }
 
+        var tournamentAdapter = TournamentCarouselAdapter(
+            tournaments,
+            parent.getTournamentBanners(),
+            parent.getTournamentLogos()
+        )
+        val ongoingAdapter = ListAdapter(
+            ongoing.map { it.logo },
+            ongoing.map { it.name },
+            ongoing.map { "${it.start_date} - ${it.end_date}" },
+            "logo/tournaments/"
+        )
+        val upcomingAdapter = ListAdapter(
+            upcoming.map { it.logo },
+            upcoming.map { it.name },
+            upcoming.map { "${it.start_date} - ${it.end_date}" },
+            "logo/tournaments/"
+        )
+
+        ongoingAdapter.setOnItemClickCallback(object : ListAdapter.OnItemClickCallback {
+            override fun onItemClicked(data: String) {
+                Log.d("Clicked", data)
+            }
+
+            override fun delData(pos: Int) {
+                // do nothing
+            }
+        })
+
+        rvTournamentCarousel.adapter = tournamentAdapter
+        rvOngoing.adapter = ongoingAdapter
+        rvUpcoming.adapter = upcomingAdapter
     }
 
     companion object {
