@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".userActivity.ExploreFr">
+    tools:context=".userActivity.ExploreFr"
+    tools:ignore="MissingDefaultResource">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
@@ -39,6 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:background="#00000000"
+        android:contentDescription="favorite"
         android:padding="8dp"
         android:src="@drawable/ic_favorite_32"
         app:layout_constraintEnd_toEndOf="parent"
@@ -122,7 +124,7 @@
             android:layout_height="180dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="24dp"
-            android:paddingStart="4dp" />
+            android:layout_marginStart="8dp"/>
 
     </LinearLayout>
 

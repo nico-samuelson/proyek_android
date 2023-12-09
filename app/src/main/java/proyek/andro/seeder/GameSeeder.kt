@@ -1,9 +1,5 @@
 package proyek.andro.seeder
 
-import android.util.Log
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.firestore
-import proyek.andro.model.Admin
 import proyek.andro.model.Game
 import java.util.UUID
 
