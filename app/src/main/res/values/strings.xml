@@ -7,4 +7,7 @@
     <string name="accountExist">Account already exists!</string>
     <string name="error">An error occured! Please try again</string>
     <string name="timedOut">Your session has expired. Please log in again</string>
+    <string name="playerdeleted">Player has been removed!</string>
+    <string name="fillAll">Please fill all fields!</string>
+    <string name="uploadFailed">File upload failed! Please try again</string>
 </resources>

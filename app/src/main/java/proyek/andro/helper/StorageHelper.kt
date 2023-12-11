@@ -13,11 +13,10 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 class StorageHelper {
-//    val storageRef = FirebaseStorage.getInstance().reference
+    val storageRef = FirebaseStorage.getInstance().reference
 
     suspend fun preloadImages(images: List<String>, directory: String): ArrayList<Uri> {
         val imagesURI = ArrayList<Uri>()
-        val storageRef = FirebaseStorage.getInstance().reference
 
         images.forEach { image ->
             suspendCoroutine { continuation ->
@@ -35,5 +34,23 @@ class StorageHelper {
         }
 
         return imagesURI
+    }
+
+    suspend fun uploadFile(uri: Uri, path: String): Task<Uri> {
+        val storageRef = FirebaseStorage.getInstance().reference
+        val fileRef = storageRef.child(path)
+
+        return fileRef.putFile(uri).continueWithTask { task ->
+            if (!task.isSuccessful) {
+                task.exception?.let {
+                    throw it
+                }
+            }
+            fileRef.downloadUrl
+        }
+    }
+
+    suspend fun deleteFile(path: String): Task<Void> {
+        return storageRef.child(path).delete()
     }
 }
