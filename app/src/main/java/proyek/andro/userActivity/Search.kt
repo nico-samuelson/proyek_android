@@ -28,6 +28,7 @@ class Search : AppCompatActivity() {
         val backBtn = findViewById<ImageView>(R.id.backBtn)
         backBtn.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
+        // arraylist to hold data
         var games : ArrayList<Game> = ArrayList()
         var tournaments : ArrayList<Tournament> = ArrayList()
         var players : ArrayList<Player> = ArrayList()

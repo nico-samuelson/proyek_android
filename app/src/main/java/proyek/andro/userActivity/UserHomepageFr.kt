@@ -10,10 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.carousel.CarouselSnapHelper
 import com.google.android.material.carousel.UncontainedCarouselStrategy
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.search.SearchBar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -47,7 +49,6 @@ class UserHomepageFr : Fragment() {
     lateinit var rvGameCarousel: RecyclerView
     lateinit var rvMatchCarousel: RecyclerView
     lateinit var parent: UserActivity
-    var gameBanners = ArrayList<Uri>()
     var job: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,6 +75,8 @@ class UserHomepageFr : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        view.findViewById<TextView>(R.id.gamesText).visibility = View.GONE
+
         rvGameCarousel = view.findViewById(R.id.games_recycler_view)
         rvMatchCarousel = view.findViewById(R.id.matches_recycler_view)
 
@@ -91,20 +94,20 @@ class UserHomepageFr : Fragment() {
         if (job == null && parent.getMatches().size > 0) {
             Log.d("fetch data", "data already fetched")
             CoroutineScope(Dispatchers.Main).launch {
-                showData()
+                showData(view)
             }
         } else {
             Log.d("fetch data", "data not yet fetched")
             job?.invokeOnCompletion {
                 CoroutineScope(Dispatchers.Main).launch {
-                    showData()
+                    showData(view)
                     job = null
                 }
             }
         }
     }
 
-    suspend fun showData() {
+    suspend fun showData(view : View) {
         if (parent.getGameBanners().size == 0 || arguments?.getString("refresh") != null) {
             parent.setGameBanners(
                 StorageHelper().preloadImages(
@@ -129,6 +132,9 @@ class UserHomepageFr : Fragment() {
                     .commit()
             }
         })
+
+        view.findViewById<TextView>(R.id.gamesText).visibility = View.VISIBLE
+        view.findViewById<CircularProgressIndicator>(R.id.loading_indicator).visibility = View.GONE
 
         rvGameCarousel.adapter = gameCarouselAdapter
         rvMatchCarousel.adapter = MatchCarouselAdapter(parent.getMatches(), parent.getTeams())

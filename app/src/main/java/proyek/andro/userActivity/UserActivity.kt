@@ -21,6 +21,7 @@ import proyek.andro.model.Match
 import proyek.andro.model.Team
 import proyek.andro.model.Tournament
 import proyek.andro.model.User
+import proyek.andro.model.UserFavorite
 import java.time.LocalDate
 
 class UserActivity : AppCompatActivity() {
@@ -35,8 +36,9 @@ class UserActivity : AppCompatActivity() {
     private var matches = ArrayList<Match>()
 
     private var user : User? = null
+    private var favorites = ArrayList<UserFavorite>()
 
-    private var selectedGame = 1
+    private var selectedGame = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +61,13 @@ class UserActivity : AppCompatActivity() {
                 intent.putExtra("timed_out", true)
                 startActivity(intent)
             }
-            else user = users.get(0)
+            else {
+                user = users.get(0)
+                favorites = UserFavorite().get(
+                    filter = Filter.equalTo("user", user!!.id),
+                    order = arrayOf(arrayOf("user", "desc"))
+                )
+            }
         }
 
         job.invokeOnCompletion {
@@ -198,7 +206,6 @@ class UserActivity : AppCompatActivity() {
     fun getData(): Job {
         return CoroutineScope(Dispatchers.Main).launch {
             // get data
-            games = Game().get()
             teams = Team().get(limit = 100)
             tournaments = Tournament().get(
                 filter = Filter.lessThan("status", 3),
@@ -210,6 +217,12 @@ class UserActivity : AppCompatActivity() {
                 order = arrayOf(arrayOf("time", "desc")),
                 limit = 5
             )
+            val tempGame : ArrayList<Game> = Game().get()
+
+            val gameFavorites = tempGame.filter { it.id in favorites.map { fav -> fav.game } }
+            val gameNonFavorite = tempGame.filter { it.id !in favorites.map { fav -> fav.game } }
+            gameFavorites.map { games.add(it) }
+            gameNonFavorite.map { games.add(it) }
         }
     }
 
