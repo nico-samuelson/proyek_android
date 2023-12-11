@@ -20,10 +20,10 @@ import java.time.format.TextStyle
 import java.util.Locale
 
 class ListAdapter (
-    private val images : List<String>,
-    private val titles : List<String>,
-    private val descriptions : List<String>,
-    private val imagePath : String,
+    private var images : List<String>,
+    private var titles : List<String>,
+    private var descriptions : List<String>,
+    private var imagePath : String,
 ) : RecyclerView.Adapter<ListAdapter.ListViewHolder>() {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
@@ -73,6 +73,13 @@ class ListAdapter (
 //            .into(holder.image)
 
         holder.itemView.setOnClickListener { onItemClickCallback.onItemClicked(titles.get(position)) }
+    }
+
+    fun setData(images : List<String>, titles : List<String>, descriptions : List<String>) {
+        this.images = images
+        this.titles = titles
+        this.descriptions = descriptions
+        notifyDataSetChanged()
     }
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {

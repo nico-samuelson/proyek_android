@@ -1,6 +1,7 @@
 package proyek.andro.userActivity
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
@@ -19,6 +20,7 @@ import com.google.android.material.carousel.HeroCarouselStrategy
 import com.google.android.material.carousel.UncontainedCarouselStrategy
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.search.SearchBar
 import com.google.firebase.firestore.Filter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -89,6 +91,13 @@ class ExploreFr : Fragment() {
     @SuppressLint("RestrictedApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val search_bar = view.findViewById<SearchBar>(R.id.search_bar)
+        search_bar.setOnClickListener {
+            val intent = Intent(parent, Search::class.java)
+            intent.putExtra("search_type", 0)
+            startActivity(intent)
+        }
 
         rvTournamentCarousel = view.findViewById(R.id.tournaments_recycler_view)
         rvOngoingTournaments = view.findViewById(R.id.ongoing_tournaments)

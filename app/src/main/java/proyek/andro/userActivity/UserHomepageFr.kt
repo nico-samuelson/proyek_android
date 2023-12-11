@@ -1,6 +1,7 @@
 package proyek.andro.userActivity
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -8,27 +9,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.LifecycleCoroutineScope
-import androidx.lifecycle.lifecycleScope
+import android.widget.SearchView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.carousel.CarouselSnapHelper
-import com.google.android.material.carousel.MultiBrowseCarouselStrategy
 import com.google.android.material.carousel.UncontainedCarouselStrategy
-import com.google.firebase.firestore.Filter
-import com.google.firebase.storage.FirebaseStorage
-import com.squareup.picasso.NetworkPolicy
-import com.squareup.picasso.Picasso
-import com.squareup.picasso.RequestCreator
+import com.google.android.material.search.SearchBar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import proyek.andro.R
 import proyek.andro.adapter.GameCarouselAdapter
 import proyek.andro.adapter.MatchCarouselAdapter
-import proyek.andro.adapter.TournamentCarouselAdapter
 import proyek.andro.helper.StorageHelper
 import proyek.andro.model.Game
 import proyek.andro.model.Match
@@ -87,6 +80,13 @@ class UserHomepageFr : Fragment() {
         rvGameCarousel.layoutManager = CarouselLayoutManager(UncontainedCarouselStrategy())
         rvMatchCarousel.layoutManager = CarouselLayoutManager(UncontainedCarouselStrategy())
         CarouselSnapHelper().attachToRecyclerView(rvMatchCarousel)
+
+        val search_bar = view.findViewById<SearchBar>(R.id.search_bar)
+        search_bar.setOnClickListener {
+            val intent = Intent(parent, Search::class.java)
+            intent.putExtra("search_type", 0)
+            startActivity(intent)
+        }
 
         if (job == null && parent.getMatches().size > 0) {
             Log.d("fetch data", "data already fetched")
