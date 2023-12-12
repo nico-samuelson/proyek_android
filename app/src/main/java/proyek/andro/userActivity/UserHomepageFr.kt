@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.carousel.CarouselSnapHelper
+import com.google.android.material.carousel.HeroCarouselStrategy
 import com.google.android.material.carousel.UncontainedCarouselStrategy
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.search.SearchBar
@@ -81,7 +82,7 @@ class UserHomepageFr : Fragment() {
         rvMatchCarousel = view.findViewById(R.id.matches_recycler_view)
 
         rvGameCarousel.layoutManager = CarouselLayoutManager(UncontainedCarouselStrategy())
-        rvMatchCarousel.layoutManager = CarouselLayoutManager(UncontainedCarouselStrategy())
+        rvMatchCarousel.layoutManager = CarouselLayoutManager(HeroCarouselStrategy())
         CarouselSnapHelper().attachToRecyclerView(rvMatchCarousel)
 
         val search_bar = view.findViewById<SearchBar>(R.id.search_bar)

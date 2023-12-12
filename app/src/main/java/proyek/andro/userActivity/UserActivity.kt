@@ -203,6 +203,18 @@ class UserActivity : AppCompatActivity() {
         return this.selectedGame
     }
 
+    fun getUser(): User? {
+        return this.user
+    }
+
+    fun getFavorites(): ArrayList<UserFavorite> {
+        return this.favorites
+    }
+
+    fun setFavorites(favorites: ArrayList<UserFavorite>) {
+        this.favorites = favorites
+    }
+
     fun getData(): Job {
         return CoroutineScope(Dispatchers.Main).launch {
             // get data

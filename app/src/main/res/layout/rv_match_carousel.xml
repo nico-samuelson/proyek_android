@@ -7,7 +7,7 @@
     android:layout_marginHorizontal="8dp"
     android:id="@+id/carousel_container"
     android:foreground="?attr/selectableItemBackground"
-    android:background="#252934"
+    android:background="@color/gray"
     app:shapeAppearance="?attr/shapeAppearanceCornerLarge"
     tools:ignore="MissingDefaultResource">
 
@@ -34,7 +34,7 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_marginStart="40dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:padding="8dp"
             android:scaleType="fitCenter"
             android:transitionName="image"

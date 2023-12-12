@@ -82,20 +82,9 @@ class Register : AppCompatActivity() {
                             age = age
                         )
 
-                        // try to make new user
-                        val success = user.insertOrUpdate()
-
-                        if (success == 1) startActivity(Intent(this@Register, Login::class.java))
-                        else {
-                            Snackbar.make(
-                                btnRegister,
-                                R.string.error,
-                                Snackbar.LENGTH_SHORT
-                            ).apply {
-                                setBackgroundTint(resources.getColor(R.color.light, null))
-                                setTextColor(resources.getColor(R.color.black, null))
-                            }.show()
-                        }
+                        // make new user
+                        user.insertOrUpdate()
+                        startActivity(Intent(this@Register, Login::class.java))
                     }
 
                     else {

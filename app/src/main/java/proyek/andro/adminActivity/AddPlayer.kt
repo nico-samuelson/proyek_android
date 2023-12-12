@@ -20,6 +20,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import proyek.andro.R
+import proyek.andro.helper.StorageHelper
 import proyek.andro.model.Game
 import proyek.andro.model.Player
 import proyek.andro.model.Team
@@ -151,7 +152,8 @@ class AddPlayer : AppCompatActivity() {
                 else if (mode == "edit") {
                     if (imageURI != null) {
                         CoroutineScope(Dispatchers.Main).launch {
-                            player?.photo = uploadPhoto(imageURI!!)
+                            StorageHelper().deleteFile(player?.photo ?: "")
+                            player?.photo = "/photos/players/${uploadPhoto(imageURI!!)}"
                         }
                     }
 

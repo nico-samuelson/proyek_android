@@ -19,5 +19,10 @@ class AdminActivity : AppCompatActivity() {
             val intent = Intent(this, ManagePlayers::class.java)
             startActivity(intent)
         }
+
+        CRUDNews.setOnClickListener {
+            val intent = Intent(this, ManageNews::class.java)
+            startActivity(intent)
+        }
     }
 }
