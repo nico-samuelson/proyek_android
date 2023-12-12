@@ -18,6 +18,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import proyek.andro.R
+import proyek.andro.helper.StorageHelper
 import proyek.andro.model.News
 import proyek.andro.model.User
 import java.time.LocalDate
@@ -127,6 +128,7 @@ class AddNews : AppCompatActivity() {
                 else if (mode == "edit") {
                     if (imageURI != null) {
                         CoroutineScope(Dispatchers.Main).launch {
+                            StorageHelper().deleteFile(selectedNews?.image ?: "")
                             selectedNews?.image = uploadPhoto(imageURI!!)
                         }
                     }

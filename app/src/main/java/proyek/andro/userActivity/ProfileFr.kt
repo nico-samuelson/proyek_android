@@ -76,7 +76,10 @@ class ProfileFr : Fragment() {
 
         logout.setOnClickListener {
             sp.edit().clear().apply()
-            startActivity(Intent(parent, Login::class.java))
+
+            val intent = Intent(parent, Login::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
         }
 
         delAcc.setOnClickListener {
@@ -109,6 +112,24 @@ class ProfileFr : Fragment() {
 
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.black))
             dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.red))
+        }
+
+        changeEmail.setOnClickListener {
+            val intent = Intent(parent, ResetCredentials::class.java)
+            intent.putExtra("type", "email")
+            intent.putExtra("user_id", parent.getUser()?.id)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+            startActivity(intent)
+        }
+
+        changePass.setOnClickListener {
+            val intent = Intent(parent, ResetCredentials::class.java)
+            intent.putExtra("type", "password")
+            intent.putExtra("user_id", parent.getUser()?.id)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+            startActivity(intent)
         }
     }
 
