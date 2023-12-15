@@ -1,6 +1,7 @@
 package proyek.andro.adapter
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,8 @@ import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 import proyek.andro.R
 import proyek.andro.model.Tournament
+import proyek.andro.userActivity.TournamentPage
+import proyek.andro.userActivity.UserHomepageFr
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
@@ -37,6 +40,13 @@ class TournamentCarouselAdapter (
         val logo : ImageView = itemView.findViewById(R.id.carousel_tournament_logo)
         val name : TextView = itemView.findViewById(R.id.carousel_tournament_name)
         val date : TextView = itemView.findViewById(R.id.carousel_tournament_date)
+
+        init {
+            itemView.setOnClickListener {
+                val intent = Intent(itemView.context, TournamentPage::class.java)
+                itemView.context.startActivity(intent)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
