@@ -4,10 +4,13 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -38,6 +41,17 @@ class ManageNews : AppCompatActivity() {
         var images : ArrayList<String> = ArrayList()
         var names : ArrayList<String> = ArrayList()
 
+        var filteredNews : ArrayList<News> = ArrayList()
+        var filteredImages : ArrayList<String> = ArrayList()
+        var filteredNames : ArrayList<String> = ArrayList()
+
+        lateinit var adapterN : SimpleListAdapter
+
+        var search_view : SearchView = findViewById(R.id.search_view)
+        val etSearch = search_view.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
+        etSearch.setHintTextColor(resources.getColor(R.color.disabled, null))
+        etSearch.setTextColor(resources.getColor(R.color.white, null))
+
         backBtn.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
         // fab click listener
@@ -61,15 +75,19 @@ class ManageNews : AppCompatActivity() {
                     names.add(it.title)
                 }
 
+                filteredNews.addAll(news)
+                filteredImages.addAll(images)
+                filteredNames.addAll(names)
+
                 rvNews.layoutManager = LinearLayoutManager(
                     this@ManageNews,
                     LinearLayoutManager.VERTICAL,
                     false
                 )
 
-                val adapterP = SimpleListAdapter(images, names, "")
+                adapterN = SimpleListAdapter(filteredImages, filteredNames, "")
 
-                adapterP.setOnItemClickCallback(object : SimpleListAdapter.OnItemClickCallback {
+                adapterN.setOnItemClickCallback(object : SimpleListAdapter.OnItemClickCallback {
                     override fun onItemClicked(data: String) {
                         val intent = Intent(this@ManageNews, AddNews::class.java)
                         intent.putExtra("mode", "edit")
@@ -78,10 +96,10 @@ class ManageNews : AppCompatActivity() {
                     }
 
                     override fun delData(pos: Int) {
-                        val selectedNews = news.get(pos)
+                        val selectedNews = filteredNews.get(pos)
 
                         val alert = MaterialAlertDialogBuilder(this@ManageNews)
-                            .setTitle("Delete Player")
+                            .setTitle("Delete News")
                             .setMessage("Are you sure you want to delete ${selectedNews.title}?")
                             .setNegativeButton("Cancel") { dialog, which ->
                                 dialog.dismiss()
@@ -91,10 +109,15 @@ class ManageNews : AppCompatActivity() {
                                     StorageHelper().deleteFile(selectedNews.image)
                                     selectedNews.delete(selectedNews.id)
 
-                                    news.removeAt(pos)
-                                    images.removeAt(pos)
-                                    names.removeAt(pos)
-                                    adapterP.setData(images, names)
+
+                                    images.remove(selectedNews.image)
+                                    names.remove(selectedNews.title)
+                                    news.remove(selectedNews)
+                                    filteredImages.removeAt(pos)
+                                    filteredNames.removeAt(pos)
+                                    filteredNews.removeAt(pos)
+
+                                    adapterN.setData(images, names)
 
                                     Snackbar.make(
                                         addNewsBtn,
@@ -116,8 +139,48 @@ class ManageNews : AppCompatActivity() {
 
                 loadingView.visibility = View.GONE
                 rvNews.visibility = View.VISIBLE
-                rvNews.adapter = adapterP
+                rvNews.adapter = adapterN
             }
         }
+
+        // search players
+        search_view.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                // reset rv states
+                filteredNews.clear()
+                filteredNames.clear()
+                filteredImages.clear()
+
+                CoroutineScope(Dispatchers.Main).launch {
+                    filteredNews = news.filter {
+                        it.title.lowercase().contains(query.toString().lowercase())
+                    } as ArrayList<News>
+                    filteredImages = filteredNews.map { it.image } as ArrayList<String>
+                    filteredNames = filteredNews.map { it.title } as ArrayList<String>
+
+                    adapterN.setData(filteredImages, filteredNames)
+                }
+
+                // clear on screen keyboard to prevent this method from being called twice
+                search_view.clearFocus()
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                // do something when text changes
+                if (newText.toString() == "") {
+                    filteredNews.clear()
+                    filteredNames.clear()
+                    filteredImages.clear()
+
+                    filteredNews.addAll(news)
+                    filteredImages.addAll(images)
+                    filteredNames.addAll(names)
+
+                    adapterN.setData(filteredImages, filteredNames)
+                }
+                return true
+            }
+        })
     }
 }

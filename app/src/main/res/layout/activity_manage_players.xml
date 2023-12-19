@@ -28,22 +28,39 @@
         app:layout_constraintStart_toEndOf="@+id/backBtn"
         app:layout_constraintTop_toTopOf="@+id/backBtn" />
 
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="12dp"
+        android:layout_marginTop="24dp"
+        android:layout_weight="1"
+        android:background="@color/gray"
+        android:focusedByDefault="true"
+        app:iconifiedByDefault="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/backBtn"
+        app:layout_constraintTop_toBottomOf="@+id/backBtn"
+        app:queryHint="Search player" />
+
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/backBtn">
+        app:layout_constraintTop_toBottomOf="@+id/search_view">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/viewPlayers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:visibility="gone"
-            android:paddingBottom="90dp"/>
+            android:paddingBottom="90dp"
+            android:visibility="gone" />
     </ScrollView>
 
 

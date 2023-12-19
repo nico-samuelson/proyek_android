@@ -54,7 +54,7 @@ class GameCarouselAdapter (
                 }
 
                 override fun onError(e: Exception?) {
-                    storageRef.child("logo/tournaments/${games.get(position).banner}")
+                    storageRef.child("banner/games/${games.get(position).banner}")
                         .downloadUrl
                         .addOnSuccessListener {
                             Picasso.get().load(it).into(holder.banner)
