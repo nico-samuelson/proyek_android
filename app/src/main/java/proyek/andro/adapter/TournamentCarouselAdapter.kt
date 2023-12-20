@@ -1,6 +1,7 @@
 package proyek.andro.adapter
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
@@ -40,13 +41,6 @@ class TournamentCarouselAdapter (
         val logo : ImageView = itemView.findViewById(R.id.carousel_tournament_logo)
         val name : TextView = itemView.findViewById(R.id.carousel_tournament_name)
         val date : TextView = itemView.findViewById(R.id.carousel_tournament_date)
-
-        init {
-            itemView.setOnClickListener {
-                val intent = Intent(itemView.context, TournamentPage::class.java)
-                itemView.context.startActivity(intent)
-            }
-        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
@@ -105,7 +99,9 @@ class TournamentCarouselAdapter (
             })
 
         holder.image.setOnClickListener {
-            onItemClickCallback.onItemClicked(tournaments.get(position).banner)
+//            onItemClickCallback.onItemClicked(tournaments.get(position).banner)
+            val intent = Intent(it.context, TournamentPage::class.java)
+            it.context.startActivity(intent)
         }
     }
 
