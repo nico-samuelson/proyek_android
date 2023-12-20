@@ -310,7 +310,8 @@ class ExploreFr : Fragment() {
             ongoingTournamentAdapter.setOnItemClickCallback(object :
                 ListAdapter.OnItemClickCallback {
                 override fun onItemClicked(data: String) {
-                    Log.d("Clicked", data)
+                    val intent = Intent(requireContext(),  TournamentPage::class.java)
+                    startActivity(intent)
                 }
 
                 override fun delData(pos: Int) {

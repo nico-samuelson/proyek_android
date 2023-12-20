@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tournamentFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".userActivity.TournamentPage">
@@ -9,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraint1"
         android:layout_width="match_parent"
-        android:layout_height="165dp"
+        android:layout_height="250dp"
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -25,13 +26,21 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/cs2_banner"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"></ImageView>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#30000000"></View>
+                android:background="#30000000"/>
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvJudulTournament"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+
+                />
         </RelativeLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -46,14 +55,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tint="#FFFFFF" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvJudulTournament"
-        android:layout_width="match_parent"
-        android:layout_height="165dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
 
-        />
     <!--    <TextView-->
     <!--        android:layout_width="match_parent"-->
     <!--        android:layout_height="165dp"-->
@@ -71,12 +73,13 @@
         android:id="@+id/constraintLayout4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/constraint1">
 
         <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipGroup"
+            android:id="@+id/tournamentChips"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -86,40 +89,43 @@
             app:singleLine="true">
 
             <com.google.android.material.chip.Chip
+                android:id="@+id/chip1"
                 style="@style/Widget.Material3.Chip.Suggestion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#1B1D22"
+                android:checkable="false"
                 android:gravity="center"
                 android:text="Overview"
                 android:textColor="@color/white" />
 
             <com.google.android.material.chip.Chip
+                android:id="@+id/chip2"
                 style="@style/Widget.Material3.Chip.Suggestion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#1B1D22"
+                android:checkable="false"
                 android:gravity="center"
                 android:text="Schedule"
                 android:textColor="@color/white" />
 
             <com.google.android.material.chip.Chip
+                android:id="@+id/chip3"
                 style="@style/Widget.Material3.Chip.Suggestion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#1B1D22"
+                android:checkable="false"
                 android:gravity="center"
                 android:text="More info"
                 android:textColor="@color/white" />
         </com.google.android.material.chip.ChipGroup>
     </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout><!--<androidx.recyclerview.widget.RecyclerView-->
+    <!--android:id="@+id/rv_idontknow"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_idontknow"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout4" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--app:layout_constraintTop_toBottomOf="@+id/constraintLayout4" />-->
