@@ -1,6 +1,7 @@
 package proyek.andro.adminActivity
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -11,10 +12,14 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.Filter
 import kotlinx.coroutines.CoroutineScope
@@ -24,33 +29,46 @@ import proyek.andro.R
 import proyek.andro.adapter.SimpleListAdapter
 import proyek.andro.helper.StorageHelper
 import proyek.andro.model.Game
+import proyek.andro.model.Match
 import proyek.andro.model.Player
 import proyek.andro.model.Team
 import proyek.andro.model.Tournament
 
 class ManagePlayers : AppCompatActivity() {
+    var games : ArrayList<Game> = ArrayList()
+    var players : ArrayList<Player> = ArrayList()
+    var images : ArrayList<String> = ArrayList()
+    var names : ArrayList<String> = ArrayList()
+    var teams : ArrayList<ArrayList<Team>> = ArrayList()
+
+    var filteredPlayer : ArrayList<Player> = ArrayList()
+    var filteredImages : ArrayList<String> = ArrayList()
+    var filteredNames : ArrayList<String> = ArrayList()
+    var filteredGame : Int = 0
+    var searchText : String = ""
+
+    lateinit var backBtn : ImageView
+    lateinit var addPlayerBtn : FloatingActionButton
+    lateinit var loadingView : LinearLayout
+    lateinit var emptyView : LinearLayout
+    lateinit var rvPlayer : RecyclerView
+    lateinit var search_view : SearchView
+    lateinit var etSearch : EditText
+
+    lateinit var adapterP : SimpleListAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_manage_players)
 
-        val backBtn : ImageView = findViewById(R.id.backBtn)
-        val addPlayerBtn : FloatingActionButton = findViewById(R.id.addPlayerBtn)
-        val loadingView : LinearLayout = findViewById(R.id.loading_view)
-        val emptyView : LinearLayout = findViewById(R.id.empty_view)
-        val rvPlayer : RecyclerView = findViewById(R.id.viewPlayers)
+        backBtn = findViewById(R.id.backBtn)
+        addPlayerBtn = findViewById(R.id.addPlayerBtn)
+        loadingView = findViewById(R.id.loading_view)
+        emptyView = findViewById(R.id.empty_view)
+        rvPlayer = findViewById(R.id.viewPlayers)
 
-        var players : ArrayList<Player> = ArrayList()
-        var images : ArrayList<String> = ArrayList()
-        var names : ArrayList<String> = ArrayList()
-
-        var filteredPlayer : ArrayList<Player> = ArrayList()
-        var filteredImages : ArrayList<String> = ArrayList()
-        var filteredNames : ArrayList<String> = ArrayList()
-
-        lateinit var adapterP : SimpleListAdapter
-
-        var search_view : SearchView = findViewById(R.id.search_view)
-        val etSearch = search_view.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
+        search_view = findViewById(R.id.search_view)
+        etSearch = search_view.findViewById(androidx.appcompat.R.id.search_src_text)
         etSearch.setHintTextColor(resources.getColor(R.color.disabled, null))
         etSearch.setTextColor(resources.getColor(R.color.white, null))
 
@@ -65,7 +83,17 @@ class ManagePlayers : AppCompatActivity() {
 
         // fetch and show data
         CoroutineScope(Dispatchers.Main).launch {
+            games = Game().get(limit=25)
             players = Player().get(limit=1000, order = arrayOf(arrayOf("team", "ASC"), arrayOf("name", "ASC")))
+
+            makeGameFilters()
+
+            games.forEach {
+                teams.add(Team().get(
+                    filter = Filter.equalTo("game", it.id),
+                    order = arrayOf(arrayOf("game", "ASC"))
+                ))
+            }
 
             if (players.size == 0) {
                 loadingView.visibility = View.GONE
@@ -77,9 +105,7 @@ class ManagePlayers : AppCompatActivity() {
                     names.add(it.nickname)
                 }
 
-                filteredPlayer.addAll(players)
-                filteredImages.addAll(images)
-                filteredNames.addAll(names)
+                filterPlayers()
 
                 rvPlayer.layoutManager = LinearLayoutManager(
                     this@ManagePlayers,
@@ -147,43 +173,116 @@ class ManagePlayers : AppCompatActivity() {
         // search players
         search_view.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                // reset rv states
-                filteredPlayer.clear()
-                filteredNames.clear()
-                filteredImages.clear()
-
-                CoroutineScope(Dispatchers.Main).launch {
-                    filteredPlayer = players.filter {
-                        it.nickname.lowercase().contains(query.toString().lowercase())
-                    } as ArrayList<Player>
-                    filteredImages =
-                        filteredPlayer.map { Team().find<Team>(it.team).logo } as ArrayList<String>
-                    filteredNames = filteredPlayer.map { it.nickname } as ArrayList<String>
-
-                    Log.d("filtered", filteredPlayer.get(0).nickname)
-                    adapterP.setData(filteredImages, filteredNames)
-                }
-
                 // clear on screen keyboard to prevent this method from being called twice
                 search_view.clearFocus()
+
+                if (query.toString() != searchText) {
+                    searchText = query.toString()
+                    filterPlayers()
+                }
+
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 // do something when text changes
-                if (newText.toString() == "") {
-                    filteredPlayer.clear()
-                    filteredNames.clear()
-                    filteredImages.clear()
-
-                    filteredPlayer.addAll(players)
-                    filteredImages.addAll(images)
-                    filteredNames.addAll(names)
-
-                    adapterP.setData(filteredImages, filteredNames)
+                if (newText.toString() == "" && searchText != "") {
+                    searchText = newText.toString()
+                    filterPlayers()
                 }
                 return true
             }
         })
+    }
+
+    fun makeGameFilters() {
+        var chips = findViewById<ChipGroup>(R.id.gameChips)
+        val colorState = ColorStateList(
+            arrayOf(
+                intArrayOf(android.R.attr.state_checked),
+                intArrayOf(0)
+            ),
+            intArrayOf(
+                ContextCompat.getColor(this@ManagePlayers, R.color.white),
+                ContextCompat.getColor(this@ManagePlayers, R.color.disabled)
+            )
+        )
+
+        games.forEachIndexed { index, game ->
+            val chip = Chip(this@ManagePlayers)
+
+            chip.id = index
+            chip.setTextColor(resources.getColor(R.color.disabled, null))
+            chip.chipStrokeWidth = 0f
+            chip.minHeight = 40
+            chip.text = game.name
+            chip.isCheckable = true
+            chip.chipBackgroundColor = ColorStateList(
+                arrayOf(intArrayOf(0)),
+                intArrayOf(
+                    ContextCompat.getColor(this@ManagePlayers, R.color.background)
+                )
+            )
+
+            if (index == filteredGame) chip.isChecked = true
+            if (chip.isChecked) chip.setTextColor(colorState)
+            else chip.setTextColor(colorState)
+
+            chip.setOnClickListener {
+                if (index != filteredGame) {
+                    filteredGame = index
+                    CoroutineScope(Dispatchers.Main).launch {
+                        filterPlayers()
+                    }
+                }
+            }
+
+            chips.addView(chip)
+        }
+    }
+
+    fun filterPlayers() {
+        // reset rv states
+        filteredPlayer.clear()
+        filteredNames.clear()
+        filteredImages.clear()
+
+        rvPlayer.visibility = View.GONE
+        emptyView.visibility = View.GONE
+        loadingView.visibility = View.VISIBLE
+
+        CoroutineScope(Dispatchers.Main).launch {
+            if (searchText == "") {
+                filteredPlayer.addAll(
+                    players.filter {
+                        it.team in teams.get(filteredGame).map { it.id }
+                    } as ArrayList<Player>
+                )
+            }
+            else {
+                filteredPlayer = players.filter {
+                    it.team in teams.get(filteredGame).map { it.id } &&
+                    it.nickname.lowercase().contains(searchText.lowercase())
+                } as ArrayList<Player>
+            }
+
+//            Log.d("filterPlayers", "Players: " + filteredPlayer.toString())
+//            Log.d("filterPlayers", "Search: " + searchText)
+//            Log.d("filterPlayers", "Game: " + filteredGame.toString())
+            filteredImages = filteredPlayer.map { player ->
+                 teams.get(filteredGame).filter { it.id == player.team }.first().logo
+            } as ArrayList<String>
+            filteredNames = filteredPlayer.map { it.nickname } as ArrayList<String>
+            adapterP.setData(filteredImages, filteredNames)
+
+            loadingView.visibility = View.GONE
+            if (filteredPlayer.size == 0) {
+                emptyView.visibility = View.VISIBLE
+            }
+            else {
+                emptyView.visibility = View.GONE
+                rvPlayer.visibility = View.VISIBLE
+            }
+        }
     }
 }

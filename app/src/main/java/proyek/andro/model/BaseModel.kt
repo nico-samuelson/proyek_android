@@ -30,7 +30,7 @@ abstract class BaseModel(
 
     suspend fun <T> get(
         filter : Filter? = null,
-        limit: Int = 10,
+        limit: Int = 10000,
         offset: DocumentSnapshot? = null,
         order: Array<Array<String>> = arrayOf(arrayOf("id", "asc"))
     ): ArrayList<T> {
