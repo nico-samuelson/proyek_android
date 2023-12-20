@@ -1,6 +1,7 @@
 package proyek.andro.adapter
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -66,18 +67,17 @@ class SimpleListAdapter (
         holder.delBtn.setOnClickListener { onItemClickCallback.delData(position) }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setData(images : List<String>, titles : List<String>) {
         this.images = images
         this.titles = titles
 
+        Log.d("filterPlayers", "adapterNames: ${titles}")
+        Log.d("itemCount", "itemCount: ${itemCount}")
         notifyDataSetChanged()
     }
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        return 2
     }
 }

@@ -19,7 +19,6 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.Filter
 import kotlinx.coroutines.CoroutineScope
@@ -29,33 +28,29 @@ import proyek.andro.R
 import proyek.andro.adapter.SimpleListAdapter
 import proyek.andro.helper.StorageHelper
 import proyek.andro.model.Game
-import proyek.andro.model.Match
 import proyek.andro.model.Player
 import proyek.andro.model.Team
-import proyek.andro.model.Tournament
 
 class ManagePlayers : AppCompatActivity() {
-    var games : ArrayList<Game> = ArrayList()
-    var players : ArrayList<Player> = ArrayList()
-    var images : ArrayList<String> = ArrayList()
-    var names : ArrayList<String> = ArrayList()
-    var teams : ArrayList<ArrayList<Team>> = ArrayList()
+    private var games : ArrayList<Game> = ArrayList()
+    private var players : ArrayList<Player> = ArrayList()
+    private var teams : ArrayList<ArrayList<Team>> = ArrayList()
 
-    var filteredPlayer : ArrayList<Player> = ArrayList()
-    var filteredImages : ArrayList<String> = ArrayList()
-    var filteredNames : ArrayList<String> = ArrayList()
-    var filteredGame : Int = 0
-    var searchText : String = ""
+    private var filteredPlayer : ArrayList<Player> = ArrayList()
+    private var filteredImages : ArrayList<String> = ArrayList()
+    private var filteredNames : ArrayList<String> = ArrayList()
+    private var filteredGame : Int = 0
+    private var searchText : String = ""
 
-    lateinit var backBtn : ImageView
-    lateinit var addPlayerBtn : FloatingActionButton
-    lateinit var loadingView : LinearLayout
-    lateinit var emptyView : LinearLayout
-    lateinit var rvPlayer : RecyclerView
-    lateinit var search_view : SearchView
-    lateinit var etSearch : EditText
+    private lateinit var backBtn : ImageView
+    private lateinit var addPlayerBtn : FloatingActionButton
+    private lateinit var loadingView : LinearLayout
+    private lateinit var emptyView : LinearLayout
+    private lateinit var rvPlayer : RecyclerView
+    private lateinit var search_view : SearchView
+    private lateinit var etSearch : EditText
 
-    lateinit var adapterP : SimpleListAdapter
+    private lateinit var adapterP : SimpleListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +61,87 @@ class ManagePlayers : AppCompatActivity() {
         loadingView = findViewById(R.id.loading_view)
         emptyView = findViewById(R.id.empty_view)
         rvPlayer = findViewById(R.id.viewPlayers)
+
+        // fetch and show data
+        CoroutineScope(Dispatchers.Main).launch {
+            games = Game().get(limit=25)
+            players = Player().get(order = arrayOf(arrayOf("team", "ASC"), arrayOf("name", "ASC")))
+            games.forEach {
+                teams.add(Team().get(
+                    filter = Filter.equalTo("game", it.id),
+                    order = arrayOf(arrayOf("game", "ASC"))
+                ))
+            }
+
+            makeGameFilters()
+            filterPlayers()
+
+            if (filteredPlayer.size == 0) {
+                loadingView.visibility = View.GONE
+                emptyView.visibility = View.VISIBLE
+            }
+            else {
+                loadingView.visibility = View.GONE
+                emptyView.visibility = View.GONE
+                rvPlayer.visibility = View.VISIBLE
+            }
+
+            adapterP = SimpleListAdapter(filteredImages, filteredNames, "logo/orgs/")
+
+            adapterP.setOnItemClickCallback(object : SimpleListAdapter.OnItemClickCallback {
+                override fun onItemClicked(data: String) {
+                    val intent = Intent(this@ManagePlayers, AddPlayer::class.java)
+                    intent.putExtra("mode", "edit")
+                    intent.putExtra("name", data)
+                    startActivity(intent)
+                }
+
+                override fun delData(pos: Int) {
+                    val player = filteredPlayer.get(pos)
+
+                    val alert = MaterialAlertDialogBuilder(this@ManagePlayers)
+                        .setTitle("Delete Player")
+                        .setMessage("Are you sure you want to delete ${player.name}?")
+                        .setNegativeButton("Cancel") { dialog, which ->
+                            dialog.dismiss()
+                        }
+                        .setPositiveButton("Delete") { dialog, which ->
+                            CoroutineScope(Dispatchers.Main).launch {
+                                StorageHelper().deleteFile(player.photo)
+                                player.delete(player.id)
+
+                                players.remove(player)
+                                filteredImages.removeAt(pos)
+                                filteredNames.removeAt(pos)
+                                filteredPlayer.removeAt(pos)
+
+                                adapterP.setData(filteredImages, filteredNames)
+
+                                Snackbar.make(
+                                    addPlayerBtn,
+                                    R.string.playerdeleted,
+                                    Snackbar.LENGTH_SHORT
+                                ).apply {
+                                    setBackgroundTint(resources.getColor(R.color.light, null))
+                                    setTextColor(resources.getColor(R.color.black, null))
+                                }.show()
+                            }
+                        }
+
+                    val dialog = alert.create()
+                    dialog.show()
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK)
+                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLACK)
+                }
+            })
+
+            rvPlayer.layoutManager = LinearLayoutManager(
+                this@ManagePlayers,
+                LinearLayoutManager.VERTICAL,
+                false
+            )
+            rvPlayer.adapter = adapterP
+        }
 
         search_view = findViewById(R.id.search_view)
         etSearch = search_view.findViewById(androidx.appcompat.R.id.search_src_text)
@@ -81,95 +157,6 @@ class ManagePlayers : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // fetch and show data
-        CoroutineScope(Dispatchers.Main).launch {
-            games = Game().get(limit=25)
-            players = Player().get(limit=1000, order = arrayOf(arrayOf("team", "ASC"), arrayOf("name", "ASC")))
-
-            makeGameFilters()
-
-            games.forEach {
-                teams.add(Team().get(
-                    filter = Filter.equalTo("game", it.id),
-                    order = arrayOf(arrayOf("game", "ASC"))
-                ))
-            }
-
-            if (players.size == 0) {
-                loadingView.visibility = View.GONE
-                emptyView.visibility = View.VISIBLE
-            }
-            else {
-                players.forEach {
-                    images.add(Team().find<Team>(it.team).logo)
-                    names.add(it.nickname)
-                }
-
-                filterPlayers()
-
-                rvPlayer.layoutManager = LinearLayoutManager(
-                    this@ManagePlayers,
-                    LinearLayoutManager.VERTICAL,
-                    false
-                )
-
-                adapterP = SimpleListAdapter(filteredImages, filteredNames, "logo/orgs/")
-
-                adapterP.setOnItemClickCallback(object : SimpleListAdapter.OnItemClickCallback {
-                    override fun onItemClicked(data: String) {
-                        val intent = Intent(this@ManagePlayers, AddPlayer::class.java)
-                        intent.putExtra("mode", "edit")
-                        intent.putExtra("name", data)
-                        startActivity(intent)
-                    }
-
-                    override fun delData(pos: Int) {
-                        val player = filteredPlayer.get(pos)
-
-                        val alert = MaterialAlertDialogBuilder(this@ManagePlayers)
-                            .setTitle("Delete Player")
-                            .setMessage("Are you sure you want to delete ${player.name}?")
-                            .setNegativeButton("Cancel") { dialog, which ->
-                                dialog.dismiss()
-                            }
-                            .setPositiveButton("Delete") { dialog, which ->
-                                CoroutineScope(Dispatchers.Main).launch {
-                                    StorageHelper().deleteFile(player.photo)
-                                    player.delete(player.id)
-
-                                    images.remove(player.photo)
-                                    names.remove(player.nickname)
-                                    players.remove(player)
-                                    filteredImages.removeAt(pos)
-                                    filteredNames.removeAt(pos)
-                                    filteredPlayer.removeAt(pos)
-
-                                    adapterP.setData(filteredImages, filteredNames)
-
-                                    Snackbar.make(
-                                        addPlayerBtn,
-                                        R.string.playerdeleted,
-                                        Snackbar.LENGTH_SHORT
-                                    ).apply {
-                                        setBackgroundTint(resources.getColor(R.color.light, null))
-                                        setTextColor(resources.getColor(R.color.black, null))
-                                    }.show()
-                                }
-                            }
-
-                        val dialog = alert.create()
-                        dialog.show()
-                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK)
-                        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLACK)
-                    }
-                })
-
-                loadingView.visibility = View.GONE
-                rvPlayer.visibility = View.VISIBLE
-                rvPlayer.adapter = adapterP
-            }
-        }
-
         // search players
         search_view.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -179,6 +166,9 @@ class ManagePlayers : AppCompatActivity() {
                 if (query.toString() != searchText) {
                     searchText = query.toString()
                     filterPlayers()
+                    CoroutineScope(Dispatchers.Main).launch {
+                        adapterP.setData(filteredImages, filteredNames)
+                    }
                 }
 
                 return true
@@ -189,6 +179,9 @@ class ManagePlayers : AppCompatActivity() {
                 if (newText.toString() == "" && searchText != "") {
                     searchText = newText.toString()
                     filterPlayers()
+                    CoroutineScope(Dispatchers.Main).launch {
+                        adapterP.setData(filteredImages, filteredNames)
+                    }
                 }
                 return true
             }
@@ -196,7 +189,7 @@ class ManagePlayers : AppCompatActivity() {
     }
 
     fun makeGameFilters() {
-        var chips = findViewById<ChipGroup>(R.id.gameChips)
+        val chips = findViewById<ChipGroup>(R.id.gameChips)
         val colorState = ColorStateList(
             arrayOf(
                 intArrayOf(android.R.attr.state_checked),
@@ -214,7 +207,6 @@ class ManagePlayers : AppCompatActivity() {
             chip.id = index
             chip.setTextColor(resources.getColor(R.color.disabled, null))
             chip.chipStrokeWidth = 0f
-            chip.minHeight = 40
             chip.text = game.name
             chip.isCheckable = true
             chip.chipBackgroundColor = ColorStateList(
@@ -231,8 +223,9 @@ class ManagePlayers : AppCompatActivity() {
             chip.setOnClickListener {
                 if (index != filteredGame) {
                     filteredGame = index
+                    filterPlayers()
                     CoroutineScope(Dispatchers.Main).launch {
-                        filterPlayers()
+                        adapterP.setData(filteredImages, filteredNames)
                     }
                 }
             }
@@ -247,42 +240,32 @@ class ManagePlayers : AppCompatActivity() {
         filteredNames.clear()
         filteredImages.clear()
 
-        rvPlayer.visibility = View.GONE
-        emptyView.visibility = View.GONE
-        loadingView.visibility = View.VISIBLE
-
-        CoroutineScope(Dispatchers.Main).launch {
-            if (searchText == "") {
-                filteredPlayer.addAll(
-                    players.filter {
-                        it.team in teams.get(filteredGame).map { it.id }
-                    } as ArrayList<Player>
-                )
-            }
-            else {
-                filteredPlayer = players.filter {
-                    it.team in teams.get(filteredGame).map { it.id } &&
-                    it.nickname.lowercase().contains(searchText.lowercase())
+        if (searchText == "") {
+            filteredPlayer.addAll(
+                players.filter {
+                    it.team in teams.get(filteredGame).map { it.id }
                 } as ArrayList<Player>
-            }
-
-//            Log.d("filterPlayers", "Players: " + filteredPlayer.toString())
-//            Log.d("filterPlayers", "Search: " + searchText)
-//            Log.d("filterPlayers", "Game: " + filteredGame.toString())
-            filteredImages = filteredPlayer.map { player ->
-                 teams.get(filteredGame).filter { it.id == player.team }.first().logo
-            } as ArrayList<String>
-            filteredNames = filteredPlayer.map { it.nickname } as ArrayList<String>
-            adapterP.setData(filteredImages, filteredNames)
-
-            loadingView.visibility = View.GONE
-            if (filteredPlayer.size == 0) {
-                emptyView.visibility = View.VISIBLE
-            }
-            else {
-                emptyView.visibility = View.GONE
-                rvPlayer.visibility = View.VISIBLE
-            }
+            )
+            filteredPlayer.sortBy { it.team }
         }
+        else {
+            filteredPlayer = players.filter {
+                it.team in teams.get(filteredGame).map { it.id } &&
+                it.nickname.lowercase().contains(searchText.lowercase())
+            } as ArrayList<Player>
+            filteredPlayer.sortBy { it.team }
+        }
+
+        filteredImages = filteredPlayer.map { player ->
+            teams.get(filteredGame).filter { it.id == player.team }.first().logo
+        } as ArrayList<String>
+        filteredNames = filteredPlayer.map { it.nickname } as ArrayList<String>
+
+        Log.d("filterPlayers", "Players: " + filteredPlayer.map{it.nickname}.toString())
+        Log.d("filterPlayers", "Name: " + filteredNames.toString())
+        Log.d("filterPlayers", "Images: " + filteredImages.toString())
+
+        if (filteredPlayer.size == 0) emptyView.visibility = View.VISIBLE
+        else emptyView.visibility = View.GONE
     }
 }

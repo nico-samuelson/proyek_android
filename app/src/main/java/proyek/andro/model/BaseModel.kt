@@ -1,8 +1,6 @@
 package proyek.andro.model
 
-import android.util.Log
 import com.google.firebase.Firebase
-import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.Query
@@ -30,7 +28,7 @@ abstract class BaseModel(
 
     suspend fun <T> get(
         filter : Filter? = null,
-        limit: Int = 10000,
+        limit: Int = 1000,
         offset: DocumentSnapshot? = null,
         order: Array<Array<String>> = arrayOf(arrayOf("id", "asc"))
     ): ArrayList<T> {
@@ -77,32 +75,20 @@ abstract class BaseModel(
         return convertToClass(result.data!!)
     }
 
-    suspend fun insertOrUpdate(): Int {
-        var status = 0
-
+    suspend fun insertOrUpdate() {
         val classData: HashMap<String, Any> =
             this::class.java.getDeclaredMethod("convertToMap").invoke(this) as HashMap<String, Any>
 
-        val res = collectionRef
+        collectionRef
             .document(classData["id"].toString())
             .set(classData)
             .await()
-
-        if (res != null) status = 1
-
-        return status
     }
 
-    suspend fun delete(doc: String): Int {
-        var status = 0
-
-        val res = collectionRef
+    suspend fun delete(doc: String) {
+        collectionRef
             .document(doc)
             .delete()
             .await()
-
-        if (res != null) status = 1
-
-        return status
     }
 }
