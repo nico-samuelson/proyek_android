@@ -55,6 +55,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tint="#FFFFFF" />
 
+    <ImageView
+        android:id="@+id/iconBtn"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/inset_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="#FFFFFF" />
+
 
     <!--    <TextView-->
     <!--        android:layout_width="match_parent"-->
@@ -110,16 +121,16 @@
                 android:text="Schedule"
                 android:textColor="@color/white" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip3"
-                style="@style/Widget.Material3.Chip.Suggestion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="#1B1D22"
-                android:checkable="false"
-                android:gravity="center"
-                android:text="More info"
-                android:textColor="@color/white" />
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/chip3"-->
+<!--                style="@style/Widget.Material3.Chip.Suggestion"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:backgroundTint="#1B1D22"-->
+<!--                android:checkable="false"-->
+<!--                android:gravity="center"-->
+<!--                android:text="More info"-->
+<!--                android:textColor="@color/white" />-->
         </com.google.android.material.chip.ChipGroup>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout><!--<androidx.recyclerview.widget.RecyclerView-->

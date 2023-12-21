@@ -59,7 +59,7 @@ class TournamentPage : AppCompatActivity() {
 
         val chip1: Chip = findViewById(R.id.chip1)
         val chip2: Chip = findViewById(R.id.chip2)
-        val chip3: Chip = findViewById(R.id.chip3)
+//        val chip3: Chip = findViewById(R.id.chip3)
 
         chip1.setOnClickListener {
             val OverView = OverviewFr()
@@ -79,14 +79,14 @@ class TournamentPage : AppCompatActivity() {
             }
         }
 
-        chip3.setOnClickListener {
-            val MoreInfo = MoreInfoFr()
-
-            mFragmentManager.beginTransaction().apply {
-                replace(R.id.tournamentFragment, MoreInfo, MoreInfo::class.java.simpleName)
-                commit()
-            }
-        }
+//        chip3.setOnClickListener {
+//            val MoreInfo = MoreInfoFr()
+//
+//            mFragmentManager.beginTransaction().apply {
+//                replace(R.id.tournamentFragment, MoreInfo, MoreInfo::class.java.simpleName)
+//                commit()
+//            }
+//        }
 
 
 //        val chips: ChipGroup = findViewById(R.id.tournamentChips)
