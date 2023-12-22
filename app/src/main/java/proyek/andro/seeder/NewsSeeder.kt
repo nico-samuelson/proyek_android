@@ -12,6 +12,7 @@ class NewsSeeder {
                 "Sentinels have shown it fangs by becoming the first place in AfreecaTV Valorant League. Winning against PRX by 3-0 score.",
                 "Nico Samuelson",
                 "2023-12-10",
+                ""
             )
         )
 
@@ -22,6 +23,7 @@ class NewsSeeder {
                 "Valorant Night Market has become an event that been awaited by all valorant player. Check your valorant night market, and see what do you get!",
                 "Kelvin Sids",
                 "2023-12-15",
+                ""
             )
         )
 
@@ -32,6 +34,7 @@ class NewsSeeder {
                 "AP.Bren has won Mobile Legend M-Series World Championship twice. That makes AP.Bren become the first team who has won Mobile Legend M-Series World Championship twice.",
                 "Vincentius Actonio",
                 "2023-12-18",
+                ""
             )
         )
 

@@ -46,6 +46,8 @@
             android:exported="false" />
         <activity
             android:name=".Register"
+            android:exported="false" />
+        <activity
             android:name=".userActivity.NewsDetail"
             android:exported="false" />
         <activity
