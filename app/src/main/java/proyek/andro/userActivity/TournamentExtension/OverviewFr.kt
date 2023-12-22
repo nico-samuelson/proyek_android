@@ -23,10 +23,10 @@ import proyek.andro.model.Team
 import proyek.andro.userActivity.TournamentPage
 
 class OverviewFr : Fragment() {
-    private var participants : ArrayList<Participant> = ArrayList()
-    private var teams : ArrayList<Team> = ArrayList()
-    private lateinit var parent : TournamentPage
-    lateinit var participantsRV : RecyclerView
+    private var participants: ArrayList<Participant> = ArrayList()
+    private var teams: ArrayList<Team> = ArrayList()
+    private lateinit var parent: TournamentPage
+    lateinit var participantsRV: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,14 +41,13 @@ class OverviewFr : Fragment() {
 
         parent = super.requireActivity() as TournamentPage
 
-        val participantsRV = view.findViewById<RecyclerView>(R.id.carousel_participants)
-        val staggeredGridLayoutManager = StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
+        participantsRV = view.findViewById(R.id.carousel_participants)
+        val staggeredGridLayoutManager =
+            StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
         participantsRV.layoutManager = staggeredGridLayoutManager
-
 
         val participantAdapter = ParticipantsAdapter(parent.getParticipants(), parent.getTeams())
         participantsRV.adapter = participantAdapter
-
 
 //        participants.add(Participant("A1", "EXL", "C9", "A", 1, 3))
 //        participants.add(Participant("A1", "EXL", "C9", "A", 1, 3))
