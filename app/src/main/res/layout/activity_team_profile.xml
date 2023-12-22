@@ -11,7 +11,6 @@
         android:id="@+id/constraint1"
         android:layout_width="match_parent"
         android:layout_height="180dp"
-
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -46,25 +45,37 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tint="#FFFFFF" />
 
-    <ImageView
-        android:id="@+id/iconTeam"
+    <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginStart="32dp"
-
         android:layout_marginTop="64dp"
-        android:src="@drawable/circle_shape"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/backBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/backBtn">
+
+        <ImageView
+            android:id="@+id/iconBg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/circle_shape" />
+
+        <ImageView
+            android:id="@+id/iconTeam"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="24dp"
+            android:src="@drawable/c9_logo" />
+    </FrameLayout>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="540dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iconTeam">
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
             android:id="@+id/constraintLayout4"
@@ -94,7 +105,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Roaster"
+                android:text="Roster"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -160,7 +171,7 @@
                         android:src="@drawable/ic_groups_24" />
 
                     <TextView
-                        android:id="@+id/tvCEO"
+                        android:id="@+id/tvCoach"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginStart="8dp"
@@ -237,7 +248,6 @@
                     android:layout_marginTop="8dp"
                     app:dividerColor="#393C43" />
 
-
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -252,7 +262,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:lines="7"
+                    android:layout_marginBottom="32dp"
                     android:text="Lorem ipsum\nlorem\nlorem\nlorem\nlorem\nlorem\nlorem"
                     android:textColor="@color/white" />
 

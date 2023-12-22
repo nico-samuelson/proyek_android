@@ -37,6 +37,7 @@ class ParticipantsAdapter(
                 ).show()
 
                 val intent = Intent(itemView.context, proyek.andro.userActivity.TeamProfile::class.java)
+                intent.putExtra("team", teams.filter { it.id == participants[adapterPosition].team }[0].id)
                 itemView.context.startActivity(intent)
             }
         }

@@ -1,5 +1,6 @@
 package proyek.andro.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,6 +51,9 @@ class ScheduleUpcomingAdapter(
         val currentItem = matches[position]
         val team1 = teams.filter { it.id == currentItem.team1 }.first()
         val team2 = teams.filter { it.id == currentItem.team2 }.first()
+
+        Log.d("match", "Matches: ${matches.size}")
+        Log.d("match", "Teams: ${teams.size}")
 
         val match_time = currentItem.time.split(" UTC")
         val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
