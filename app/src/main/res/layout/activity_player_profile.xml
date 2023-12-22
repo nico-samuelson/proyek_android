@@ -47,209 +47,203 @@
         app:tint="#FFFFFF" />
 
     <ImageView
+        android:id="@+id/imageView3"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginStart="32dp"
 
+        android:layout_marginStart="32dp"
         android:layout_marginTop="64dp"
         android:src="@drawable/circle_shape"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/backBtn" />
 
-    <LinearLayout
-        android:id="@+id/constraintLayout4"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:orientation="vertical"
+        android:layout_height="500dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/constraint1">
+        app:layout_constraintTop_toBottomOf="@+id/imageView3">
 
         <LinearLayout
+            android:id="@+id/constraintLayout4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-            <TextView
-                android:id="@+id/tvNickname"
-                android:layout_width="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginBottom="16dp"
-                android:text="s1mple"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvNickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:text="s1mple"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/ivCaptain"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="8dp"
+                    android:src="@drawable/ic_captain_24"
+                    app:tint="@color/white" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Player Information"
                 android:textColor="@color/white"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
-            <ImageView
-                android:id="@+id/ivCaptain"
-                android:layout_marginStart="8dp"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_captain_24"
-                app:tint="@color/white"
-                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
 
-        </LinearLayout>
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_person_24" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:text="Player Information"
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/tvName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:gravity="center"
+                    android:text="Oleksandr Kostyliev"
+                    android:textColor="@color/white" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="32dp"
-            android:orientation="horizontal">
+            </LinearLayout>
 
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_person_24" />
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="340dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                app:dividerColor="#393C43" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_groups_24" />
+
+                <TextView
+                    android:id="@+id/tvTeam"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:gravity="center"
+                    android:text="Natus Vincere / NAVI"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="340dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                app:dividerColor="#393C43" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_flag_24"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:id="@+id/tvNationality"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:gravity="center"
+                    android:text="Ukraine"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="340dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                app:dividerColor="#393C43" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_control_camera_24"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:id="@+id/tvPosition"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:gravity="center"
+                    android:text="Duelist"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="340dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                app:dividerColor="#393C43" />
+
 
             <TextView
-                android:id="@+id/tvName"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="8dp"
-                android:gravity="center"
-                android:text="Oleksandr Kostyliev"
-                android:textColor="@color/white" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Player History"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_PlayerHistory_carousel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp" />
 
         </LinearLayout>
 
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_width="340dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="8dp"
-            app:dividerColor="#393C43" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="32dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_groups_24" />
-
-            <TextView
-                android:id="@+id/tvTeam"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="8dp"
-                android:gravity="center"
-                android:text="Natus Vincere / NAVI"
-                android:textColor="@color/white" />
-
-        </LinearLayout>
-
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_width="340dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="8dp"
-            app:dividerColor="#393C43" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="32dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_flag_24"
-                app:tint="@color/white" />
-
-            <TextView
-                android:id="@+id/tvNationality"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="8dp"
-                android:gravity="center"
-                android:text="Ukraine"
-                android:textColor="@color/white" />
-
-        </LinearLayout>
-
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_width="340dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="8dp"
-            app:dividerColor="#393C43" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="32dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_control_camera_24"
-                app:tint="@color/white" />
-
-            <TextView
-                android:id="@+id/tvPosition"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="8dp"
-                android:gravity="center"
-                android:text="Duelist"
-                android:textColor="@color/white" />
-
-        </LinearLayout>
-
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_width="340dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="8dp"
-            app:dividerColor="#393C43" />
-
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="32dp"
-            android:text="Player History"
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_PlayerHistory_carousel"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginEnd="32dp"
-            />
-
-    </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout><!--<androidx.recyclerview.widget.RecyclerView-->
     <!--android:id="@+id/rv_idontknow"-->

@@ -1,5 +1,6 @@
 package proyek.andro.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,16 +21,23 @@ import proyek.andro.model.Team
 import java.lang.Exception
 
 class ParticipantsAdapter(
-    private val participants : ArrayList<Participant>,
-    private val teams : ArrayList<Team>
+    private val participants: ArrayList<Participant>,
+    private val teams: ArrayList<Team>
 ) : RecyclerView.Adapter<ParticipantsAdapter.ParticipantViewHolder>() {
-    inner class ParticipantViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
-        val tvParticipant : TextView = itemView.findViewById(R.id.tvParticipant)
-        val team_logo : ImageView = itemView.findViewById(R.id.team_logo)
+    inner class ParticipantViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val tvParticipant: TextView = itemView.findViewById(R.id.tvParticipant)
+        val team_logo: ImageView = itemView.findViewById(R.id.team_logo)
 
         init {
             itemView.setOnClickListener {
-                Toast.makeText(itemView.context, "Clicked: ${tvParticipant.text}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    itemView.context,
+                    "Clicked: ${tvParticipant.text}",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                val intent = Intent(itemView.context, proyek.andro.userActivity.TeamProfile::class.java)
+                itemView.context.startActivity(intent)
             }
         }
     }
@@ -62,7 +70,8 @@ class ParticipantsAdapter(
         parent: ViewGroup,
         viewType: Int
     ): ParticipantsAdapter.ParticipantViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.rv_participants_carousel, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.rv_participants_carousel, parent, false)
 
         return ParticipantViewHolder(view)
     }

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.carousel.UncontainedCarouselStrategy
 import com.google.firebase.firestore.Filter
@@ -40,8 +41,9 @@ class OverviewFr : Fragment() {
 
         parent = super.requireActivity() as TournamentPage
 
-        participantsRV = view.findViewById(R.id.carousel_participants)
-        participantsRV.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        val participantsRV = view.findViewById<RecyclerView>(R.id.carousel_participants)
+        val staggeredGridLayoutManager = StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
+        participantsRV.layoutManager = staggeredGridLayoutManager
 
 
         val participantAdapter = ParticipantsAdapter(parent.getParticipants(), parent.getTeams())
@@ -69,5 +71,4 @@ class OverviewFr : Fragment() {
 
 //        participantsRV.adapter?.notifyDataSetChanged()
     }
-
 }

@@ -56,16 +56,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tint="#FFFFFF" />
 
-    <ImageView
-        android:id="@+id/iconBtn"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:src="@drawable/inset_icon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="#FFFFFF" />
+<!--    <ImageView-->
+<!--        android:id="@+id/iconBtn"-->
+<!--        android:layout_width="32dp"-->
+<!--        android:layout_height="32dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:layout_marginEnd="16dp"-->
+<!--        android:src="@drawable/inset_icon"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:tint="#FFFFFF" />-->
 
 
     <!--    <TextView-->

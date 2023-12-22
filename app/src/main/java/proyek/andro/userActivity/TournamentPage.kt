@@ -7,12 +7,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.widget.Button
 import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
 import com.google.firebase.firestore.Filter
 import com.squareup.picasso.Callback
 import com.squareup.picasso.NetworkPolicy
@@ -27,7 +25,6 @@ import proyek.andro.model.Match
 import proyek.andro.model.Participant
 import proyek.andro.model.Team
 import proyek.andro.model.Tournament
-import proyek.andro.userActivity.TournamentExtension.MoreInfoFr
 import proyek.andro.userActivity.TournamentExtension.OverviewFr
 import proyek.andro.userActivity.TournamentExtension.ScheduleFr
 import proyek.andro.userActivity.TournamentExtension.TourneyString
@@ -46,7 +43,7 @@ class TournamentPage : AppCompatActivity() {
             val currentPosition = (rvJudul.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
             val nextPosition = if (currentPosition + 1 < juduls.size) currentPosition + 1 else 0
             rvJudul.smoothScrollToPosition(nextPosition)
-            handler.postDelayed(this, 3000) // Scrolls every 3 seconds
+            handler.postDelayed(this, 5000)
         }
     }
 
@@ -147,59 +144,11 @@ class TournamentPage : AppCompatActivity() {
                 }
             }
         }
-
-
-
-
-//        chip3.setOnClickListener {
-//            val MoreInfo = MoreInfoFr()
-//
-//            mFragmentManager.beginTransaction().apply {
-//                replace(R.id.tournamentFragment, MoreInfo, MoreInfo::class.java.simpleName)
-//                commit()
-//            }
-//        }
-
-
-//        val chips: ChipGroup = findViewById(R.id.tournamentChips)
-//
-//        chips.setOnCheckedChangeListener { group, checkedId ->
-//            when (checkedId) {
-//                R.id.chip1 -> {
-//                    val OverView = OverviewFr()
-//
-//                    mFragmentManager.beginTransaction().apply {
-//                        replace(R.id.tournamentFragment, OverView, OverView::class.java.simpleName)
-//                        commit()
-//                    }
-//                }
-//
-//                R.id.chip2 -> {
-//                    val Schedule = ScheduleFr()
-//
-//                    mFragmentManager.beginTransaction().apply {
-//                        replace(R.id.tournamentFragment, Schedule, Schedule::class.java.simpleName)
-//                        commit()
-//                    }
-//                }
-//
-//                R.id.chip3 -> {
-//                    val MoreInfo = MoreInfoFr()
-//
-//                    mFragmentManager.beginTransaction().apply {
-//                        replace(R.id.tournamentFragment, MoreInfo, MoreInfo::class.java.simpleName)
-//                        commit()
-//                        true
-//                    }
-//                }
-//            }
-//        }
-
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        handler.removeCallbacks(runnable) // Stop scrolling when the activity is destroyed
+        handler.removeCallbacks(runnable)
     }
 
     fun getTournament() : Tournament? {

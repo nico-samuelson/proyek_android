@@ -57,11 +57,11 @@ class UserHomepageFr : Fragment() {
     lateinit var parent: UserActivity
     var job: Job? = null
 
-    private val players : ArrayList<Player> = ArrayList()
-    lateinit var playersRV : RecyclerView
-
-    private val organizations : ArrayList<Organization> = ArrayList()
-    lateinit var organizationsRV : RecyclerView
+//    private val players : ArrayList<Player> = ArrayList()
+//    lateinit var playersRV : RecyclerView
+//
+//    private val organizations : ArrayList<Organization> = ArrayList()
+//    lateinit var organizationsRV : RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -118,37 +118,37 @@ class UserHomepageFr : Fragment() {
             }
         }
 
-        playersRV = view.findViewById(R.id.players_recycler_view)
-        playersRV.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-
-        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
-        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
-        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
-        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
-        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
-        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
-        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
-        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
-        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
-        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
-        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
-        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
-        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
-
-        playersRV.adapter = PlayersListAdapter(players)
-
-        organizationsRV = view.findViewById(R.id.organizations_recycler_view)
-        organizationsRV.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-
-        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
-        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
-        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
-        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
-        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
-        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
-        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
-
-        organizationsRV.adapter = OrganizationsListAdapter(organizations)
+//        playersRV = view.findViewById(R.id.players_recycler_view)
+//        playersRV.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+//
+//        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+//        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+//        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+//        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+//        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+//        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+//        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+//        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+//        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+//        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+//        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+//        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+//        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+//
+//        playersRV.adapter = PlayersListAdapter(players)
+//
+//        organizationsRV = view.findViewById(R.id.organizations_recycler_view)
+//        organizationsRV.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+//
+//        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
+//        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
+//        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
+//        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
+//        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
+//        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
+//        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
+//
+//        organizationsRV.adapter = OrganizationsListAdapter(organizations)
     }
 
     suspend fun showData(view : View) {

@@ -20,7 +20,7 @@ class OrganizationsListAdapter(
                 val position: Int = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     val currentItem = organizatoins[position]
-                    val intent = Intent(itemView.context, proyek.andro.userActivity.OrganizationProfile::class.java)
+                    val intent = Intent(itemView.context, proyek.andro.userActivity.TeamProfile::class.java)
                     itemView.context.startActivity(intent)
                 }
             }

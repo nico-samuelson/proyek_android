@@ -14,6 +14,7 @@ class PlayersListAdapter(
 ) : RecyclerView.Adapter<PlayersListAdapter.ListViewHolder>(){
     inner class ListViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
         val tvNickname : TextView = itemView.findViewById(R.id.tvNickname)
+        val tvNationality : TextView = itemView.findViewById(R.id.tvNationality)
 
         init {
             itemView.setOnClickListener {
@@ -38,6 +39,7 @@ class PlayersListAdapter(
     override fun onBindViewHolder(holder: PlayersListAdapter.ListViewHolder, position: Int) {
         val currentItem = players[position]
         holder.tvNickname.text = currentItem.nickname
+        holder.tvNationality.text = currentItem.nationality
     }
 
     override fun getItemCount(): Int {
