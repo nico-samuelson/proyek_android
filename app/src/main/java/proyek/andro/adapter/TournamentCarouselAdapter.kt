@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -99,9 +100,7 @@ class TournamentCarouselAdapter (
             })
 
         holder.image.setOnClickListener {
-//            onItemClickCallback.onItemClicked(tournaments.get(position).banner)
-            val intent = Intent(it.context, TournamentPage::class.java)
-            it.context.startActivity(intent)
+            onItemClickCallback.onItemClicked(tournaments.get(position).name)
         }
     }
 
