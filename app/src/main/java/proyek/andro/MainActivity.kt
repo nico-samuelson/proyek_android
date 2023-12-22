@@ -8,6 +8,7 @@ import kotlinx.coroutines.runBlocking
 import proyek.andro.seeder.AdminSeeder
 import proyek.andro.seeder.GameSeeder
 import proyek.andro.seeder.MatchSeeder
+import proyek.andro.seeder.NewsSeeder
 import proyek.andro.seeder.OrganizationSeeder
 import proyek.andro.seeder.TeamSeeder
 import proyek.andro.seeder.TournamentPhaseSeeder
@@ -17,7 +18,7 @@ import proyek.andro.userActivity.UserActivity
 
 class MainActivity : AppCompatActivity() {
 
-    var runSeeder = false // JANGAN DIJADIIN TRUE KALAU DATA SUDAH ADA DI FIREBASE
+    var runSeeder = false// JANGAN DIJADIIN TRUE KALAU DATA SUDAH ADA DI FIREBASE
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -36,6 +37,7 @@ class MainActivity : AppCompatActivity() {
 //                     ParticipantSeeder().run()
 //                     MatchSeeder().run()
 //                     PlayerHistorySeeder().run()
+//                    NewsSeeder().run()
                 }
             }
         }
