@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.carousel.CarouselSnapHelper
@@ -25,9 +26,13 @@ import kotlinx.coroutines.launch
 import proyek.andro.R
 import proyek.andro.adapter.GameCarouselAdapter
 import proyek.andro.adapter.MatchCarouselAdapter
+import proyek.andro.adapter.OrganizationsListAdapter
+import proyek.andro.adapter.PlayersListAdapter
 import proyek.andro.helper.StorageHelper
 import proyek.andro.model.Game
 import proyek.andro.model.Match
+import proyek.andro.model.Organization
+import proyek.andro.model.Player
 import proyek.andro.model.Team
 import proyek.andro.model.Tournament
 import kotlin.coroutines.resume
@@ -51,6 +56,12 @@ class UserHomepageFr : Fragment() {
     lateinit var rvMatchCarousel: RecyclerView
     lateinit var parent: UserActivity
     var job: Job? = null
+
+    private val players : ArrayList<Player> = ArrayList()
+    lateinit var playersRV : RecyclerView
+
+    private val organizations : ArrayList<Organization> = ArrayList()
+    lateinit var organizationsRV : RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,6 +117,38 @@ class UserHomepageFr : Fragment() {
                 }
             }
         }
+
+        playersRV = view.findViewById(R.id.players_recycler_view)
+        playersRV.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+
+        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+
+        playersRV.adapter = PlayersListAdapter(players)
+
+        organizationsRV = view.findViewById(R.id.organizations_recycler_view)
+        organizationsRV.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+
+        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
+        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
+        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
+        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
+        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
+        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
+        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
+
+        organizationsRV.adapter = OrganizationsListAdapter(organizations)
     }
 
     suspend fun showData(view : View) {
@@ -163,24 +206,4 @@ class UserHomepageFr : Fragment() {
 //            rvMatchCarousel.recycledViewPool.setMaxRecycledViews(3, 0)
 //        }
 //    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment UserHomepageFr.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            UserHomepageFr().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }
