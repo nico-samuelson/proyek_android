@@ -102,6 +102,7 @@ class UserActivity : AppCompatActivity() {
 
                         mFragmentManager.beginTransaction()
                             .replace(R.id.fragmentContainer, home, home::class.java.simpleName)
+                            .addToBackStack(null)
                             .commit()
                         true
                     }
@@ -111,6 +112,7 @@ class UserActivity : AppCompatActivity() {
 
                         mFragmentManager.beginTransaction()
                             .replace(R.id.fragmentContainer, explore, explore::class.java.simpleName)
+                            .addToBackStack(null)
                             .commit()
                         true
                     }
@@ -120,6 +122,7 @@ class UserActivity : AppCompatActivity() {
 
                         mFragmentManager.beginTransaction()
                             .replace(R.id.fragmentContainer, news, news::class.java.simpleName)
+                            .addToBackStack(null)
                             .commit()
                         true
                     }
@@ -129,6 +132,7 @@ class UserActivity : AppCompatActivity() {
 
                         mFragmentManager.beginTransaction()
                             .replace(R.id.fragmentContainer, profile, profile::class.java.simpleName)
+                            .addToBackStack(null)
                             .commit()
                         true
                     }
@@ -137,6 +141,7 @@ class UserActivity : AppCompatActivity() {
 
                         mFragmentManager.beginTransaction()
                             .replace(R.id.fragmentContainer, favorite, favorite::class.java.simpleName)
+                            .addToBackStack(null)
                             .commit()
                         true
                     }
