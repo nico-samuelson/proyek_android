@@ -1,6 +1,7 @@
 package proyek.andro.userActivity
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -8,30 +9,30 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.LifecycleCoroutineScope
-import androidx.lifecycle.lifecycleScope
+import android.widget.SearchView
+import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.carousel.CarouselSnapHelper
-import com.google.android.material.carousel.MultiBrowseCarouselStrategy
+import com.google.android.material.carousel.HeroCarouselStrategy
 import com.google.android.material.carousel.UncontainedCarouselStrategy
-import com.google.firebase.firestore.Filter
-import com.google.firebase.storage.FirebaseStorage
-import com.squareup.picasso.NetworkPolicy
-import com.squareup.picasso.Picasso
-import com.squareup.picasso.RequestCreator
+import com.google.android.material.progressindicator.CircularProgressIndicator
+import com.google.android.material.search.SearchBar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import proyek.andro.R
 import proyek.andro.adapter.GameCarouselAdapter
 import proyek.andro.adapter.MatchCarouselAdapter
-import proyek.andro.adapter.TournamentCarouselAdapter
+import proyek.andro.adapter.OrganizationsListAdapter
+import proyek.andro.adapter.PlayersListAdapter
 import proyek.andro.helper.StorageHelper
 import proyek.andro.model.Game
 import proyek.andro.model.Match
+import proyek.andro.model.Organization
+import proyek.andro.model.Player
 import proyek.andro.model.Team
 import proyek.andro.model.Tournament
 import kotlin.coroutines.resume
@@ -54,8 +55,13 @@ class UserHomepageFr : Fragment() {
     lateinit var rvGameCarousel: RecyclerView
     lateinit var rvMatchCarousel: RecyclerView
     lateinit var parent: UserActivity
-    var gameBanners = ArrayList<Uri>()
     var job: Job? = null
+
+//    private val players : ArrayList<Player> = ArrayList()
+//    lateinit var playersRV : RecyclerView
+//
+//    private val organizations : ArrayList<Organization> = ArrayList()
+//    lateinit var organizationsRV : RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,39 +87,80 @@ class UserHomepageFr : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        view.findViewById<TextView>(R.id.gamesText).visibility = View.GONE
+
         rvGameCarousel = view.findViewById(R.id.games_recycler_view)
         rvMatchCarousel = view.findViewById(R.id.matches_recycler_view)
 
         rvGameCarousel.layoutManager = CarouselLayoutManager(UncontainedCarouselStrategy())
-        rvMatchCarousel.layoutManager = CarouselLayoutManager(UncontainedCarouselStrategy())
+        rvMatchCarousel.layoutManager = CarouselLayoutManager(HeroCarouselStrategy())
         CarouselSnapHelper().attachToRecyclerView(rvMatchCarousel)
+
+        val search_bar = view.findViewById<SearchBar>(R.id.search_bar)
+        search_bar.setOnClickListener {
+            val intent = Intent(parent, Search::class.java)
+            intent.putExtra("search_type", 0)
+            startActivity(intent)
+        }
 
         if (job == null && parent.getMatches().size > 0) {
             Log.d("fetch data", "data already fetched")
             CoroutineScope(Dispatchers.Main).launch {
-                showData()
+                showData(view)
             }
         } else {
             Log.d("fetch data", "data not yet fetched")
             job?.invokeOnCompletion {
                 CoroutineScope(Dispatchers.Main).launch {
-                    showData()
+                    showData(view)
                     job = null
                 }
             }
         }
+
+//        playersRV = view.findViewById(R.id.players_recycler_view)
+//        playersRV.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+//
+//        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+//        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+//        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+//        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+//        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+//        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+//        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+//        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+//        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+//        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+//        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+//        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+//        players.add(Player("1","NaVi","S1mple","S1mple","AWP","Ukraina","s1mple.jpg",false,0))
+//
+//        playersRV.adapter = PlayersListAdapter(players)
+//
+//        organizationsRV = view.findViewById(R.id.organizations_recycler_view)
+//        organizationsRV.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+//
+//        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
+//        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
+//        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
+//        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
+//        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
+//        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
+//        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
+//
+//        organizationsRV.adapter = OrganizationsListAdapter(organizations)
     }
 
-    suspend fun showData() {
+    suspend fun showData(view : View) {
         if (parent.getGameBanners().size == 0 || arguments?.getString("refresh") != null) {
             parent.setGameBanners(
                 StorageHelper().preloadImages(
                     parent.getGames().map { it.banner },
-                    "banner/games/"
+                    "banner/games"
                 )
             )
         }
-
+//kll
         val gameCarouselAdapter = GameCarouselAdapter(parent.getGames(), parent.getGameBanners())
         val mFragmentManager = parentFragmentManager
         val explore = ExploreFr()
@@ -130,32 +177,12 @@ class UserHomepageFr : Fragment() {
             }
         })
 
+        view.findViewById<TextView>(R.id.gamesText).visibility = View.VISIBLE
+        view.findViewById<CircularProgressIndicator>(R.id.loading_indicator).visibility = View.GONE
+
         rvGameCarousel.adapter = gameCarouselAdapter
         rvMatchCarousel.adapter = MatchCarouselAdapter(parent.getMatches(), parent.getTeams())
-
-        rvGameCarousel.recycledViewPool.setMaxRecycledViews(1, 0)
-        rvMatchCarousel.recycledViewPool.setMaxRecycledViews(3, 0)
     }
-//        else {
-//            val gameCarouselAdapter = GameCarouselAdapter(parent.getGames(), parent.getGameBanners())
-//            gameCarouselAdapter.setOnItemClickCallback(object : GameCarouselAdapter.OnItemClickCallback {
-//                override fun onItemClicked(data: Game) {
-//                    Log.d("game clicked", data.toString())
-//                    parent.setSelectedGame(parent.getGames().indexOfFirst { it.id == data.id })
-//                    mFragmentManager.beginTransaction()
-//                        .replace(R.id.fragmentContainer, explore, explore::class.java.simpleName)
-//                        .addToBackStack(null)
-//                        .commit()
-//                }
-//            })
-//
-//            rvGameCarousel.adapter = gameCarouselAdapter
-//            rvMatchCarousel.adapter = MatchCarouselAdapter(parent.getMatches(), parent.getTeams())
-//
-//            rvGameCarousel.recycledViewPool.setMaxRecycledViews(1, 0)
-//            rvMatchCarousel.recycledViewPool.setMaxRecycledViews(3, 0)
-//        }
-//    }
 
     companion object {
         /**

@@ -22,7 +22,7 @@ class Player : BaseModel {
         photo: String,
         captain: Boolean,
         status: Long,
-    ) : super("tbGame") {
+    ) : super("tbPlayer") {
         this.id = id
         this.team = team
         this.name = name

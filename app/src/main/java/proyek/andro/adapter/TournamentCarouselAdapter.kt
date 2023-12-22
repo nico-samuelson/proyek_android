@@ -1,7 +1,10 @@
 package proyek.andro.adapter
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +17,8 @@ import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 import proyek.andro.R
 import proyek.andro.model.Tournament
+import proyek.andro.userActivity.TournamentPage
+import proyek.andro.userActivity.UserHomepageFr
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
@@ -94,8 +99,8 @@ class TournamentCarouselAdapter (
                 }
             })
 
-        holder.image.setOnClickListener {
-            onItemClickCallback.onItemClicked(tournaments.get(position).banner)
+        holder.itemView.setOnClickListener {
+            onItemClickCallback.onItemClicked(tournaments.get(position).name)
         }
     }
 

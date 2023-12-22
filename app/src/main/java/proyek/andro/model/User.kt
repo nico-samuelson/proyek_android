@@ -6,11 +6,22 @@ class User : BaseModel {
     lateinit var email: String
     lateinit var password: String
     lateinit var phone: String
+    lateinit var remember_token: String
+    var role : Long = 0
     var age : Long = 0
 
     constructor() : super("tbUser") {}
 
-    constructor(id : String, name : String, email : String, password : String, phone : String, age : Long) : super("tbUser")
+    constructor(
+        id : String,
+        name : String,
+        email : String,
+        password : String,
+        phone : String,
+        remember_token : String,
+        role : Long,
+        age : Long
+    ) : super("tbUser")
     {
         this.id = id
         this.name = name
@@ -18,6 +29,8 @@ class User : BaseModel {
         this.password = password
         this.phone = phone
         this.age = age
+        this.role = role
+        this.remember_token = remember_token
     }
 
     fun convertToMap() : Map<String, Any> {
@@ -29,6 +42,8 @@ class User : BaseModel {
         data.put("password", password)
         data.put("phone", phone)
         data.put("age", age)
+        data.put("role", role)
+        data.put("remember_token", remember_token)
 
         return data
     }

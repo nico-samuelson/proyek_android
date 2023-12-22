@@ -28,9 +28,17 @@
     <item
         android:id="@+id/item_4"
         android:enabled="true"
+        android:icon="@drawable/ic_favorite_32"
+        app:itemIconTint="#ffffff"
+        app:itemTextColor="#ffffff"
+        app:labelVisibilityMode="unlabeled"
+        android:title="Favorites"/>
+    <item
+        android:id="@+id/item_5"
+        android:enabled="true"
         android:icon="@drawable/ic_person_24"
         app:itemIconTint="#ffffff"
         app:itemTextColor="#ffffff"
         app:labelVisibilityMode="unlabeled"
-        android:title="News"/>
+        android:title="Profile"/>
 </menu>

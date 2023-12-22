@@ -1,6 +1,7 @@
 package proyek.andro.userActivity
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +21,8 @@ import com.google.android.material.carousel.HeroCarouselStrategy
 import com.google.android.material.carousel.UncontainedCarouselStrategy
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.progressindicator.CircularProgressIndicator
+import com.google.android.material.search.SearchBar
 import com.google.firebase.firestore.Filter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -61,6 +65,8 @@ class ExploreFr : Fragment() {
     private var upcomingTournaments = ArrayList<Tournament>()
     private var ongoingMatches = ArrayList<Match>()
     private var matchesTeams = ArrayList<Team>()
+    private lateinit var ongoingGroups : LinearLayout
+    private lateinit var upcomingGroups : LinearLayout
 
     private lateinit var parent : UserActivity
     var job: Job? = null
@@ -89,6 +95,18 @@ class ExploreFr : Fragment() {
     @SuppressLint("RestrictedApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val search_bar = view.findViewById<SearchBar>(R.id.search_bar)
+        search_bar.setOnClickListener {
+            val intent = Intent(parent, Search::class.java)
+            intent.putExtra("search_type", 0)
+            startActivity(intent)
+        }
+
+        ongoingGroups = view.findViewById(R.id.ongoing_layout_groups)
+        upcomingGroups = view.findViewById(R.id.upcoming_layout_groups)
+        ongoingGroups.visibility = View.GONE
+        upcomingGroups.visibility = View.GONE
 
         rvTournamentCarousel = view.findViewById(R.id.tournaments_recycler_view)
         rvOngoingTournaments = view.findViewById(R.id.ongoing_tournaments)
@@ -165,7 +183,6 @@ class ExploreFr : Fragment() {
 
     fun makeChips(view : View) {
         var chips = view.findViewById<ChipGroup>(R.id.gameChips)
-        val hsv : HorizontalScrollView = view.findViewById(R.id.horizontalScrollView)
         val colorState = ColorStateList(
             arrayOf(
                 intArrayOf(android.R.attr.state_checked),
@@ -193,6 +210,11 @@ class ExploreFr : Fragment() {
             else chip.chipBackgroundColor = colorState
 
             chip.setOnClickListener {
+                rvTournamentCarousel.visibility = View.GONE
+                ongoingGroups.visibility = View.GONE
+                upcomingGroups.visibility = View.GONE
+                view.findViewById<CircularProgressIndicator>(R.id.loading_indicator).visibility = View.VISIBLE
+
                 CoroutineScope(Dispatchers.Main).launch {
                     parent.setTournamentBanners(ArrayList())
                     parent.setTournamentLogos(ArrayList())
@@ -205,7 +227,6 @@ class ExploreFr : Fragment() {
 
                     CoroutineScope(Dispatchers.Main).launch {
                         if (ongoingTournaments.size > 0) {
-                            Log.d("ongoing", ongoingTournaments.size.toString())
                             ongoingMatches = Match().get(
                                 filter = Filter.and(
                                     Filter.inArray("tournament", ongoingTournaments.map { it.id }),
@@ -214,8 +235,6 @@ class ExploreFr : Fragment() {
                                 limit = 5,
                                 order = arrayOf(arrayOf("time", "desc"))
                             )
-
-                            Log.d("ongoing matches", ongoingMatches.size.toString())
 
                             matchesTeams = parent.getTeams().filter { team ->
                                 ongoingMatches.map { it.team1 }.contains(team.id) || ongoingMatches.map { it.team2 }.contains(team.id)
@@ -233,8 +252,6 @@ class ExploreFr : Fragment() {
 
     suspend fun showData(view : View) {
         val helper = StorageHelper()
-        val ongoingGroups = view.findViewById<LinearLayout>(R.id.ongoing_layout_groups)
-        val upcomingGroups = view.findViewById<LinearLayout>(R.id.upcoming_layout_groups)
 
         Log.d("ongoing tourney", ongoingTournaments.size.toString())
         Log.d("upcoming tourney", upcomingTournaments.size.toString())
@@ -242,17 +259,12 @@ class ExploreFr : Fragment() {
         // check tournament size to determine render output
         if (tournaments.size == 0) {
             view.findViewById<LinearLayout>(R.id.no_tournaments_layout).visibility = View.VISIBLE
-            rvTournamentCarousel.visibility = View.GONE
-            ongoingGroups.visibility = View.GONE
-            upcomingGroups.visibility = View.GONE
+            view.findViewById<CircularProgressIndicator>(R.id.loading_indicator).visibility = View.GONE
             return
         }
-        else {
-            view.findViewById<LinearLayout>(R.id.no_tournaments_layout).visibility = View.GONE
-            rvTournamentCarousel.visibility = View.VISIBLE
-            ongoingGroups.visibility = View.VISIBLE
-            upcomingGroups.visibility = View.VISIBLE
-        }
+
+        view.findViewById<LinearLayout>(R.id.no_tournaments_layout).visibility = View.GONE
+        rvTournamentCarousel.visibility = View.VISIBLE
 
         // preload images
         if (parent.getTournamentBanners().size == 0 || arguments?.getString("refresh") != null) {
@@ -275,6 +287,19 @@ class ExploreFr : Fragment() {
             parent.getTournamentBanners(),
             parent.getTournamentLogos()
         )
+
+        tournamentAdapter.setOnItemClickCallback(object : TournamentCarouselAdapter.OnItemClickCallback {
+            override fun onItemClicked(data: String) {
+                val intent = Intent(requireContext(),  TournamentPage::class.java)
+                intent.putExtra("tournament", data)
+                startActivity(intent)
+            }
+
+            override fun delData(pos: Int) {
+                // do nothing
+            }
+        })
+
         rvTournamentCarousel.adapter = tournamentAdapter
 
         // render ongoing section
@@ -297,7 +322,9 @@ class ExploreFr : Fragment() {
             ongoingTournamentAdapter.setOnItemClickCallback(object :
                 ListAdapter.OnItemClickCallback {
                 override fun onItemClicked(data: String) {
-                    Log.d("Clicked", data)
+                    val intent = Intent(requireContext(),  TournamentPage::class.java)
+                    intent.putExtra("tournament", data)
+                    startActivity(intent)
                 }
 
                 override fun delData(pos: Int) {
@@ -305,6 +332,7 @@ class ExploreFr : Fragment() {
                 }
             })
 
+            ongoingGroups.visibility = View.VISIBLE
             rvOngoingTournaments.adapter = ongoingTournamentAdapter
             rvOngoingMatches.adapter = ongoingMatchesAdapter
         }
@@ -321,11 +349,15 @@ class ExploreFr : Fragment() {
                 "logo/tournaments/"
             )
 
+            upcomingGroups.visibility = View.VISIBLE
             rvUpcomingTournaments.adapter = upcomingAdapter
         }
         else {
             upcomingGroups.visibility = View.GONE
         }
+
+        view.findViewById<CircularProgressIndicator>(R.id.loading_indicator).visibility = View.GONE
+        rvTournamentCarousel.visibility = View.VISIBLE
     }
 
     companion object {

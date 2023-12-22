@@ -1,5 +1,14 @@
 <resources>
-    <string name="app_name">proyek_android</string>
+    <string name="app_name">xSports</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="emailError">Email not registered!</string>
+    <string name="passError">Wrong password!</string>
+    <string name="accountExist">Account already exists!</string>
+    <string name="error">An error occured! Please try again</string>
+    <string name="timedOut">Your session has expired. Please log in again</string>
+    <string name="playerdeleted">Player has been removed!</string>
+    <string name="fillAll">Please fill all fields!</string>
+    <string name="uploadFailed">File upload failed! Please try again</string>
+    <string name="newsdeleted">News has been removed!</string>
 </resources>

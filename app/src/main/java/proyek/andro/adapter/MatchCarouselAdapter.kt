@@ -68,14 +68,14 @@ class MatchCarouselAdapter (
 
         if (match.score != "") {
             if (scores[0] > scores[1]) {
-                holder.team1Score.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
+                holder.team1Score.setTextColor(holder.itemView.context.resources.getColor(R.color.primary))
                 holder.team2Score.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
             } else if (scores[0] < scores[1]) {
                 holder.team1Score.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
-                holder.team2Score.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
+                holder.team2Score.setTextColor(holder.itemView.context.resources.getColor(R.color.primary))
             } else {
-                holder.team1Score.setTextColor(holder.itemView.context.resources.getColor(R.color.disabled))
-                holder.team2Score.setTextColor(holder.itemView.context.resources.getColor(R.color.disabled))
+                holder.team1Score.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
+                holder.team2Score.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
             }
         }
 
