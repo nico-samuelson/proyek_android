@@ -13,7 +13,11 @@ import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Callback
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import proyek.andro.R
+import proyek.andro.helper.StorageHelper
 import proyek.andro.model.Tournament
 import java.time.LocalDate
 import java.time.format.TextStyle
@@ -53,24 +57,25 @@ class ListAdapter (
         holder.title.text = titles.get(position)
         holder.desc.text = descriptions.get(position)
 
-        storageRef.child(imagePath + "/" + images.get(position)).downloadUrl.addOnSuccessListener {
+        CoroutineScope(Dispatchers.Main).launch {
+            val imageURI = StorageHelper().getImageURI(images.get(position), imagePath)
+
             Picasso.get()
-                .load(it)
+                .load(imageURI)
                 .placeholder(R.drawable.bg_gradient_1)
                 .networkPolicy(NetworkPolicy.OFFLINE)
-                .into(holder.image)
-        }.addOnFailureListener {
-            Picasso.get()
-                .load(images.get(position))
-                .placeholder(R.drawable.bg_gradient_1)
-                .networkPolicy(NetworkPolicy.OFFLINE)
-                .into(holder.image)
+                .into(holder.image, object : Callback {
+                    override fun onSuccess() {
+                    }
+
+                    override fun onError(e: Exception?) {
+                        Picasso.get()
+                            .load(imageURI)
+                            .placeholder(R.drawable.bg_gradient_1)
+                            .into(holder.image)
+                    }
+                })
         }
-//        Picasso.get()
-//            .load(images.get(position))
-//            .placeholder(R.drawable.bg_gradient_1)
-//            .networkPolicy(NetworkPolicy.OFFLINE)
-//            .into(holder.image)
 
         holder.itemView.setOnClickListener { onItemClickCallback.onItemClicked(titles.get(position)) }
     }

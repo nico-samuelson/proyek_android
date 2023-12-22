@@ -55,7 +55,7 @@ class Search : AppCompatActivity() {
 
         // create rv adapter
         var adapterT = ListAdapter(tournaments.map { it.logo }, tournaments.map { it.name }, tournaments.map { "Tournament" }, "logo/tournaments")
-        var adapterP = ListAdapter(players.map { it.photo }, players.map { it.name }, players.map { "Player" }, "photo/player")
+        var adapterP = ListAdapter(players.map { it.photo }, players.map { it.name }, players.map { "Player" }, "")
         var adapterG = ListAdapter(games.map { it.logo }, games.map { it.name }, games.map { "Game" }, "logo/games")
 
         // set adapter onclick
@@ -123,11 +123,11 @@ class Search : AppCompatActivity() {
                     )
                     players = Player().get(
                         filter = Filter.and(
-                            Filter.greaterThanOrEqualTo("name", query.toString()),
-                            Filter.lessThanOrEqualTo("name", query.toString() + "\uf8ff")
+                            Filter.greaterThanOrEqualTo("nickname", query.toString()),
+                            Filter.lessThanOrEqualTo("nickname", query.toString() + "\uf8ff")
                         ),
                         limit = 100,
-                        order = arrayOf(arrayOf("name", "asc"))
+                        order = arrayOf(arrayOf("nickname", "asc"))
                     )
 
                     Log.d("search_query", games.toString())
@@ -144,7 +144,7 @@ class Search : AppCompatActivity() {
 
                     Log.d("search_query", games.map { it.logo }.toString())
                     adapterT.setData(tournaments.map { it.logo }, tournaments.map { it.name }, tournaments.map { "Tournament" })
-                    adapterP.setData(players.map { it.photo }, players.map { it.name }, players.map { "Player" })
+                    adapterP.setData(players.map { it.photo }, players.map { it.nickname }, players.map { "Player" })
                     adapterG.setData(games.map { it.logo }, games.map { it.name }, games.map { "Game" })
                 }
 
