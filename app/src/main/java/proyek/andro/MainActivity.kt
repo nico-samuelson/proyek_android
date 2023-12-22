@@ -9,6 +9,7 @@ import proyek.andro.adminActivity.AdminActivity
 import proyek.andro.seeder.GameSeeder
 import proyek.andro.seeder.MatchSeeder
 import proyek.andro.seeder.OrganizationSeeder
+import proyek.andro.seeder.ParticipantSeeder
 import proyek.andro.seeder.TeamSeeder
 import proyek.andro.seeder.TournamentPhaseSeeder
 import proyek.andro.seeder.TournamentSeeder

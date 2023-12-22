@@ -288,6 +288,18 @@ class ExploreFr : Fragment() {
             parent.getTournamentLogos()
         )
 
+        tournamentAdapter.setOnItemClickCallback(object : TournamentCarouselAdapter.OnItemClickCallback {
+            override fun onItemClicked(data: String) {
+                val intent = Intent(requireContext(),  TournamentPage::class.java)
+                intent.putExtra("tournament", data)
+                startActivity(intent)
+            }
+
+            override fun delData(pos: Int) {
+                // do nothing
+            }
+        })
+
         rvTournamentCarousel.adapter = tournamentAdapter
 
         // render ongoing section
@@ -310,7 +322,9 @@ class ExploreFr : Fragment() {
             ongoingTournamentAdapter.setOnItemClickCallback(object :
                 ListAdapter.OnItemClickCallback {
                 override fun onItemClicked(data: String) {
-                    Log.d("Clicked", data)
+                    val intent = Intent(requireContext(),  TournamentPage::class.java)
+                    intent.putExtra("tournament", data)
+                    startActivity(intent)
                 }
 
                 override fun delData(pos: Int) {

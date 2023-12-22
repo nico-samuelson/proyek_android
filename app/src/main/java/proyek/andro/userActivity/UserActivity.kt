@@ -124,7 +124,7 @@ class UserActivity : AppCompatActivity() {
                         true
                     }
 
-                    R.id.item_4 -> {
+                    R.id.item_5 -> {
                         val profile = ProfileFr()
 
                         mFragmentManager.beginTransaction()
@@ -132,6 +132,15 @@ class UserActivity : AppCompatActivity() {
                             .commit()
                         true
                     }
+                    R.id.item_4 -> {
+                        val favorite = FavoriteFr()
+
+                        mFragmentManager.beginTransaction()
+                            .replace(R.id.fragmentContainer, favorite, favorite::class.java.simpleName)
+                            .commit()
+                        true
+                    }
+
 
                     else -> false
                 }

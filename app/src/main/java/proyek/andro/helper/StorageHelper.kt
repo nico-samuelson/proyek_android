@@ -15,6 +15,10 @@ import kotlin.coroutines.suspendCoroutine
 class StorageHelper {
     val storageRef = FirebaseStorage.getInstance().reference
 
+    suspend fun getImageURI(image : String, directory: String) : Uri {
+        return storageRef.child("${directory}/${image}").downloadUrl.await()
+    }
+
     suspend fun preloadImages(images: List<String>, directory: String): ArrayList<Uri> {
         val imagesURI = ArrayList<Uri>()
 
