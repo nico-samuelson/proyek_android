@@ -40,8 +40,9 @@ class PlayerProfile : AppCompatActivity() {
 
         val backBtn : ImageView = findViewById(R.id.backBtn)
         backBtn.setOnClickListener {
-            val intent = Intent(this, TeamProfile::class.java)
-            startActivity(intent)
+            onBackPressedDispatcher.onBackPressed()
+//            val intent = Intent(this, TeamProfile::class.java)
+//            startActivity(intent)
         }
 
         playerHistoryRV = findViewById(R.id.rv_PlayerHistory_carousel)

@@ -19,8 +19,7 @@ class TeamProfile : AppCompatActivity() {
 
         val backBtn : ImageView = findViewById(R.id.backBtn)
         backBtn.setOnClickListener {
-            val intent = Intent(this, TournamentPage::class.java)
-            startActivity(intent)
+            onBackPressedDispatcher.onBackPressed()
         }
 
         rvRoasters = findViewById(R.id.rv_team_roaster)
