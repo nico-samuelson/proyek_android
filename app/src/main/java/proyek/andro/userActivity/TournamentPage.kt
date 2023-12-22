@@ -11,6 +11,9 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
+import com.google.android.material.tabs.TabItem
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayout.Tab
 import com.google.firebase.firestore.Filter
 import com.squareup.picasso.Callback
 import com.squareup.picasso.NetworkPolicy
@@ -122,27 +125,59 @@ class TournamentPage : AppCompatActivity() {
                 .add(R.id.tournamentFragment, overviewFr)
                 .commit()
 
-            val chip1: Chip = findViewById(R.id.chip1)
-            val chip2: Chip = findViewById(R.id.chip2)
+
+            val tabLayout : TabLayout = findViewById(R.id.tournamentLayout)
+
+            tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    when (tab?.position) {
+                        0 -> {
+                            val OverView = OverviewFr()
+                            mFragmentManager.beginTransaction().apply {
+                                replace(R.id.tournamentFragment, OverView, OverView::class.java.simpleName)
+                                commit()
+                            }
+                        }
+                        1 -> {
+                            val Schedule = ScheduleFr()
+                            mFragmentManager.beginTransaction().apply {
+                                replace(R.id.tournamentFragment, Schedule, Schedule::class.java.simpleName)
+                                commit()
+                            }
+                        }
+                    }
+                }
+
+                override fun onTabReselected(tab: TabLayout.Tab?) {
+                    // Handle tab reselect
+                }
+
+                override fun onTabUnselected(tab: TabLayout.Tab?) {
+                    // Handle tab unselect
+                }
+            })
+
+//            val chip1: TabItem = findViewById(R.id.chip1)
+//            val chip2: TabItem = findViewById(R.id.chip2)
 //        val chip3: Chip = findViewById(R.id.chip3)
 
-            chip1.setOnClickListener {
-                val OverView = OverviewFr()
-
-                mFragmentManager.beginTransaction().apply {
-                    replace(R.id.tournamentFragment, OverView, OverView::class.java.simpleName)
-                    commit()
-                }
-            }
-
-            chip2.setOnClickListener {
-                val Schedule = ScheduleFr()
-
-                mFragmentManager.beginTransaction().apply {
-                    replace(R.id.tournamentFragment, Schedule, Schedule::class.java.simpleName)
-                    commit()
-                }
-            }
+//            chip1.setOnClickListener {
+//                val OverView = OverviewFr()
+//
+//                mFragmentManager.beginTransaction().apply {
+//                    replace(R.id.tournamentFragment, OverView, OverView::class.java.simpleName)
+//                    commit()
+//                }
+//            }
+//
+//            chip2.setOnClickListener {
+//                val Schedule = ScheduleFr()
+//
+//                mFragmentManager.beginTransaction().apply {
+//                    replace(R.id.tournamentFragment, Schedule, Schedule::class.java.simpleName)
+//                    commit()
+//                }
+//            }
         }
     }
 
