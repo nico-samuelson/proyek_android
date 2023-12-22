@@ -99,7 +99,7 @@ class TournamentCarouselAdapter (
                 }
             })
 
-        holder.image.setOnClickListener {
+        holder.itemView.setOnClickListener {
             onItemClickCallback.onItemClicked(tournaments.get(position).name)
         }
     }
