@@ -156,7 +156,7 @@ class UserHomepageFr : Fragment() {
             parent.setGameBanners(
                 StorageHelper().preloadImages(
                     parent.getGames().map { it.banner },
-                    "banner/games/"
+                    "banner/games"
                 )
             )
         }
@@ -182,28 +182,25 @@ class UserHomepageFr : Fragment() {
 
         rvGameCarousel.adapter = gameCarouselAdapter
         rvMatchCarousel.adapter = MatchCarouselAdapter(parent.getMatches(), parent.getTeams())
-
-        rvGameCarousel.recycledViewPool.setMaxRecycledViews(1, 0)
-        rvMatchCarousel.recycledViewPool.setMaxRecycledViews(3, 0)
     }
-//        else {
-//            val gameCarouselAdapter = GameCarouselAdapter(parent.getGames(), parent.getGameBanners())
-//            gameCarouselAdapter.setOnItemClickCallback(object : GameCarouselAdapter.OnItemClickCallback {
-//                override fun onItemClicked(data: Game) {
-//                    Log.d("game clicked", data.toString())
-//                    parent.setSelectedGame(parent.getGames().indexOfFirst { it.id == data.id })
-//                    mFragmentManager.beginTransaction()
-//                        .replace(R.id.fragmentContainer, explore, explore::class.java.simpleName)
-//                        .addToBackStack(null)
-//                        .commit()
-//                }
-//            })
-//
-//            rvGameCarousel.adapter = gameCarouselAdapter
-//            rvMatchCarousel.adapter = MatchCarouselAdapter(parent.getMatches(), parent.getTeams())
-//
-//            rvGameCarousel.recycledViewPool.setMaxRecycledViews(1, 0)
-//            rvMatchCarousel.recycledViewPool.setMaxRecycledViews(3, 0)
-//        }
-//    }
+
+    companion object {
+        /**
+         * Use this factory method to create a new instance of
+         * this fragment using the provided parameters.
+         *
+         * @param param1 Parameter 1.
+         * @param param2 Parameter 2.
+         * @return A new instance of fragment UserHomepageFr.
+         */
+        // TODO: Rename and change types and number of parameters
+        @JvmStatic
+        fun newInstance(param1: String, param2: String) =
+            UserHomepageFr().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
+                }
+            }
+    }
 }

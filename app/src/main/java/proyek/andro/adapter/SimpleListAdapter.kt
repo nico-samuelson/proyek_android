@@ -1,6 +1,7 @@
 package proyek.andro.adapter
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.storage.FirebaseStorage
+import com.squareup.picasso.Callback
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 import proyek.andro.R
@@ -47,15 +49,17 @@ class SimpleListAdapter (
         storageRef.child(imagePath + images.get(position)).downloadUrl.addOnSuccessListener {
             Picasso.get()
                 .load(it)
-                .placeholder(R.drawable.bg_gradient_1)
+                .placeholder(R.drawable.card_placeholder)
                 .networkPolicy(NetworkPolicy.OFFLINE)
-                .into(holder.image)
-        }.addOnFailureListener {
-            Picasso.get()
-                .load(images.get(position))
-                .placeholder(R.drawable.bg_gradient_1)
-                .networkPolicy(NetworkPolicy.OFFLINE)
-                .into(holder.image)
+                .into(holder.image, object : Callback {
+                    override fun onSuccess() {}
+                    override fun onError(e: Exception?) {
+                        Picasso.get()
+                            .load(it)
+                            .placeholder(R.drawable.card_placeholder)
+                            .into(holder.image)
+                    }
+                })
         }
 
         holder.title.setOnClickListener { onItemClickCallback.onItemClicked(titles.get(position)) }
@@ -63,18 +67,17 @@ class SimpleListAdapter (
         holder.delBtn.setOnClickListener { onItemClickCallback.delData(position) }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setData(images : List<String>, titles : List<String>) {
         this.images = images
         this.titles = titles
 
+        Log.d("filterPlayers", "adapterNames: ${titles}")
+        Log.d("itemCount", "itemCount: ${itemCount}")
         notifyDataSetChanged()
     }
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        return 2
     }
 }

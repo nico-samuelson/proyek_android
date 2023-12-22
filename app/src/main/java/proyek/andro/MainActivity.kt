@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
 //                     ParticipantSeeder().run()
 //                     MatchSeeder().run()
 //                     PlayerHistorySeeder().run()
-//                    UserFavoriteSeeder().run()
+//                     UserFavoriteSeeder().run()
                 }
             }
         }
