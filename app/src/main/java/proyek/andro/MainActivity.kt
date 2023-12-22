@@ -3,13 +3,17 @@ package proyek.andro
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import proyek.andro.adminActivity.AdminActivity
 import proyek.andro.seeder.GameSeeder
 import proyek.andro.seeder.MatchSeeder
+import proyek.andro.seeder.NewsSeeder
 import proyek.andro.seeder.OrganizationSeeder
 import proyek.andro.seeder.ParticipantSeeder
+import proyek.andro.seeder.PlayerHistorySeeder
 import proyek.andro.seeder.TeamSeeder
 import proyek.andro.seeder.TournamentPhaseSeeder
 import proyek.andro.seeder.TournamentSeeder
@@ -20,7 +24,7 @@ import java.time.LocalDate
 
 class MainActivity : AppCompatActivity() {
 
-    var runSeeder = false // JANGAN DIJADIIN TRUE KALAU DATA SUDAH ADA DI FIREBASE
+    var runSeeder = false// JANGAN DIJADIIN TRUE KALAU DATA SUDAH ADA DI FIREBASE
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -39,6 +43,7 @@ class MainActivity : AppCompatActivity() {
 //                     MatchSeeder().run()
 //                     PlayerHistorySeeder().run()
 //                     UserFavoriteSeeder().run()
+//                    NewsSeeder().run()
                 }
             }
         }

@@ -160,7 +160,7 @@ class UserHomepageFr : Fragment() {
                 )
             )
         }
-
+//kll
         val gameCarouselAdapter = GameCarouselAdapter(parent.getGames(), parent.getGameBanners())
         val mFragmentManager = parentFragmentManager
         val explore = ExploreFr()
