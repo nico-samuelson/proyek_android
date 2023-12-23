@@ -13,14 +13,14 @@ class OrganizationsListAdapter(
     private val organizatoins : ArrayList<Organization>
 ) : RecyclerView.Adapter<OrganizationsListAdapter.ListViewHolder>(){
     inner class ListViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
-        val tvNickname : TextView = itemView.findViewById(R.id.tvNickname)
+        val tvNickname : TextView = itemView.findViewById(R.id.tvName)
 
         init {
             itemView.setOnClickListener {
                 val position: Int = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     val currentItem = organizatoins[position]
-                    val intent = Intent(itemView.context, proyek.andro.userActivity.TeamProfile::class.java)
+                    val intent = Intent(itemView.context, proyek.andro.userActivity.OrganizationPage::class.java)
                     itemView.context.startActivity(intent)
                 }
             }
@@ -31,7 +31,7 @@ class OrganizationsListAdapter(
         parent: ViewGroup,
         viewType: Int
     ): OrganizationsListAdapter.ListViewHolder {
-        val view : View = LayoutInflater.from(parent.context).inflate(R.layout.rv_players_list, parent, false)
+        val view : View = LayoutInflater.from(parent.context).inflate(R.layout.rv_organizations_list, parent, false)
         return ListViewHolder(view)
     }
 

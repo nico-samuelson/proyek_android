@@ -56,8 +56,7 @@ class TournamentPage : AppCompatActivity() {
 
         val backBtn: ImageView = findViewById(R.id.backBtn)
         backBtn.setOnClickListener {
-            val intent = Intent(this, UserActivity::class.java)
-            startActivity(intent)
+            onBackPressedDispatcher.onBackPressed()
         }
 
         var imageURI : ArrayList<Uri> = ArrayList()
