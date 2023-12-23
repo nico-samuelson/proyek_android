@@ -1,6 +1,5 @@
 package proyek.andro.userActivity
 
-import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,10 +9,7 @@ import android.util.Log
 import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.chip.Chip
-import com.google.android.material.tabs.TabItem
 import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayout.Tab
 import com.google.firebase.firestore.Filter
 import com.squareup.picasso.Callback
 import com.squareup.picasso.NetworkPolicy
@@ -88,7 +84,7 @@ class TournamentPage : AppCompatActivity() {
 
             imageURI = StorageHelper().preloadImages(listOf(tournament?.banner!!), "banner/tournaments")
         }.invokeOnCompletion {
-            var banner = findViewById<ImageView>(R.id.tournament_banner)
+            val banner = findViewById<ImageView>(R.id.tournament_banner)
 
             if (imageURI.size > 0) {
                 Picasso.get()

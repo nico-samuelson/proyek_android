@@ -77,46 +77,51 @@ class UserActivity : AppCompatActivity() {
                 R.id.item_1 -> {
                     val home = UserHomepageFr()
 
-                    mFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, home, home::class.java.simpleName)
-                        .commit()
-                    true
-                }
+                        mFragmentManager.beginTransaction()
+                            .replace(R.id.fragmentContainer, home, home::class.java.simpleName)
+                            .addToBackStack(null)
+                            .commit()
+                        true
+                    }
 
                 R.id.item_2 -> {
                     val explore = ExploreFr()
 
-                    mFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, explore, explore::class.java.simpleName)
-                        .commit()
-                    true
-                }
+                        mFragmentManager.beginTransaction()
+                            .replace(R.id.fragmentContainer, explore, explore::class.java.simpleName)
+                            .addToBackStack(null)
+                            .commit()
+                        true
+                    }
 
                 R.id.item_3 -> {
                     val news = NewsFr()
 
-                    mFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, news, news::class.java.simpleName)
-                        .commit()
-                    true
-                }
+                        mFragmentManager.beginTransaction()
+                            .replace(R.id.fragmentContainer, news, news::class.java.simpleName)
+                            .addToBackStack(null)
+                            .commit()
+                        true
+                    }
 
-                R.id.item_5 -> {
-                    val profile = ProfileFr()
+                    R.id.item_5 -> {
+                        val profile = ProfileFr()
 
-                    mFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, profile, profile::class.java.simpleName)
-                        .commit()
-                    true
-                }
-                R.id.item_4 -> {
-                    val favorite = FavoriteFr()
+                        mFragmentManager.beginTransaction()
+                            .replace(R.id.fragmentContainer, profile, profile::class.java.simpleName)
+                            .addToBackStack(null)
+                            .commit()
+                        true
+                    }
+                    R.id.item_4 -> {
+                        val favorite = FavoriteFr()
 
-                    mFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, favorite, favorite::class.java.simpleName)
-                        .commit()
-                    true
-                }
+                        mFragmentManager.beginTransaction()
+                            .replace(R.id.fragmentContainer, favorite, favorite::class.java.simpleName)
+                            .addToBackStack(null)
+                            .commit()
+                        true
+                    }
 
 
                 else -> false
