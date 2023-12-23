@@ -60,11 +60,12 @@ class ScheduleUpcomingAdapter(
         val outputFormatter = DateTimeFormatter.ofPattern("d MMM yyyy-HH:mm")
 
         val utcDateTime = ZonedDateTime.parse(match_time[0], inputFormatter.withZone(ZoneId.of("UTC")))
-        val localDateTime = utcDateTime.withZoneSameInstant(ZoneId.systemDefault())
+        val localDateTime = utcDateTime.withZoneSameInstant(ZoneId.of("Asia/Jakarta"))
         val formattedLocalDateTime = localDateTime.format(outputFormatter)
 
         holder.tvDate.text = formattedLocalDateTime.split("-")[0]
-        holder.tvTime.text = "${formattedLocalDateTime.split("-")[1]} ${ZoneId.systemDefault().id}"
+        holder.tvTime.text = "${formattedLocalDateTime.split("-")[1]} WIB"
+//        holder.tvTime.text = "${formattedLocalDateTime.split("-")[1]} \n${ZoneId.systemDefault().id}"
         holder.tvTeam1.text = team1.name
         holder.tvTeam2.text = team2.name
 

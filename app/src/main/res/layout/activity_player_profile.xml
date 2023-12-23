@@ -28,9 +28,11 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <View
+            <ImageView
+                android:id="@+id/ivPlayerPhoto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:scaleType="centerCrop"
                 android:background="#30000000" />
         </RelativeLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -50,10 +52,9 @@
         android:id="@+id/imageView3"
         android:layout_width="100dp"
         android:layout_height="100dp"
-
         android:layout_marginStart="32dp"
         android:layout_marginTop="64dp"
-        android:src="@drawable/circle_shape"
+        android:src="@drawable/default_pp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/backBtn" />
 

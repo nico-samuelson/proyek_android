@@ -110,7 +110,7 @@ class OrganizationSeeder {
             "logo_prx.png",
             "2017",
             "Singapore",
-            "https://www.paparex.gg/",
+            "https://www.pprx.team/",
             "Nikhil Hathiramani",
             1
         ))
