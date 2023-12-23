@@ -15,6 +15,9 @@
         android:theme="@style/Theme.Proyek_android"
         tools:targetApi="31">
         <activity
+            android:name=".adminActivity.AddOrganizations"
+            android:exported="false" />
+        <activity
             android:name=".adminActivity.ManageOrganizations"
             android:exported="false" />
         <activity

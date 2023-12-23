@@ -67,6 +67,12 @@ class AdminActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        CRUDOrgs.setOnClickListener {
+            val intent = Intent(this, ManageOrganizations::class.java)
+            startActivity(intent)
+
+        }
+
         CRUDPlayer.setOnClickListener {
             val intent = Intent(this, ManagePlayers::class.java)
             startActivity(intent)
