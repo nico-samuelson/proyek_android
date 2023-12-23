@@ -39,8 +39,8 @@ class NewsSeeder {
 ////
 ////        return listofNews
 //    }
-
-    suspend fun run() {
+ 
+  suspend fun run() {
 //        seed()
         listofNews.forEach {
             it.insertOrUpdate()
