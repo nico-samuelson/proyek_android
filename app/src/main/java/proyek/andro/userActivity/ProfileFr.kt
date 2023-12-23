@@ -3,9 +3,7 @@ package proyek.andro.userActivity
 import android.app.AlertDialog
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.provider.ContactsContract.CommonDataKinds.Email
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +18,6 @@ import kotlinx.coroutines.launch
 import proyek.andro.Login
 import proyek.andro.R
 import proyek.andro.model.UserFavorite
-import kotlin.math.log
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -65,6 +62,8 @@ class ProfileFr : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        parent.getNavbar().menu.getItem(4).isChecked = true
+
         user_name = view.findViewById(R.id.user_name)
         delAcc = view.findViewById(R.id.delAcc)
         logout = view.findViewById(R.id.logout)
@@ -100,7 +99,7 @@ class ProfileFr : Fragment() {
                         ).forEach {
                             it.delete(it.id)
                         }
-                        user?.delete(user.id)
+                        user.delete(user.id)
                         sp.edit().clear().apply()
 
                         startActivity(Intent(parent, Login::class.java))
@@ -110,8 +109,8 @@ class ProfileFr : Fragment() {
             val dialog = builder.create()
             dialog.show()
 
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.black))
-            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.red))
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.black, null))
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.red, null))
         }
 
         changeEmail.setOnClickListener {

@@ -17,19 +17,17 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import proyek.andro.R
-import proyek.andro.adapter.PlayersListAdapter
+import proyek.andro.adapter.TeamListAdapter
 import proyek.andro.helper.StorageHelper
+import proyek.andro.model.Game
 import proyek.andro.model.Organization
-import proyek.andro.model.Player
 import proyek.andro.model.Team
-import proyek.andro.model.Tournament
 
-class TeamProfile : AppCompatActivity() {
-    private var players : ArrayList<Player> = ArrayList()
-    private var team : Team? = null
+class OrganizationPage : AppCompatActivity() {
+    private var teams : ArrayList<Team> = ArrayList()
+    private var games : ArrayList<Game> = ArrayList()
     private var orgs : Organization? = null
-    lateinit var rvRoasters : RecyclerView
-
+    lateinit var rvTeams : RecyclerView
 
     lateinit var tvName : TextView
     lateinit var tvFounded : TextView
@@ -41,7 +39,7 @@ class TeamProfile : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_team_profile)
+        setContentView(R.layout.activity_organization_page)
 
         val backBtn : ImageView = findViewById(R.id.backBtn)
         backBtn.setOnClickListener {
@@ -57,16 +55,16 @@ class TeamProfile : AppCompatActivity() {
         tvDescription = findViewById(R.id.tvDescription)
 
         CoroutineScope(Dispatchers.Main).launch {
-            team = Team().find(intent.getStringExtra("team").toString())
-            orgs = Organization().find(team!!.organization)
-            players = Player().get(
-                filter = Filter.equalTo("team", team!!.id),
-                order = arrayOf(arrayOf("team", "ASC"))
+            orgs = Organization().find(intent.getStringExtra("orgs").toString())
+            teams = Team().get(
+                filter = Filter.equalTo("organization", orgs!!.id),
+                order = arrayOf(arrayOf("organization", "ASC"))
             )
+            games = Game().get()
 
-            tvName.text = team!!.name
-            tvFounded.text = team!!.founded
-            tvCoach.text = team!!.coach
+            tvName.text = orgs!!.name
+            tvFounded.text = orgs!!.founded
+            tvCoach.text = orgs!!.ceo
             tvLocation.text = orgs!!.location
             tvWebsite.text = orgs!!.website
             tvDescription.text = orgs!!.description
@@ -94,16 +92,14 @@ class TeamProfile : AppCompatActivity() {
                     }
                 })
 
-            rvRoasters = findViewById(R.id.rv_team_roaster)
-            rvRoasters.layoutManager = LinearLayoutManager(this@TeamProfile, RecyclerView.HORIZONTAL, false)
+            rvTeams = findViewById(R.id.rv_team_roaster)
+            rvTeams.layoutManager = LinearLayoutManager(
+                this@OrganizationPage,
+                RecyclerView.HORIZONTAL,
+                false
+            )
 
-            rvRoasters.adapter = PlayersListAdapter(players)
+            rvTeams.adapter = TeamListAdapter(teams, games)
         }
-
-//        players.add(Player("1", "NaVi", "S1mple", "S1mple", "AWP", "Ukraina", "https://liquipedia.net/commons/images/thumb/1/1d/S1mple_at_BLAST_Premier_Spring_Series_2020.jpg/600px-S1mple_at_BLAST_Premier_Spring_Series_2020.jpg", true, 1))
-//        players.add(Player("1", "NaVi", "S1mple", "S1mple", "AWP", "Ukraina", "https://liquipedia.net/commons/images/thumb/1/1d/S1mple_at_BLAST_Premier_Spring_Series_2020.jpg/600px-S1mple_at_BLAST_Premier_Spring_Series_2020.jpg", true, 1))
-//        players.add(Player("1", "NaVi", "S1mple", "S1mple", "AWP", "Ukraina", "https://liquipedia.net/commons/images/thumb/1/1d/S1mple_at_BLAST_Premier_Spring_Series_2020.jpg/600px-S1mple_at_BLAST_Premier_Spring_Series_2020.jpg", true, 1))
-//        players.add(Player("1", "NaVi", "S1mple", "S1mple", "AWP", "Ukraina", "https://liquipedia.net/commons/images/thumb/1/1d/S1mple_at_BLAST_Premier_Spring_Series_2020.jpg/600px-S1mple_at_BLAST_Premier_Spring_Series_2020.jpg", true, 1))
-//        players.add(Player("1", "NaVi", "S1mple", "S1mple", "AWP", "Ukraina", "https://liquipedia.net/commons/images/thumb/1/1d/S1mple_at_BLAST_Premier_Spring_Series_2020.jpg/600px-S1mple_at_BLAST_Premier_Spring_Series_2020.jpg", true, 1))
     }
 }
