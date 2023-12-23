@@ -41,12 +41,14 @@ class NewsAdapter (
         holder._newsTitle.setText(news.title)
         holder._newsAuthor.setText(news.author)
         holder._newsDate.setText(news.date)
-        val context = holder.itemView.context
         holder.itemView.setOnClickListener { onItemClickCallback.onItemClicked(news) }
     }
 
     override fun getItemCount(): Int {
         return listNews.size
+    }
+    fun setOnItemClickCallback(onItemClickCallback: NewsAdapter.OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
     }
 
 

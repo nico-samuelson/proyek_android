@@ -18,6 +18,7 @@ import proyek.andro.R
 import proyek.andro.adminActivity.AdminActivity
 import proyek.andro.model.Game
 import proyek.andro.model.Match
+import proyek.andro.model.News
 import proyek.andro.model.Team
 import proyek.andro.model.Tournament
 import proyek.andro.model.User
@@ -28,6 +29,8 @@ class UserActivity : AppCompatActivity() {
     private var tournaments = ArrayList<Tournament>()
     private var tournamentBanners = ArrayList<Uri>()
     private var tournamentLogos = ArrayList<Uri>()
+
+    private var news = ArrayList<News>()
 
     private var games = ArrayList<Game>()
     private var gameBanners = ArrayList<Uri>()
@@ -220,6 +223,10 @@ class UserActivity : AppCompatActivity() {
         return this.favorites
     }
 
+    fun getNews(): ArrayList<News> {
+        return this.news
+    }
+
     fun setFavorites(favorites: ArrayList<UserFavorite>) {
         this.favorites = favorites
     }
@@ -238,6 +245,7 @@ class UserActivity : AppCompatActivity() {
                 order = arrayOf(arrayOf("time", "desc")),
                 limit = 5
             )
+            news = News().get()
             val tempGame : ArrayList<Game> = Game().get()
 
             val gameFavorites = tempGame.filter { it.id in favorites.map { fav -> fav.game } }
