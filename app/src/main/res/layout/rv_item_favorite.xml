@@ -13,7 +13,8 @@
         android:id="@+id/card"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:cardBackgroundColor="#393C43">
+        app:cardBackgroundColor="#393C43"
+        app:strokeColor="#23252B">
 
         <ImageView
             android:id="@+id/imgBanner"

@@ -67,5 +67,25 @@
             android:clipChildren="false"
             android:clipToPadding="false"
             android:paddingStart="16dp" />
+
+        <TextView
+            android:id="@+id/orgsText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:text="Organizations"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:visibility="gone"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/orgs_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:clipToPadding="false"
+            android:paddingStart="16dp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
