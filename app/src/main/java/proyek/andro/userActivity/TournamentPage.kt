@@ -25,6 +25,7 @@ import proyek.andro.model.Match
 import proyek.andro.model.Participant
 import proyek.andro.model.Team
 import proyek.andro.model.Tournament
+import proyek.andro.userActivity.TournamentExtension.HighlightFr
 import proyek.andro.userActivity.TournamentExtension.OverviewFr
 import proyek.andro.userActivity.TournamentExtension.ScheduleFr
 import proyek.andro.userActivity.TournamentExtension.TourneyString
@@ -124,6 +125,7 @@ class TournamentPage : AppCompatActivity() {
 
             val chip1: Chip = findViewById(R.id.chip1)
             val chip2: Chip = findViewById(R.id.chip2)
+            val chip3: Chip = findViewById(R.id.chip3)
 //        val chip3: Chip = findViewById(R.id.chip3)
 
             chip1.setOnClickListener {
@@ -140,6 +142,14 @@ class TournamentPage : AppCompatActivity() {
 
                 mFragmentManager.beginTransaction().apply {
                     replace(R.id.tournamentFragment, Schedule, Schedule::class.java.simpleName)
+                    commit()
+                }
+            }
+            chip3.setOnClickListener {
+                val Highlight = HighlightFr()
+
+                mFragmentManager.beginTransaction().apply {
+                    replace(R.id.tournamentFragment, Highlight, Highlight::class.java.simpleName)
                     commit()
                 }
             }
