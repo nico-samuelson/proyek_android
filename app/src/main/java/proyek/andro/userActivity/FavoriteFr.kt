@@ -8,20 +8,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.GridLayout
-import android.widget.ImageView
-import android.widget.LinearLayout
-import com.squareup.picasso.NetworkPolicy
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.progressindicator.CircularProgressIndicator
-import com.google.firebase.storage.FirebaseStorage
-import com.squareup.picasso.Callback
-import com.squareup.picasso.Picasso
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import proyek.andro.R
 import proyek.andro.adapter.FavoriteAdapter
 
@@ -56,7 +46,7 @@ class FavoriteFr : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.d("user_favorite", parent.getFavorites().toString())
+        parent.getNavbar().menu.getItem(3).isChecked = true
 
         rvFavorite = view.findViewById(R.id.favorite_grid_layout)
         rvFavorite.layoutManager =

@@ -1,6 +1,7 @@
 package proyek.andro.userActivity
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -69,6 +70,13 @@ class TeamProfile : AppCompatActivity() {
             tvLocation.text = orgs!!.location
             tvWebsite.text = orgs!!.website
             tvDescription.text = orgs!!.description
+
+            tvWebsite.setTextColor(resources.getColor(R.color.primary, null))
+            tvWebsite.setOnClickListener {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(orgs!!.website)
+                startActivity(intent)
+            }
 
             val logo = StorageHelper().getImageURI(orgs!!.logo, "logo/orgs")
 

@@ -2,14 +2,12 @@ package proyek.andro.userActivity
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,16 +25,9 @@ import proyek.andro.R
 import proyek.andro.adapter.GameCarouselAdapter
 import proyek.andro.adapter.MatchCarouselAdapter
 import proyek.andro.adapter.OrganizationsListAdapter
-import proyek.andro.adapter.PlayersListAdapter
 import proyek.andro.helper.StorageHelper
 import proyek.andro.model.Game
-import proyek.andro.model.Match
 import proyek.andro.model.Organization
-import proyek.andro.model.Player
-import proyek.andro.model.Team
-import proyek.andro.model.Tournament
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -89,13 +80,18 @@ class UserHomepageFr : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        parent.getNavbar().menu.getItem(0).isChecked = true
+
         view.findViewById<TextView>(R.id.gamesText).visibility = View.GONE
+        view.findViewById<TextView>(R.id.orgsText).visibility = View.GONE
 
         rvGameCarousel = view.findViewById(R.id.games_recycler_view)
         rvMatchCarousel = view.findViewById(R.id.matches_recycler_view)
+        organizationsRV = view.findViewById(R.id.orgs_recycler_view)
 
         rvGameCarousel.layoutManager = CarouselLayoutManager(UncontainedCarouselStrategy())
         rvMatchCarousel.layoutManager = CarouselLayoutManager(HeroCarouselStrategy())
+        organizationsRV.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         CarouselSnapHelper().attachToRecyclerView(rvMatchCarousel)
 
         val search_bar = view.findViewById<SearchBar>(R.id.search_bar)
@@ -119,15 +115,6 @@ class UserHomepageFr : Fragment() {
                 }
             }
         }
-
-        organizationsRV = view.findViewById(R.id.orgs_recycler_view)
-        organizationsRV.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
-        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
-        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
-        organizations.add(Organization("1", "NaVi", "Hola Amigos", "navi.jpg", "2000", "Ukraina", "navi.com", "S1mple", 1))
-
-        organizationsRV.adapter = OrganizationsListAdapter(organizations)
     }
 
     suspend fun showData(view : View) {
@@ -139,7 +126,7 @@ class UserHomepageFr : Fragment() {
                 )
             )
         }
-//kll
+
         val gameCarouselAdapter = GameCarouselAdapter(parent.getGames(), parent.getGameBanners())
         val mFragmentManager = parentFragmentManager
         val explore = ExploreFr()
@@ -156,11 +143,13 @@ class UserHomepageFr : Fragment() {
             }
         })
 
+        view.findViewById<TextView>(R.id.orgsText).visibility = View.VISIBLE
         view.findViewById<TextView>(R.id.gamesText).visibility = View.VISIBLE
         view.findViewById<CircularProgressIndicator>(R.id.loading_indicator).visibility = View.GONE
 
         rvGameCarousel.adapter = gameCarouselAdapter
         rvMatchCarousel.adapter = MatchCarouselAdapter(parent.getMatches(), parent.getTeams())
+        organizationsRV.adapter = OrganizationsListAdapter(parent.getOrgs())
     }
 
     companion object {

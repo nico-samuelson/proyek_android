@@ -1,38 +1,31 @@
 package proyek.andro.userActivity
 
 import android.content.Intent
-import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.carousel.CarouselSnapHelper
 import com.google.android.material.carousel.HeroCarouselStrategy
-import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.firebase.firestore.Filter
+import com.squareup.picasso.Callback
+import com.squareup.picasso.NetworkPolicy
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import proyek.andro.R
-import proyek.andro.adapter.GameCarouselAdapter
 import proyek.andro.adapter.MatchCarouselAdapter
-import proyek.andro.adapter.PlayersListAdapter
-import proyek.andro.adapter.ScheduleUpcomingAdapter
 import proyek.andro.helper.StorageHelper
-import proyek.andro.model.Game
 import proyek.andro.model.Match
 import proyek.andro.model.Player
 import proyek.andro.model.PlayerHistory
 import proyek.andro.model.Team
-import java.text.FieldPosition
 
 class PlayerProfile : AppCompatActivity() {
     private var playerHistories : ArrayList<PlayerHistory> = ArrayList()
@@ -49,6 +42,7 @@ class PlayerProfile : AppCompatActivity() {
     lateinit var tvNationality : TextView
     lateinit var tvPosition : TextView
     lateinit var ivCaptain : ImageView
+    lateinit var ivPlayerPhoto : ImageView
 
     var job : Job? = null
 
@@ -67,6 +61,9 @@ class PlayerProfile : AppCompatActivity() {
         tvNationality = findViewById(R.id.tvNationality)
         tvPosition = findViewById(R.id.tvPosition)
         ivCaptain = findViewById(R.id.ivCaptain)
+        ivPlayerPhoto = findViewById(R.id.ivPlayerPhoto)
+
+        tvTeam.setTextColor(resources.getColor(R.color.primary, null))
 
         CoroutineScope(Dispatchers.Main).launch {
             player = Player().find(intent.getStringExtra("player")!!)
@@ -90,20 +87,31 @@ class PlayerProfile : AppCompatActivity() {
             tvNationality.text = player!!.nationality
             tvPosition.text = player!!.position
 
+            tvTeam.setOnClickListener{
+                val intent = Intent(this@PlayerProfile, TeamProfile::class.java)
+                intent.putExtra("team", team!!.id)
+                startActivity(intent)
+            }
+
             if (player!!.captain) ivCaptain.visibility = View.VISIBLE
             else ivCaptain.visibility = View.GONE
+
+            val imageUri = StorageHelper().getImageURI(player!!.photo, "")
+            Picasso.get()
+                .load(imageUri)
+                .networkPolicy(NetworkPolicy.OFFLINE)
+                .into(ivPlayerPhoto, object : Callback {
+                    override fun onSuccess() {}
+
+                    override fun onError(e: Exception?) {
+                        Picasso.get().load(imageUri).into(ivPlayerPhoto)
+                    }
+                })
 
             playerHistoryRV = findViewById(R.id.rv_PlayerHistory_carousel)
             playerHistoryRV.layoutManager = CarouselLayoutManager(HeroCarouselStrategy())
             CarouselSnapHelper().attachToRecyclerView(playerHistoryRV)
             playerHistoryRV.adapter = MatchCarouselAdapter(matches, matchTeams)
-
-//            playerHistories.add(Player("1", "NaVi", "S1mple", "S1mple", "AWP", "Ukraina", "https://liquipedia.net/commons/images/thumb/1/1d/S1mple_at_BLAST_Premier_Spring_Series_2020.jpg/600px-S1mple_at_BLAST_Premier_Spring_Series_2020.jpg", true, 1))
-//            playerHistories.add(Player("1", "NaVi", "S1mple", "S1mple", "AWP", "Ukraina", "https://liquipedia.net/commons/images/thumb/1/1d/S1mple_at_BLAST_Premier_Spring_Series_2020.jpg/600px-S1mple_at_BLAST_Premier_Spring_Series_2020.jpg", true, 1))
-//            playerHistories.add(Player("1", "NaVi", "S1mple", "S1mple", "AWP", "Ukraina", "https://liquipedia.net/commons/images/thumb/1/1d/S1mple_at_BLAST_Premier_Spring_Series_2020.jpg/600px-S1mple_at_BLAST_Premier_Spring_Series_2020.jpg", true, 1))
-//            playerHistories.add(Player("1", "NaVi", "S1mple", "S1mple", "AWP", "Ukraina", "https://liquipedia.net/commons/images/thumb/1/1d/S1mple_at_BLAST_Premier_Spring_Series_2020.jpg/600px-S1mple_at_BLAST_Premier_Spring_Series_2020.jpg", true, 1))
-//
-//            playerHistoryRV.adapter = PlayersListAdapter(playerHistories)
         }
     }
 }

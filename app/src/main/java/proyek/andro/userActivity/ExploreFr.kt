@@ -9,15 +9,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.carousel.CarouselSnapHelper
-import com.google.android.material.carousel.HeroCarouselStrategy
 import com.google.android.material.carousel.UncontainedCarouselStrategy
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -95,6 +92,8 @@ class ExploreFr : Fragment() {
     @SuppressLint("RestrictedApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        parent.getNavbar().menu.getItem(1).isChecked = true
 
         val search_bar = view.findViewById<SearchBar>(R.id.search_bar)
         search_bar.setOnClickListener {
@@ -182,7 +181,7 @@ class ExploreFr : Fragment() {
     }
 
     fun makeChips(view : View) {
-        var chips = view.findViewById<ChipGroup>(R.id.gameChips)
+        val chips = view.findViewById<ChipGroup>(R.id.gameChips)
         val colorState = ColorStateList(
             arrayOf(
                 intArrayOf(android.R.attr.state_checked),
@@ -282,7 +281,7 @@ class ExploreFr : Fragment() {
             )
         }
 
-        var tournamentAdapter = TournamentCarouselAdapter(
+        val tournamentAdapter = TournamentCarouselAdapter(
             tournaments,
             parent.getTournamentBanners(),
             parent.getTournamentLogos()
