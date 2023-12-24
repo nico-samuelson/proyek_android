@@ -8,7 +8,7 @@
     <TextView
         android:id="@+id/News_title"
         android:layout_width="300dp"
-        android:layout_height="70dp"
+        android:layout_height="wrap_content"
         android:justificationMode="inter_word"
         android:textColor="@color/white"
         android:textSize="20sp"
@@ -18,11 +18,10 @@
 
     <TextView
         android:id="@+id/News_author"
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
-        android:gravity="center"
         android:textColor="@color/white"
         android:textSize="10sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,7 +33,7 @@
         android:layout_height="30dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
-        android:gravity="center"
+        android:textAlignment="viewStart"
         android:textColor="@color/white"
         android:textSize="10sp"
         app:layout_constraintStart_toEndOf="@+id/News_author"
