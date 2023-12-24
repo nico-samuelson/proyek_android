@@ -15,6 +15,12 @@
         android:theme="@style/Theme.Proyek_android"
         tools:targetApi="31">
         <activity
+            android:name=".adminActivity.AddTeams"
+            android:exported="false" />
+        <activity
+            android:name=".adminActivity.ManageTeams"
+            android:exported="false" />
+        <activity
             android:name=".adminActivity.AddOrganizations"
             android:exported="false" />
         <activity

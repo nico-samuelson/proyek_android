@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".adminActivity.AddOrganizations">
+    tools:context=".adminActivity.AddTeams">
 
     <ImageView
         android:id="@+id/backBtn"
@@ -22,23 +22,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:text="Add Organization"
+        android:text="Add Team"
         android:textColor="@color/white"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/backBtn"
         app:layout_constraintStart_toEndOf="@+id/backBtn"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/inputLogo"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="24dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/card_placeholder"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/backBtn" />
 
     <LinearLayout
         android:id="@+id/linearLayout3"
@@ -51,7 +40,7 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputLogo">
+        app:layout_constraintTop_toBottomOf="@+id/pageTitle">
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -68,16 +57,18 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout"
+            style="?attr/textInputOutlinedExposedDropdownMenuStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="CEO">
+            android:hint="Game">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etCEO"
+            <AutoCompleteTextView
+                android:id="@+id/etGame"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:padding="16dp"
                 android:textColor="@color/white" />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
@@ -113,10 +104,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Location">
+            android:hint="Coach">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etLocation"
+                android:id="@+id/etCoach"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textColor="@color/white" />
@@ -137,17 +128,19 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
 
         <com.google.android.material.textfield.TextInputLayout
+            style="?attr/textInputOutlinedExposedDropdownMenuStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="16dp"
             android:layout_weight="1"
-            android:hint="Website"
-            app:prefixText="https://">
+            android:hint="Status">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etWebsite"
+            <AutoCompleteTextView
+                android:id="@+id/etStatus"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:padding="16dp"
                 android:textColor="@color/white" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -156,10 +149,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Status">
+            android:hint="Organization">
 
             <AutoCompleteTextView
-                android:id="@+id/etStatus"
+                android:id="@+id/etOrg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="none"

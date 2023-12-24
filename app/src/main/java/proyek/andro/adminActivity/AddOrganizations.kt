@@ -4,11 +4,13 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.AutoCompleteTextView
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
@@ -27,6 +29,7 @@ class AddOrganizations : AppCompatActivity() {
     private lateinit var etLocation : TextView
     private lateinit var etWebsite : TextView
     private lateinit var etDescription : TextView
+    private lateinit var etStatus : AutoCompleteTextView
 
     private var imageURI : Uri? = null
 
@@ -43,9 +46,12 @@ class AddOrganizations : AppCompatActivity() {
         etLocation = findViewById(R.id.etLocation)
         etWebsite = findViewById(R.id.etWebsite)
         etDescription = findViewById(R.id.etDescription)
+        etStatus = findViewById(R.id.etStatus)
 
         val backBtn : ImageView = findViewById(R.id.backBtn)
         val submitBtn : MaterialButton = findViewById(R.id.submitBtn)
+
+        (etStatus as MaterialAutoCompleteTextView).setSimpleItems(arrayOf("Active", "Inactive"))
 
         backBtn.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -65,6 +71,7 @@ class AddOrganizations : AppCompatActivity() {
                 val location = etLocation.text.toString()
                 val website = etWebsite.text.toString()
                 val description = etDescription.text.toString()
+                val status = etStatus.text.toString()
 
                 var logo = ""
                 if (imageURI != null) {
@@ -75,12 +82,12 @@ class AddOrganizations : AppCompatActivity() {
                             UUID.randomUUID().toString(),
                             name,
                             description,
-                            "logo/orgs/${logo}",
+                            logo,
                             founded,
                             location,
                             website,
                             ceo,
-                            1L
+                            if (status == "Active") 1 else 0,
                         )
 
                         CoroutineScope(Dispatchers.Main).launch {
@@ -103,7 +110,7 @@ class AddOrganizations : AppCompatActivity() {
 
     fun uploadPhoto(uri : Uri) : String{
         val photoID = UUID.randomUUID().toString()
-        val fileRef = storageRef.child("logo/orgs/${photoID}")
+        val fileRef = storageRef.child("logo/orgs/${etName.text.toString()}")
 
         fileRef.putFile(uri)
             .addOnSuccessListener {
