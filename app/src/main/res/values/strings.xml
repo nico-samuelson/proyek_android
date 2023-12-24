@@ -12,4 +12,6 @@
     <string name="uploadFailed">File upload failed! Please try again</string>
     <string name="newsdeleted">News has been removed!</string>
     <string name="downloadFailed">Download Failed</string>
+    <string name="organizationdeleted">Organization deleted!</string>
+    <string name="teamdeleted">Team deleted!</string>
 </resources>
