@@ -5,6 +5,7 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
@@ -23,6 +24,7 @@ import proyek.andro.model.Team
 
 class ManageTeams : AppCompatActivity() {
     private var teams : ArrayList<Team> = ArrayList()
+    private var filteredTeams : ArrayList<Team> = ArrayList()
     private var filteredImages : ArrayList<String> = ArrayList()
     private var filteredNames : ArrayList<String> = ArrayList()
 
@@ -63,6 +65,8 @@ class ManageTeams : AppCompatActivity() {
 
             adapterP = SimpleListAdapter(filteredImages, filteredNames, "logo/orgs/")
 
+            filterTeam()
+
             adapterP.setOnItemClickCallback(object : SimpleListAdapter.OnItemClickCallback {
                 override fun onItemClicked(data: String) {
                     val intent = Intent(this@ManageTeams, AddTeams::class.java)
@@ -72,7 +76,7 @@ class ManageTeams : AppCompatActivity() {
                 }
 
                 override fun delData(pos: Int) {
-                    val team = teams[pos]
+                    val team = filteredTeams.get(pos)
 
                     val alert = MaterialAlertDialogBuilder(this@ManageTeams)
                         .setTitle("Delete Team")
@@ -87,6 +91,7 @@ class ManageTeams : AppCompatActivity() {
                                 teams.removeAt(pos)
                                 filteredImages.removeAt(pos)
                                 filteredNames.removeAt(pos)
+                                filteredTeams.removeAt(pos)
 
                                 adapterP.setData(filteredImages, filteredNames)
 
@@ -150,11 +155,35 @@ class ManageTeams : AppCompatActivity() {
     }
 
     fun filterTeam() {
-        filteredImages = ArrayList()
-        filteredNames = ArrayList()
+        filteredTeams.clear()
+        filteredImages.clear()
+        filteredNames.clear()
 
-        val filteredTeams = teams.filter { it.name.contains(searchText, true) }
+        if (searchText == "") {
+            filteredTeams.addAll(
+                teams.filter {
+                    it.name != ""
+                }
+            )
+        }
+        else {
+            filteredTeams = teams.filter {
+                it.name.contains(searchText, true)
+            } as ArrayList<Team>
+        }
+
         filteredImages = filteredTeams.map { it.logo } as ArrayList<String>
         filteredNames = filteredTeams.map { it.name } as ArrayList<String>
+
+        if (filteredTeams.isEmpty()) {
+            teamRV.visibility = View.GONE
+        }
+        else {
+            teamRV.visibility = View.VISIBLE
+        }
+
+        CoroutineScope(Dispatchers.Main).launch {
+            adapterP.setData(filteredImages, filteredNames)
+        }
     }
 }

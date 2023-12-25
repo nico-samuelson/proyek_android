@@ -107,8 +107,8 @@ class AddTeams : AppCompatActivity() {
                 Log.d("AddTeams", "Team logo found: $orgLogo")
 
                 if (mode == "add") {
-                    Log.d("addteams",games.find { it.name == game }?.id!!.toString())
-                    Log.d("addteams",organizations.find { it.name == org }?.id!!.toString())
+                    Log.d("addteams", games.find { it.name == game }?.id!!.toString())
+                    Log.d("addteams", organizations.find { it.name == org }?.id!!.toString())
                     val newTeam = Team(
                         UUID.randomUUID().toString(),
                         organizations.find { it.name == org }?.id!!,
@@ -142,7 +142,6 @@ class AddTeams : AppCompatActivity() {
                 }
             }
         }
-
     }
 
     fun showEdit() {
@@ -173,7 +172,12 @@ class AddTeams : AppCompatActivity() {
                     organizations.map { it.name }.toTypedArray()
                 )
 
-                (etStatus as MaterialAutoCompleteTextView).setSimpleItems(arrayOf("Active", "Inactive"))
+                (etStatus as MaterialAutoCompleteTextView).setSimpleItems(
+                    arrayOf(
+                        "Active",
+                        "Inactive"
+                    )
+                )
             }
         }
     }
