@@ -20,11 +20,13 @@ import kotlinx.coroutines.launch
 import proyek.andro.R
 import proyek.andro.adapter.TourneyPageAdapter
 import proyek.andro.helper.StorageHelper
+import proyek.andro.model.Highlights
 import proyek.andro.model.Match
 import proyek.andro.model.Participant
 import proyek.andro.model.Team
 import proyek.andro.model.Tournament
 import proyek.andro.model.TournamentPhase
+import proyek.andro.userActivity.TournamentExtension.HighlightFr
 import proyek.andro.userActivity.TournamentExtension.OverviewFr
 import proyek.andro.userActivity.TournamentExtension.ScheduleFr
 import proyek.andro.userActivity.TournamentExtension.TourneyString
@@ -37,6 +39,8 @@ class TournamentPage : AppCompatActivity() {
     private var participants : ArrayList<Participant> = ArrayList()
     private var teams : ArrayList<Team> = ArrayList()
     private var matches : ArrayList<Match> = ArrayList()
+    private var highlights : ArrayList<Highlights> = ArrayList()
+
 
     private val handler = Handler(Looper.getMainLooper())
     private val runnable = object : Runnable {
@@ -82,6 +86,11 @@ class TournamentPage : AppCompatActivity() {
                 filter = Filter.equalTo("tournament", tournament?.id),
                 limit = 500,
                 order = arrayOf(arrayOf("tournament", "ASC"))
+            )
+            highlights = Highlights().get(
+                filter = Filter.equalTo("tournament",tournament?.id),
+                limit = 50,
+                order = arrayOf(arrayOf("tournament","ASC"))
             )
 
             Log.d("tournament", "tournament: ${tournament?.name}")
@@ -150,6 +159,13 @@ class TournamentPage : AppCompatActivity() {
                                 commit()
                             }
                         }
+                        2 -> {
+                            val Highlight = HighlightFr()
+                            mFragmentManager.beginTransaction().apply {
+                                replace(R.id.tournamentFragment, Highlight, Highlight::class.java.simpleName)
+                                commit()
+                            }
+                        }
                     }
                 }
 
@@ -201,6 +217,10 @@ class TournamentPage : AppCompatActivity() {
 
     fun getTeams() : ArrayList<Team> {
         return teams
+    }
+
+    fun getHighlights() : ArrayList<Highlights> {
+        return highlights
     }
 
     fun getMatches() : ArrayList<Match> {

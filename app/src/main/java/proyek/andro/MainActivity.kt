@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import proyek.andro.adminActivity.AdminActivity
 import proyek.andro.seeder.GameSeeder
+import proyek.andro.seeder.HighLightSeeder
 import proyek.andro.seeder.MatchSeeder
 import proyek.andro.seeder.NewsSeeder
 import proyek.andro.seeder.OrganizationSeeder
@@ -44,6 +45,7 @@ class MainActivity : AppCompatActivity() {
 //                     PlayerHistorySeeder().run()
 //                     UserFavoriteSeeder().run()
 //                    NewsSeeder().run()
+//                    HighLightSeeder().run()
                 }
             }
         }

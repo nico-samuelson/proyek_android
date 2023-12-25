@@ -1,6 +1,9 @@
 package proyek.andro.model
 
-class News : BaseModel {
+import android.os.Parcelable
+import java.io.Serializable
+
+class News : BaseModel, Serializable{
     lateinit var id: String
     lateinit var title: String
     lateinit var content: String
