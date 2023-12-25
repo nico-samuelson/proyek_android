@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import proyek.andro.Login
 import proyek.andro.R
 import proyek.andro.model.Game
+import proyek.andro.model.Highlights
 import proyek.andro.model.Match
 import proyek.andro.model.Organization
 import proyek.andro.model.News
@@ -30,6 +31,7 @@ class UserActivity : AppCompatActivity() {
     private var tournamentLogos = ArrayList<Uri>()
 
     private var news = ArrayList<News>()
+    private var highlights = ArrayList<Highlights>()
 
     private var games = ArrayList<Game>()
     private var gameBanners = ArrayList<Uri>()
@@ -230,6 +232,10 @@ class UserActivity : AppCompatActivity() {
 
     fun getNews(): ArrayList<News> {
         return this.news
+    }
+
+    fun getHighLights(): ArrayList<Highlights> {
+        return this.highlights
     }
 
     fun setFavorites(favorites: ArrayList<UserFavorite>) {

@@ -59,9 +59,12 @@ class NewsFr : Fragment() {
         var newsAdapter = NewsAdapter(news)
         newsAdapter.setOnItemClickCallback(object : NewsAdapter.OnItemClickCallback {
             override fun onItemClicked(data: News) {
-//                val intent = Intent(requireContext(),  TournamentPage::class.java)
-//                intent.putExtra("tournament", data)
-//                startActivity(intent)
+                val intent = Intent(requireContext(),  NewsDetail::class.java)
+                intent.putExtra("title", data.title)
+                intent.putExtra("author", data.author)
+                intent.putExtra("date", data.date)
+                intent.putExtra("content", data.content)
+                startActivity(intent)
             }
 
             override fun delData(pos: Int) {
@@ -92,3 +95,4 @@ class NewsFr : Fragment() {
             }
     }
 }
+
