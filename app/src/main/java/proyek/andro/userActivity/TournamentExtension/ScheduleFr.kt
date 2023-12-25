@@ -13,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import proyek.andro.R
 import proyek.andro.adapter.ScheduleUpcomingAdapter
+import proyek.andro.model.Match
 import proyek.andro.model.Participant
 import proyek.andro.model.Team
 import proyek.andro.model.Tournament
@@ -41,12 +42,10 @@ class ScheduleFr : Fragment() {
         UpcomingScheduleRV = view.findViewById(R.id.carousel_schedules)
         UpcomingScheduleRV.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
 
-//        tournaments.add(Tournament("1", "Valorant", "Tournament 1", "12 June 23", "12/12/2020", 1000000, "EXL", "Online", listOf("Indonesia"), listOf("Indonesia"), "Tournament 1", "logo", "banner", 1))
-//        tournaments.add(Tournament("1", "Valorant", "Tournament 1", "12 June 23", "12/12/2020", 1000000, "EXL", "Online", listOf("Indonesia"), listOf("Indonesia"), "Tournament 1", "logo", "banner", 1))
-//        tournaments.add(Tournament("1", "Valorant", "Tournament 1", "12 June 23", "12/12/2020", 1000000, "EXL", "Online", listOf("Indonesia"), listOf("Indonesia"), "Tournament 1", "logo", "banner", 1))
-//        tournaments.add(Tournament("1", "Valorant", "Tournament 1", "12 June 23", "12/12/2020", 1000000, "EXL", "Online", listOf("Indonesia"), listOf("Indonesia"), "Tournament 1", "logo", "banner", 1))
-//        tournaments.add(Tournament("1", "Valorant", "Tournament 1", "12 June 23", "12/12/2020", 1000000, "EXL", "Online", listOf("Indonesia"), listOf("Indonesia"), "Tournament 1", "logo", "banner", 1))
+//        val sortedMatches = ArrayList(parent.getMatches().sortedBy { it.time })
 
-        UpcomingScheduleRV.adapter = ScheduleUpcomingAdapter(parent.getMatches(), parent.getTeams())
+        UpcomingScheduleRV.adapter = ScheduleUpcomingAdapter(
+            parent.getMatches(),
+            parent.getTeams())
     }
 }

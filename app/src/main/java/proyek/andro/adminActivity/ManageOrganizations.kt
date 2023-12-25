@@ -22,11 +22,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import proyek.andro.R
 import proyek.andro.adapter.SimpleListAdapter
+import proyek.andro.helper.StorageHelper
 import proyek.andro.model.Organization
 import proyek.andro.model.Player
 
 class ManageOrganizations : AppCompatActivity() {
     private var organizations: ArrayList<Organization> = ArrayList()
+    private var filteredOrganization: ArrayList<Organization> = ArrayList()
     private var filteredImages: ArrayList<String> = ArrayList()
     private var filteredNames: ArrayList<String> = ArrayList()
 
@@ -65,6 +67,8 @@ class ManageOrganizations : AppCompatActivity() {
             Log.d("filterOrgs", "Name: " + filteredNames.toString())
             Log.d("filterOrgs", "Images: " + filteredImages.toString())
 
+            filterOrganizations()
+
             adapterP = SimpleListAdapter(filteredImages, filteredNames, "logo/orgs/")
 
             adapterP.setOnItemClickCallback(object : SimpleListAdapter.OnItemClickCallback {
@@ -76,7 +80,7 @@ class ManageOrganizations : AppCompatActivity() {
                 }
 
                 override fun delData(pos: Int) {
-                    val organization = organizations[pos]
+                    val organization = filteredOrganization.get(pos)
 
                     val alert = MaterialAlertDialogBuilder(this@ManageOrganizations)
                         .setTitle("Delete Organization")
@@ -86,11 +90,13 @@ class ManageOrganizations : AppCompatActivity() {
                         }
                         .setPositiveButton("Delete") { dialog, which ->
                             CoroutineScope(Dispatchers.Main).launch {
+                                StorageHelper().deleteFile(organization.logo)
                                 organization.delete(organization.id)
 
                                 organizations.removeAt(pos)
                                 filteredImages.removeAt(pos)
                                 filteredNames.removeAt(pos)
+                                filteredOrganization.removeAt(pos)
 
                                 adapterP.setData(filteredImages, filteredNames)
 
@@ -155,13 +161,41 @@ class ManageOrganizations : AppCompatActivity() {
     }
 
     fun filterOrganizations() {
+        filteredOrganization.clear()
         filteredImages.clear()
         filteredNames.clear()
 
-        val filteredOrganizations = organizations.filter { it.name.contains(searchText, ignoreCase = true) }
+        if (searchText == "") {
+            filteredOrganization.addAll(
+                organizations.filter {
+                    it.name != ""
+                } as ArrayList<Organization>
+            )
+        }
+        else {
+            Log.d("filterOrgs", "Searching for $searchText")
+            Log.d("filterOrgs", "Orgs: " + organizations.map { it.name }.toString())
+            filteredOrganization = organizations.filter {
+                it.name.lowercase().contains(searchText, ignoreCase = true)
+            } as ArrayList<Organization>
+        }
 
-        filteredImages = filteredOrganizations.map { it.logo } as ArrayList<String>
-        filteredNames = filteredOrganizations.map { it.name } as ArrayList<String>
+        filteredImages = filteredOrganization.map { it.logo } as ArrayList<String>
+        filteredNames = filteredOrganization.map { it.name } as ArrayList<String>
+
+        if (filteredOrganization.isEmpty()) {
+            organizationRV.visibility = View.GONE
+        } else {
+            organizationRV.visibility = View.VISIBLE
+        }
+
+        Log.d("filterOrgs", "Orgs: " + filteredOrganization.map { it.name }.toString())
+        Log.d("filterOrgs", "Name: " + filteredNames.toString())
+        Log.d("filterOrgs", "Images: " + filteredImages.toString())
+
+        // update adapter data
+        CoroutineScope(Dispatchers.Main).launch {
+            adapterP.setData(filteredImages, filteredNames)
+        }
     }
-
 }

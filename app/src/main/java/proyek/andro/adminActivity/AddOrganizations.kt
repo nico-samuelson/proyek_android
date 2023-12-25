@@ -98,7 +98,7 @@ class AddOrganizations : AppCompatActivity() {
                                 UUID.randomUUID().toString(),
                                 name,
                                 description,
-                                logo,
+                                name,
                                 founded,
                                 location,
                                 website,
@@ -192,11 +192,34 @@ class AddOrganizations : AppCompatActivity() {
                 etDescription.text = organization?.description
                 etStatus.setText(if (organization?.status == 1L) "Active" else "Inactive")
 
-                val formattedLogo = "logo_" + organization?.name?.replace(" ","_")?.toLowerCase() + ".png"
-                storageRef.child("logo/orgs/${formattedLogo}").downloadUrl.addOnSuccessListener {
-                    Log.d("editOrg", it.toString())
-                    Picasso.get().load(it).into(inputLogo)
+                var signal = true
+                val formattedLogo =
+                    "logo_" + organization?.name?.replace(" ", "_")?.toLowerCase() + ".png"
+
+                storageRef.child("logo/orgs/${formattedLogo}").downloadUrl
+                    .addOnSuccessListener {
+                        Log.d("editOrg", it.toString())
+                        Picasso.get().load(it).into(inputLogo)
+                        signal = false
+                    }
+
+                if (signal) {
+                    storageRef.child("logo/orgs/${organization?.logo}").downloadUrl
+                        .addOnSuccessListener {
+                            Log.d("editOrg", it.toString())
+                            Picasso.get().load(it).into(inputLogo)
+                            signal = false
+                        }
                 }
+//                    .addOnFailureListener {
+//                        // Case 1: Use the default logo when the download fails
+//                        Picasso.get().load("logo/orgs/${organization?.logo}").into(inputLogo)
+//
+//                        // Case 2: Use the photo ID from uploadPhoto function when the download fails
+////                        val photoID = uploadPhoto(imageURI!!)
+////                        Picasso.get().load("logo/orgs/${photoID}").into(inputLogo)
+//
+//                        // Case 3: Add your case here
             }
         }
     }
