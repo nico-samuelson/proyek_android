@@ -10,4 +10,5 @@
     <color name="disabled">#888888</color>
     <color name="green">#5fd968</color>
     <color name="red">#e76361</color>
+    <color name="header">#363D4F</color>
 </resources>
