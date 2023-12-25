@@ -35,6 +35,7 @@ class AddPlayer : AppCompatActivity() {
     private lateinit var etStatus : AutoCompleteTextView
     private lateinit var etCaptain : AutoCompleteTextView
     private lateinit var inputPhoto : ImageView
+
     private var teams : ArrayList<Team> = ArrayList()
     private var games : ArrayList<Game> = ArrayList()
     private var mode : String? = null

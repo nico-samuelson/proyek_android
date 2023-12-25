@@ -25,6 +25,7 @@ import proyek.andro.model.Match
 import proyek.andro.model.Participant
 import proyek.andro.model.Team
 import proyek.andro.model.Tournament
+import proyek.andro.model.TournamentPhase
 import proyek.andro.userActivity.TournamentExtension.HighlightFr
 import proyek.andro.userActivity.TournamentExtension.OverviewFr
 import proyek.andro.userActivity.TournamentExtension.ScheduleFr
@@ -34,6 +35,7 @@ class TournamentPage : AppCompatActivity() {
     private var juduls : ArrayList<TourneyString> = ArrayList()
     private lateinit var rvJudul : RecyclerView
     private var tournament : Tournament? = null
+    private var phases : ArrayList<TournamentPhase> = ArrayList()
     private var participants : ArrayList<Participant> = ArrayList()
     private var teams : ArrayList<Team> = ArrayList()
     private var matches : ArrayList<Match> = ArrayList()
@@ -69,6 +71,11 @@ class TournamentPage : AppCompatActivity() {
             participants = Participant().get(
                 filter = Filter.equalTo("tournament", tournament?.id),
                 limit = 100,
+                order = arrayOf(arrayOf("tournament", "ASC"))
+            )
+            phases = TournamentPhase().get(
+                filter = Filter.equalTo("tournament", tournament?.id),
+                limit = 10,
                 order = arrayOf(arrayOf("tournament", "ASC"))
             )
             teams = Team().get(
@@ -115,12 +122,15 @@ class TournamentPage : AppCompatActivity() {
             rvJudul = findViewById(R.id.rvJudulTournament)
             rvJudul.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
 
-            juduls.add(TourneyString(tournament?.name ?: ""))
+            juduls.add(TourneyString
+                (tournament?.name + "\n${tournament?.start_date} until ${tournament?.end_date}" ?: "")
+            )
+            juduls.add(TourneyString("Prize Pool\n$" + (tournament?.prize_pool).toString() ?: ""))
             juduls.add(TourneyString(tournament?.description ?: ""))
 
             rvJudul.adapter = TourneyPageAdapter(juduls)
 
-            handler.postDelayed(runnable, 3000)
+            handler.postDelayed(runnable, 5000)
 
             val mFragmentManager = supportFragmentManager
             val overviewFr = OverviewFr()
@@ -215,5 +225,9 @@ class TournamentPage : AppCompatActivity() {
 
     fun getMatches() : ArrayList<Match> {
         return matches
+    }
+
+    fun getPhases() : ArrayList<TournamentPhase> {
+        return phases
     }
 }

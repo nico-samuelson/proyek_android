@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Callback
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
@@ -30,10 +31,10 @@ class ParticipantsAdapter(
 
         init {
             itemView.setOnClickListener {
-                Toast.makeText(
-                    itemView.context,
+                Snackbar.make(
+                    itemView,
                     "Clicked: ${tvParticipant.text}",
-                    Toast.LENGTH_SHORT
+                    Snackbar.LENGTH_SHORT
                 ).show()
 
                 val intent = Intent(itemView.context, proyek.andro.userActivity.TeamProfile::class.java)

@@ -18,15 +18,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import proyek.andro.R
 import proyek.andro.adapter.ParticipantsAdapter
+import proyek.andro.adapter.PhasesAdapter
 import proyek.andro.model.Participant
 import proyek.andro.model.Team
+import proyek.andro.model.TournamentPhase
 import proyek.andro.userActivity.TournamentPage
 
 class OverviewFr : Fragment() {
     private var participants: ArrayList<Participant> = ArrayList()
     private var teams: ArrayList<Team> = ArrayList()
     private lateinit var parent: TournamentPage
+
     lateinit var participantsRV: RecyclerView
+    lateinit var phasesRV : RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,9 +46,37 @@ class OverviewFr : Fragment() {
         parent = super.requireActivity() as TournamentPage
 
         participantsRV = view.findViewById(R.id.carousel_participants)
-        val staggeredGridLayoutManager =
-            StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
-        participantsRV.layoutManager = staggeredGridLayoutManager
+        phasesRV = view.findViewById(R.id.carousel_phases)
+
+        //Phases
+
+        var phases = parent.getPhases()
+        Log.d("phases", phases.toString())
+
+        if (phases.isNotEmpty()) {
+            phases = phases.filter {
+                it.tournament == parent.getTournament()?.id
+            } as ArrayList<TournamentPhase>
+
+            val linearLayoutManager = LinearLayoutManager(
+                parent,
+                LinearLayoutManager.VERTICAL,
+                false
+            )
+            phasesRV.layoutManager = linearLayoutManager
+
+            val phasesAdapter = PhasesAdapter(phases)
+            phasesRV.adapter = phasesAdapter
+        }
+
+        //Participants
+
+        val linearLayoutManager2 =
+            LinearLayoutManager(
+                parent,
+                LinearLayoutManager.HORIZONTAL,
+                false)
+        participantsRV.layoutManager = linearLayoutManager2
 
         val participantAdapter = ParticipantsAdapter(parent.getParticipants(), parent.getTeams())
         participantsRV.adapter = participantAdapter
