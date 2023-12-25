@@ -45,36 +45,38 @@ class OverviewFr : Fragment() {
 
         parent = super.requireActivity() as TournamentPage
 
-
-
         participantsRV = view.findViewById(R.id.carousel_participants)
         phasesRV = view.findViewById(R.id.carousel_phases)
 
-        val linearLayoutManager = LinearLayoutManager(
-            parent,
-            LinearLayoutManager.VERTICAL,
-            false
-        )
-        phasesRV.layoutManager = linearLayoutManager
+        //Phases
 
         var phases = parent.getPhases()
         Log.d("phases", phases.toString())
 
-        if (phases != null) {
+        if (phases.isNotEmpty()) {
             phases = phases.filter {
                 it.tournament == parent.getTournament()?.id
             } as ArrayList<TournamentPhase>
 
+            val linearLayoutManager = LinearLayoutManager(
+                parent,
+                LinearLayoutManager.VERTICAL,
+                false
+            )
+            phasesRV.layoutManager = linearLayoutManager
+
             val phasesAdapter = PhasesAdapter(phases)
             phasesRV.adapter = phasesAdapter
-
-            val linearLayoutManager2 =
-                LinearLayoutManager(
-                    parent,
-                    LinearLayoutManager.HORIZONTAL,
-                    false)
-            participantsRV.layoutManager = linearLayoutManager2
         }
+
+        //Participants
+
+        val linearLayoutManager2 =
+            LinearLayoutManager(
+                parent,
+                LinearLayoutManager.HORIZONTAL,
+                false)
+        participantsRV.layoutManager = linearLayoutManager2
 
         val participantAdapter = ParticipantsAdapter(parent.getParticipants(), parent.getTeams())
         participantsRV.adapter = participantAdapter
