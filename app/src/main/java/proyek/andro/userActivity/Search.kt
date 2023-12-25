@@ -61,31 +61,32 @@ class Search : AppCompatActivity() {
         // set adapter onclick
         adapterT.setOnItemClickCallback(object : ListAdapter.OnItemClickCallback {
             override fun onItemClicked(data: String) {
-//                val intent = Intent(this@Search, TournamentDetail::class.java)
-//                intent.putExtra("title", data)
-//                startActivity(intent)
+                val intent = Intent(this@Search, TournamentPage::class.java)
+                intent.putExtra("tournament", data)
+                startActivity(intent)
             }
 
             override fun delData(pos: Int) {}
         })
+
         adapterP.setOnItemClickCallback(object : ListAdapter.OnItemClickCallback {
             override fun onItemClicked(data: String) {
-//                val intent = Intent(this@Search, PlayerDetail::class.java)
-//                intent.putExtra("title", data)
-//                startActivity(intent)
+                val intent = Intent(this@Search, PlayerProfile::class.java)
+                intent.putExtra("name", data)
+                startActivity(intent)
             }
 
             override fun delData(pos: Int) {}
         })
-        adapterG.setOnItemClickCallback(object : ListAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: String) {
-//                val intent = Intent(this@Search, GameDetail::class.java)
-//                intent.putExtra("title", data)
-//                startActivity(intent)
-            }
-
-            override fun delData(pos: Int) {}
-        })
+//        adapterG.setOnItemClickCallback(object : ListAdapter.OnItemClickCallback {
+//            override fun onItemClicked(data: String) {
+////                val intent = Intent(this@Search, GameDetail::class.java)
+////                intent.putExtra("title", data)
+////                startActivity(intent)
+//            }
+//
+//            override fun delData(pos: Int) {}
+//        })
 
         tournament_result.adapter = adapterT
         player_result.adapter = adapterP
@@ -130,9 +131,10 @@ class Search : AppCompatActivity() {
                         order = arrayOf(arrayOf("nickname", "asc"))
                     )
 
-                    Log.d("search_query", games.toString())
-                    Log.d("search_query", tournaments.toString())
-                    Log.d("search_query", players.toString())
+//                    Log.d("search_query", games.toString())
+//                    Log.d("search_query", tournaments.toString())
+//                    Log.d("search_query", players.toString())
+
                     if (games.size == 0 && tournaments.size == 0 && players.size == 0) {
                         empty_result.visibility = LinearLayout.VISIBLE
                     }

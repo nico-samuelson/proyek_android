@@ -62,6 +62,8 @@ class ListAdapter (
 
             Picasso.get()
                 .load(imageURI)
+                .resize(60, 60)
+                .centerInside()
                 .placeholder(R.drawable.bg_gradient_1)
                 .networkPolicy(NetworkPolicy.OFFLINE)
                 .into(holder.image, object : Callback {
@@ -71,6 +73,8 @@ class ListAdapter (
                     override fun onError(e: Exception?) {
                         Picasso.get()
                             .load(imageURI)
+                            .resize(60, 60)
+                            .centerInside()
                             .placeholder(R.drawable.bg_gradient_1)
                             .into(holder.image)
                     }

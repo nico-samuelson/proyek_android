@@ -66,52 +66,65 @@ class PlayerProfile : AppCompatActivity() {
         tvTeam.setTextColor(resources.getColor(R.color.primary, null))
 
         CoroutineScope(Dispatchers.Main).launch {
-            player = Player().find(intent.getStringExtra("player")!!)
+            if (intent.getStringExtra("player") == null) {
+                player = Player().get<Player>(
+                    filter = Filter.equalTo("nickname", intent.getStringExtra("name")!!),
+                    order = arrayOf(arrayOf("nickname", "ASC"))
+                )[0]
+            } else {
+                player = Player().find(intent.getStringExtra("player")!!)
+            }
+
+//            player = Player().find(intent.getStringExtra("player")!!)
             team = Team().find(player!!.team)
             playerHistories = PlayerHistory().get(
                 filter = Filter.equalTo("player", player!!.id),
                 limit = 10,
                 order = arrayOf(arrayOf("player", "ASC"))
             )
-            matches = Match().get(
-                filter = Filter.inArray("id", playerHistories.map { it.match }),
-                order = arrayOf(arrayOf("time", "DESC")),
-            )
-            val matchTeams = Team().get<Team>(
-                filter = Filter.inArray("id", matches.map { it.team1 }.union(matches.map { it.team2 }).toList())
-            )
+        }.invokeOnCompletion {
+            Log.d("player", "player: ${playerHistories?.size}")
+            CoroutineScope(Dispatchers.Main).launch {
+                matches = Match().get(
+                    filter = Filter.inArray("id", playerHistories.map { it.match }),
+                    order = arrayOf(arrayOf("time", "DESC")),
+                )
+                val matchTeams = Team().get<Team>(
+                    filter = Filter.inArray("id", matches.map { it.team1 }.union(matches.map { it.team2 }).toList())
+                )
 
-            tvNickname.text = player!!.nickname
-            tvName.text = player!!.name
-            tvTeam.text = team!!.name
-            tvNationality.text = player!!.nationality
-            tvPosition.text = player!!.position
+                tvNickname.text = player!!.nickname
+                tvName.text = player!!.name
+                tvTeam.text = team!!.name
+                tvNationality.text = player!!.nationality
+                tvPosition.text = player!!.position
 
-            tvTeam.setOnClickListener{
-                val intent = Intent(this@PlayerProfile, TeamProfile::class.java)
-                intent.putExtra("team", team!!.id)
-                startActivity(intent)
+                tvTeam.setOnClickListener{
+                    val intent = Intent(this@PlayerProfile, TeamProfile::class.java)
+                    intent.putExtra("team", team!!.id)
+                    startActivity(intent)
+                }
+
+                if (player!!.captain) ivCaptain.visibility = View.VISIBLE
+                else ivCaptain.visibility = View.GONE
+
+                val imageUri = StorageHelper().getImageURI(player!!.photo, "")
+                Picasso.get()
+                    .load(imageUri)
+                    .networkPolicy(NetworkPolicy.OFFLINE)
+                    .into(ivPlayerPhoto, object : Callback {
+                        override fun onSuccess() {}
+
+                        override fun onError(e: Exception?) {
+                            Picasso.get().load(imageUri).into(ivPlayerPhoto)
+                        }
+                    })
+
+                playerHistoryRV = findViewById(R.id.rv_PlayerHistory_carousel)
+                playerHistoryRV.layoutManager = CarouselLayoutManager(HeroCarouselStrategy())
+                CarouselSnapHelper().attachToRecyclerView(playerHistoryRV)
+                playerHistoryRV.adapter = MatchCarouselAdapter(matches, matchTeams)
             }
-
-            if (player!!.captain) ivCaptain.visibility = View.VISIBLE
-            else ivCaptain.visibility = View.GONE
-
-            val imageUri = StorageHelper().getImageURI(player!!.photo, "")
-            Picasso.get()
-                .load(imageUri)
-                .networkPolicy(NetworkPolicy.OFFLINE)
-                .into(ivPlayerPhoto, object : Callback {
-                    override fun onSuccess() {}
-
-                    override fun onError(e: Exception?) {
-                        Picasso.get().load(imageUri).into(ivPlayerPhoto)
-                    }
-                })
-
-            playerHistoryRV = findViewById(R.id.rv_PlayerHistory_carousel)
-            playerHistoryRV.layoutManager = CarouselLayoutManager(HeroCarouselStrategy())
-            CarouselSnapHelper().attachToRecyclerView(playerHistoryRV)
-            playerHistoryRV.adapter = MatchCarouselAdapter(matches, matchTeams)
         }
     }
 }

@@ -56,7 +56,9 @@ class ResetCredentials : AppCompatActivity() {
             etNewConfirm.setTransformationMethod(PasswordTransformationMethod.getInstance())
         }
 
-        btnBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
+        btnBack.setOnClickListener {
+            startActivity(Intent(this@ResetCredentials, UserActivity::class.java))
+        }
 
         CoroutineScope(Dispatchers.Main).launch {
             user = User().find(user_id ?: "")
