@@ -63,7 +63,7 @@ class ManageTournament : AppCompatActivity() {
             Log.d("filterTeams", filteredNames.toString())
             Log.d("filterTeams", filteredImages.toString())
 
-            adapterP = SimpleListAdapter(filteredImages, filteredNames, "logo/orgs/")
+            adapterP = SimpleListAdapter(filteredImages, filteredNames, "logo/tournaments/")
 
             filterTournament()
 
