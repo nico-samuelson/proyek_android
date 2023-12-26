@@ -52,25 +52,21 @@ class AddTournament : AppCompatActivity() {
     private lateinit var etVenue: TextView
     private lateinit var etDescription: TextView
     private lateinit var etStatus: AutoCompleteTextView
-    private lateinit var etParticipant : MaterialAutoCompleteTextView
     private lateinit var inputBanner: ImageView
     private lateinit var inputLogo: ImageView
     private lateinit var rvLocation: RecyclerView
     private lateinit var rvVenue: RecyclerView
-    private lateinit var rvParticipant : RecyclerView
 
     var bannerURI: Uri? = null
     var logoURI: Uri? = null
 
     var locations = listOf<String>()
     var venues = listOf<String>()
-    var participants : ArrayList<Participant> = ArrayList()
 
     val storageRef = FirebaseStorage.getInstance().reference
 
     var adapterL: SimpleListAdapter2? = null
     var adapterV: SimpleListAdapter2? = null
-    var adapterP: SimpleListAdapter2? = null
 
     var selectedGame : Game? = null
     var teams : ArrayList<Team> = ArrayList()
@@ -90,12 +86,10 @@ class AddTournament : AppCompatActivity() {
         etDescription = findViewById(R.id.etDescription)
         etStatus = findViewById(R.id.etStatus)
         etType = findViewById(R.id.etType)
-        etParticipant = findViewById(R.id.etParticipant)
         inputBanner = findViewById(R.id.inputBanner)
         inputLogo = findViewById(R.id.inputLogo)
         rvLocation = findViewById(R.id.rv_locations)
         rvVenue = findViewById(R.id.rv_venue)
-        rvParticipant = findViewById(R.id.rv_participant)
 
         val backBtn: ImageView = findViewById(R.id.backBtn)
         val submitBtn: MaterialButton = findViewById(R.id.submitBtn)
@@ -110,7 +104,6 @@ class AddTournament : AppCompatActivity() {
 
         CoroutineScope(Dispatchers.Main).launch {
             games = Game().get(limit = 50)
-            participants = Participant().get(limit = 50)
         }.invokeOnCompletion {
             (etGame as MaterialAutoCompleteTextView).setSimpleItems(
                 games.map { it.name }.toTypedArray()
@@ -238,7 +231,6 @@ class AddTournament : AppCompatActivity() {
 
         adapterL = SimpleListAdapter2(locations)
         adapterV = SimpleListAdapter2(venues)
-        adapterP = SimpleListAdapter2(teams.filter { it.id in participants.map { p -> p.team } }.map { it.name })
 
         adapterL?.setOnItemClickCallback(object : SimpleListAdapter2.OnItemClickCallback {
             override fun onItemClicked(data: String) {}
@@ -255,15 +247,6 @@ class AddTournament : AppCompatActivity() {
             override fun delData(pos: Int) {
                 venues = venues.filterIndexed { index, _ -> index != pos }
                 adapterV?.setData(venues)
-            }
-        })
-
-        adapterP?.setOnItemClickCallback(object : SimpleListAdapter2.OnItemClickCallback {
-            override fun onItemClicked(data: String) {}
-
-            override fun delData(pos: Int) {
-                participants = participants.filterIndexed { index, _ -> index != pos } as ArrayList<Participant>
-                adapterP?.setData(teams.filter { it.id in participants.map { p -> p.team } }.map { it.name })
             }
         })
 
@@ -299,18 +282,14 @@ class AddTournament : AppCompatActivity() {
                     filter = Filter.equalTo("game", selectedGame?.id),
                     order = arrayOf(arrayOf("game", "asc"))
                 )
-
-                etParticipant.setSimpleItems(teams.map { it.name }.toTypedArray())
             }
         }
 
         rvLocation.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         rvVenue.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        rvParticipant.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
         rvLocation.adapter = adapterL
         rvVenue.adapter = adapterV
-        rvParticipant.adapter = adapterP
     }
 
     fun showEdit() {
@@ -322,11 +301,6 @@ class AddTournament : AppCompatActivity() {
             ).firstOrNull()
 
             if (tournament != null) {
-
-                participants = Participant().get(
-                    filter = Filter.equalTo("tournament", tournament?.id),
-                    order = arrayOf(arrayOf("tournament", "asc"))
-                )
 
                 etName.text = tournament!!.name
                 etGame.setText(games.find { it.id == tournament?.game }?.name)

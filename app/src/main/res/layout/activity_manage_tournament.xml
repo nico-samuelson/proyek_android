@@ -42,7 +42,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/backBtn"
         app:layout_constraintTop_toBottomOf="@+id/backBtn"
-        app:queryHint="Search team" />
+        app:queryHint="Search tournament" />
 
     <ScrollView
         android:id="@+id/scrollView2"
