@@ -31,7 +31,9 @@ class AdminActivity : AppCompatActivity() {
         val CRUDOrgs: MaterialCardView = findViewById(R.id.manageOrganization)
         val CRUDTeams: MaterialCardView = findViewById(R.id.manageTeams)
         val CRUDTourneys: MaterialCardView = findViewById(R.id.manageTournaments)
+        val CRUDPhases: MaterialCardView = findViewById(R.id.managePhases)
         val CRUDMatches: MaterialCardView = findViewById(R.id.manageMatches)
+        val CRUDParticipants : MaterialCardView = findViewById(R.id.manageParticipant)
 
         val pageTitle: TextView = findViewById(R.id.pageTitle)
         val logoutBtn : MaterialButton = findViewById(R.id.logoutBtn)
@@ -91,15 +93,25 @@ class AdminActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-//        CRUDTourneys.setOnClickListener {
-//            val intent = Intent(this, ManageTournaments::class.java)
-//            startActivity(intent)
-//        }
-//
-//        CRUDMatches.setOnClickListener {
-//            val intent = Intent(this, ManageMatches::class.java)
-//            startActivity(intent)
-//        }
+        CRUDTourneys.setOnClickListener {
+            val intent = Intent(this, ManageTournament::class.java)
+            startActivity(intent)
+        }
+
+        CRUDPhases.setOnClickListener {
+            val intent = Intent(this, ManagePhase::class.java)
+            startActivity(intent)
+        }
+
+        CRUDMatches.setOnClickListener {
+            val intent = Intent(this, ManageMatch::class.java)
+            startActivity(intent)
+        }
+
+        CRUDParticipants.setOnClickListener {
+            val intent = Intent(this, ManageParticipant::class.java)
+            startActivity(intent)
+        }
     }
 
     fun getUser(): User? {

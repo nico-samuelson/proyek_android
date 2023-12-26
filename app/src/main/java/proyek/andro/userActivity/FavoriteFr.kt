@@ -1,6 +1,7 @@
 package proyek.andro.userActivity
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -8,12 +9,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import kotlinx.coroutines.Job
 import proyek.andro.R
 import proyek.andro.adapter.FavoriteAdapter
+import proyek.andro.adminActivity.AddNews
 
 import proyek.andro.model.Game
 import proyek.andro.model.UserFavorite
@@ -21,6 +25,7 @@ import proyek.andro.model.UserFavorite
 class FavoriteFr : Fragment() {
     lateinit var rvFavorite: RecyclerView
     lateinit var parent: UserActivity
+
     var favorites = ArrayList<Uri>()
 
     var job: Job? = null
@@ -45,6 +50,8 @@ class FavoriteFr : Fragment() {
     @SuppressLint("RestrictedApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val addFavBtn : FloatingActionButton = view.findViewById(R.id.AddFavoriteBtn)
+
 
         parent.getNavbar().menu.getItem(3).isChecked = true
 
@@ -58,6 +65,7 @@ class FavoriteFr : Fragment() {
 
         val mFragmentManager = parentFragmentManager
         val explore = ExploreFr()
+        val addFavFr = AddFavoriteFr()
 
         val rvFavoriteAdapter = FavoriteAdapter(parent.getFavorites(), parent.getGames())
         rvFavoriteAdapter.setOnItemClickCallback(object :
@@ -71,6 +79,12 @@ class FavoriteFr : Fragment() {
                     .commit()
             }
         })
+        addFavBtn.setOnClickListener {
+            mFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, addFavFr, AddFavoriteFr::class.java.simpleName)
+                .addToBackStack(null)
+                .commit()
+        }
 
         rvFavorite.adapter = rvFavoriteAdapter
 //        val favoriteGrid: GridLayout = view.findViewById(R.id.favorite_grid_layout)

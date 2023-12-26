@@ -46,24 +46,24 @@ class FavoriteAdapter(
     override fun onBindViewHolder(holder: FavoriteAdapter.FavoriteViewHolder, position: Int) {
         val currentItem = favorites[position]
 
-        CoroutineScope(Dispatchers.Main).launch {
-            val imageUri = StorageHelper().getImageURI(
-                games.filter {
-                    currentItem.game == it.id
-                }[0].banner,"banner/games/"
-            )
-
-            Picasso.get()
-                .load(imageUri)
-                .networkPolicy(NetworkPolicy.OFFLINE)
-                .into(holder.imgBanner, object : Callback {
-                    override fun onSuccess() {}
-
-                    override fun onError(e: Exception?) {
-                        Picasso.get().load(imageUri).into(holder.imgBanner)
-                    }
-                })
-        }
+//        CoroutineScope(Dispatchers.Main).launch {
+//            val imageUri = StorageHelper().getImageURI(
+//                games.filter {
+//                    currentItem.game == it.id
+//                }[0].banner,"banner/games/"
+//            )
+//
+//            Picasso.get()
+//                .load(imageUri)
+//                .networkPolicy(NetworkPolicy.OFFLINE)
+//                .into(holder.imgBanner, object : Callback {
+//                    override fun onSuccess() {}
+//
+//                    override fun onError(e: Exception?) {
+//                        Picasso.get().load(imageUri).into(holder.imgBanner)
+//                    }
+//                })
+//        }
 
         holder.imgBanner.setOnClickListener {
             onItemClickCallback.onItemClicked(favorites.get(position))
