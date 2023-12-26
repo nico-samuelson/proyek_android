@@ -19,10 +19,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import proyek.andro.adapter.SimpleListAdapter
-import proyek.andro.model.PlayerHistory
 import proyek.andro.model.TournamentPhase
 
-class ManagePhase : AppCompatActivity() {
+class ManagePhases : AppCompatActivity() {
     private var phases: ArrayList<TournamentPhase> = ArrayList()
 
     private var filteredPhases: ArrayList<TournamentPhase> = ArrayList()
@@ -68,7 +67,7 @@ class ManagePhase : AppCompatActivity() {
 
             adapterP.setOnItemClickCallback(object : SimpleListAdapter.OnItemClickCallback {
                 override fun onItemClicked(data: String) {
-                    val intent = Intent(this@ManagePhase, AddTournamentPhase::class.java)
+                    val intent = Intent(this@ManagePhases, AddTournamentPhase::class.java)
                     intent.putExtra("mode", "edit")
                     intent.putExtra("name", data)
                     startActivity(intent)
@@ -77,7 +76,7 @@ class ManagePhase : AppCompatActivity() {
                 override fun delData(pos: Int) {
                     val tournamentPhase = filteredPhases.get(pos)
 
-                    val alert = MaterialAlertDialogBuilder(this@ManagePhase).setTitle("Delete Team")
+                    val alert = MaterialAlertDialogBuilder(this@ManagePhases).setTitle("Delete Team")
                         .setMessage("Are you sure you want to delete ${tournamentPhase.name}?")
                         .setNegativeButton("Cancel") { dialog, which ->
                             dialog.dismiss()
@@ -111,7 +110,7 @@ class ManagePhase : AppCompatActivity() {
 
             rvPhases.adapter = adapterP
             rvPhases.layoutManager = LinearLayoutManager(
-                this@ManagePhase, LinearLayoutManager.VERTICAL, false
+                this@ManagePhases, LinearLayoutManager.VERTICAL, false
             )
         }
 

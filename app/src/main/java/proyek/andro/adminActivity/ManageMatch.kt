@@ -57,7 +57,7 @@ class ManageMatch : AppCompatActivity() {
         rvMatch = findViewById(R.id.viewMatch)
         CoroutineScope(Dispatchers.Main).launch {
             match = Match().get(limit = 50)
-            playerHistories = PlayerHistory().get(limit = 10000)
+            playerHistories = PlayerHistory().get(limit = 3000)
 
             filteredNames = match.map { it.name } as ArrayList<String>
 

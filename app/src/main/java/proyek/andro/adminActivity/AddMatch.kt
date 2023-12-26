@@ -80,7 +80,7 @@ class AddMatch : AppCompatActivity() {
             phases = TournamentPhase().get(limit = 50)
             teams = Team().get(limit = 50)
             tour = Tournament().get(limit = 10)
-            players = Player().get(limit = 1000)
+            players = Player().get(limit = 500)
         }.invokeOnCompletion {
             Log.d("AddMatch", "Phases: " + phases.map { it.name }.toString())
             Log.d("AddMatch", "Teams: " + teams.map { it.name }.toString())
@@ -130,7 +130,7 @@ class AddMatch : AppCompatActivity() {
                 val filteredPhases = phases.filter { it.tournament == tourId }
 
                 (etPhase as MaterialAutoCompleteTextView).setSimpleItems(
-                    filteredPhases.map { it.name }.toTypedArray()
+                    filteredPhases.map { it.name + " - " + it.id }.toTypedArray()
                 )
             }
 
@@ -172,6 +172,7 @@ class AddMatch : AppCompatActivity() {
                 val tournament = etTour.text.toString()
                 val tournamentId = tournament.split(" - ")[1]
                 val phase = etPhase.text.toString()
+                val phaseId = phase.split(" - ")[1]
                 val status = etStatus.text.toString()
 
                 if (mode == "add") {
@@ -179,7 +180,7 @@ class AddMatch : AppCompatActivity() {
                         val matchID = UUID.randomUUID().toString()
                         val newTeam = Match(
                             matchID,
-                            phase,
+                            phaseId,
                             team1ID,
                             team2ID,
                             name,
@@ -229,7 +230,7 @@ class AddMatch : AppCompatActivity() {
                     }
                 } else if (mode == "edit") {
                     match?.name = name
-                    match?.tournament_phase = phase
+                    match?.tournament_phase = phaseId
                     match?.team1 = team1ID
                     match?.team2 = team2ID
                     match?.winner = winnerId
@@ -256,18 +257,26 @@ class AddMatch : AppCompatActivity() {
             if (match != null) {
 //                Log.d("Addmatchs", match.toString())
                 etName.text = match?.name
-                etPhase.setText(match?.tournament_phase)
+                etTour.setText(
+                    tour.filter { it.id == match?.tournament }.map { "${it.name} - ${it.id}" }
+                        .firstOrNull()
+                )
+                etPhase.setText(match?.name + " - " + match?.tournament_phase)
                 etTeam1.setText(
-                    teams.filter { it.id == match?.team1 }.map { "${it.name} - ${it.id}" }.firstOrNull()
+                    teams.filter { it.id == match?.team1 }.map { "${it.name} - ${it.id}" }
+                        .firstOrNull()
                 )
                 etTeam2.setText(
-                    teams.filter { it.id == match?.team2 }.map { "${it.name} - ${it.id}" }.firstOrNull()
+                    teams.filter { it.id == match?.team2 }.map { "${it.name} - ${it.id}" }
+                        .firstOrNull()
                 )
+                etWinner.setText(
+                    teams.filter { it.id == match?.winner }.map { "${it.name} - ${it.id}" }
+                        .firstOrNull()
+                )
+
                 etScore.text = match?.score
                 etTime.text = match?.time
-                etTour.setText(
-                    tour.filter { it.id == match?.tournament }.map { "${it.name} - ${it.id}" }.firstOrNull()
-                )
                 etStatus.setText(if (match?.status == 1L) "Active" else "Inactive", false)
 
                 (etTeam1 as MaterialAutoCompleteTextView).setSimpleItems(
@@ -275,6 +284,11 @@ class AddMatch : AppCompatActivity() {
                 )
                 (etTeam2 as MaterialAutoCompleteTextView).setSimpleItems(
                     teams.map { "${it.name} - ${it.id}" }.toTypedArray()
+                )
+
+                (etPhase as MaterialAutoCompleteTextView).setSimpleItems(
+                    phases.filter { it.tournament == match?.tournament }.map { it.name + " - " + it.id }
+                        .toTypedArray()
                 )
 
                 (etWinner as MaterialAutoCompleteTextView).setSimpleItems(
@@ -303,7 +317,8 @@ class AddMatch : AppCompatActivity() {
     fun validate(): Boolean {
         if (
             etName.text.toString().isEmpty() || etPhase.text.toString().isEmpty() ||
-            etTeam1.text.toString().isEmpty() || etTeam2.text.toString().isEmpty() || etScore.text.toString().isEmpty() ||
+            etTeam1.text.toString().isEmpty() || etTeam2.text.toString()
+                .isEmpty() || etScore.text.toString().isEmpty() ||
             etTime.text.toString().isEmpty() || etTour.text.toString().isEmpty() ||
             etStatus.text.toString().isEmpty()
         ) {

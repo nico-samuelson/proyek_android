@@ -141,8 +141,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="16dp"
             android:layout_weight="1"
-            android:hint="Website"
-            app:prefixText="https://">
+            android:hint="Website">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etWebsite"

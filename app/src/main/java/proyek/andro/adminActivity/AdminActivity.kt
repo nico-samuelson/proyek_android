@@ -3,7 +3,6 @@ package proyek.andro.adminActivity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.TextView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
@@ -14,8 +13,6 @@ import kotlinx.coroutines.launch
 import proyek.andro.Login
 import proyek.andro.R
 import proyek.andro.model.User
-import proyek.andro.model.UserFavorite
-import proyek.andro.userActivity.UserActivity
 
 class AdminActivity : AppCompatActivity() {
 
@@ -99,7 +96,7 @@ class AdminActivity : AppCompatActivity() {
         }
 
         CRUDPhases.setOnClickListener {
-            val intent = Intent(this, ManagePhase::class.java)
+            val intent = Intent(this, ManagePhases::class.java)
             startActivity(intent)
         }
 

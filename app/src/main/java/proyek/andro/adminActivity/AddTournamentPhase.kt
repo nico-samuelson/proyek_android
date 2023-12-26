@@ -6,10 +6,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.ImageView
-import android.widget.Spinner
 import android.widget.TextView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
@@ -80,10 +78,7 @@ class AddTournamentPhase : AppCompatActivity() {
             etStartDate.setOnClickListener {
                 val now = Calendar.getInstance()
                 val datePicker = DatePickerDialog(this, { _, year, month, dayOfMonth ->
-                    val timePicker = TimePickerDialog(this, { _, hourOfDay, minute ->
-                        etStartDate.setText("$year-${month + 1}-$dayOfMonth $hourOfDay:$minute UTC")
-                    }, now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), true)
-                    timePicker.show()
+                    etStartDate.setText("$year-${month + 1}-$dayOfMonth")
                 }, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH))
                 datePicker.show()
             }
@@ -91,10 +86,7 @@ class AddTournamentPhase : AppCompatActivity() {
             etEndDate.setOnClickListener {
                 val now = Calendar.getInstance()
                 val datePicker = DatePickerDialog(this, { _, year, month, dayOfMonth ->
-                    val timePicker = TimePickerDialog(this, { _, hourOfDay, minute ->
-                        etEndDate.setText("$year-${month + 1}-$dayOfMonth $hourOfDay:$minute UTC")
-                    }, now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), true)
-                    timePicker.show()
+                    etEndDate.setText("$year-${month + 1}-$dayOfMonth")
                 }, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH))
                 datePicker.show()
             }
@@ -132,13 +124,18 @@ class AddTournamentPhase : AppCompatActivity() {
                         )
 
                         newTournamentPhase.insertOrUpdate()
-                        startActivity(Intent(this@AddTournamentPhase, ManagePhase::class.java))
+                        startActivity(Intent(this@AddTournamentPhase, ManagePhases::class.java))
                     }
                 } else if (mode == "edit") {
                     phase?.name = name
                     phase?.tournament = tournamentId
                     phase?.start_date = startDate
                     phase?.end_date = endDate
+
+                    CoroutineScope(Dispatchers.Main).launch {
+                        phase?.insertOrUpdate()
+                        startActivity(Intent(this@AddTournamentPhase, ManagePhases::class.java))
+                    }
                 }
             }
         }
@@ -146,16 +143,25 @@ class AddTournamentPhase : AppCompatActivity() {
 
     fun showEdit() {
         CoroutineScope(Dispatchers.Main).launch {
-            phase = TournamentPhase().findByTournament(
-                tournaments.find {
-                    it.name == name
-                }!!.id
-            ).get(0)
+            phase = TournamentPhase().findByTournament(name!!, tournaments.first().id)
 
             Log.d("phase", phase.toString())
 
             etName.text = phase?.name
-            etTournament.setText(phase?.tournament)
+
+            val tournament = tournaments.filter { it.id == phase?.tournament }.first()
+
+            etTournament.setText(
+                tournament.name + " - " + tournament.id)
+
+            (etTournament as MaterialAutoCompleteTextView).setSimpleItems(
+                tournaments
+                    .map { "${it.name} - ${it.id}" }
+                    .toTypedArray()
+            )
+//            etTournament.setText(
+//                tournament.name + " - " + tournament.id
+//            )
             etStartDate.text = phase?.start_date
             etEndDate.text = phase?.end_date
         }

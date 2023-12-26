@@ -21,7 +21,7 @@
             android:name=".adminActivity.ManageParticipant"
             android:exported="false" />
         <activity
-            android:name=".adminActivity.ManagePhase"
+            android:name=".adminActivity.ManagePhases"
             android:exported="false" />
         <activity
             android:name=".adminActivity.AddTournamentPhase"
