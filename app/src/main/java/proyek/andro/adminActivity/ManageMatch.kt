@@ -164,7 +164,6 @@ class ManageMatch : AppCompatActivity() {
     }
     fun filterMatch() {
         filteredMatch.clear()
-        filteredImages.clear()
         filteredNames.clear()
 
         if (searchText == "") {
