@@ -21,12 +21,14 @@ import kotlinx.coroutines.launch
 import proyek.andro.R
 import proyek.andro.adapter.SimpleListAdapter
 import proyek.andro.model.Match
+import proyek.andro.model.PlayerHistory
 import proyek.andro.model.Tournament
 
 class ManageMatch : AppCompatActivity() {
     private var match : ArrayList<Match> = ArrayList()
+    private var playerHistories : ArrayList<PlayerHistory> = ArrayList()
+
     private var filteredMatch : ArrayList<Match> = ArrayList()
-    private var filteredImages : ArrayList<String> = ArrayList()
     private var filteredNames : ArrayList<String> = ArrayList()
 
     private lateinit var rvMatch : RecyclerView
@@ -47,7 +49,7 @@ class ManageMatch : AppCompatActivity() {
         }
 
         addBtn.setOnClickListener {
-            val intent = Intent(this, AddTournament::class.java)
+            val intent = Intent(this, AddMatch::class.java)
             intent.putExtra("mode", "add")
             startActivity(intent)
         }
@@ -55,16 +57,17 @@ class ManageMatch : AppCompatActivity() {
         rvMatch = findViewById(R.id.viewMatch)
         CoroutineScope(Dispatchers.Main).launch {
             match = Match().get(limit = 50)
+            playerHistories = PlayerHistory().get(limit = 10000)
+
             filteredNames = match.map { it.name } as ArrayList<String>
 
             Log.d("filterTeams", match.map { it.name }.toString())
             Log.d("filterTeams", filteredNames.toString())
-            Log.d("filterTeams", filteredImages.toString())
+            Log.d("filterTeams", filteredNames.toString())
 
-            adapterP = SimpleListAdapter(filteredImages, filteredNames, "logo/orgs/")
+            filterMatch()
 
-            filterTournament()
-
+            adapterP = SimpleListAdapter(filteredNames, filteredNames, "logo/orgs/")
             adapterP.setOnItemClickCallback(object : SimpleListAdapter.OnItemClickCallback {
                 override fun onItemClicked(data: String) {
                     val intent = Intent(this@ManageMatch, AddMatch::class.java)
@@ -84,6 +87,13 @@ class ManageMatch : AppCompatActivity() {
                         }
                         .setPositiveButton("Delete") { dialog, which ->
                             CoroutineScope(Dispatchers.Main).launch {
+                                val matchId = tour.id
+                                val playerHistory = playerHistories.filter { it.match == matchId }
+                                Log.d("playerHistory", playerHistory.size.toString())
+                                playerHistory.forEach {
+                                    PlayerHistory().delete(it.id)
+                                }
+
                                 tour.delete(tour.id)
 
                                 match.removeAt(pos)
@@ -91,11 +101,11 @@ class ManageMatch : AppCompatActivity() {
                                 filteredNames.removeAt(pos)
                                 filteredMatch.removeAt(pos)
 
-                                adapterP.setData(filteredImages, filteredNames)
+                                adapterP.setData(filteredNames, filteredNames)
 
                                 Snackbar.make(
                                     addBtn,
-                                    R.string.teamdeleted,
+                                    "Match deleted successfully",
                                     Snackbar.LENGTH_SHORT
                                 ).apply {
                                     setBackgroundTint(resources.getColor(R.color.light, null))
@@ -130,9 +140,9 @@ class ManageMatch : AppCompatActivity() {
 
                 if (query.toString() != searchText) {
                     searchText = query.toString()
-                    filterTournament()
+                    filterMatch()
                     CoroutineScope(Dispatchers.Main).launch {
-                        adapterP.setData(filteredImages, filteredNames)
+                        adapterP.setData(filteredNames, filteredNames)
                     }
                 }
 
@@ -142,9 +152,9 @@ class ManageMatch : AppCompatActivity() {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText.toString() == "" && searchText != "") {
                     searchText = newText.toString()
-                    filterTournament()
+                    filterMatch()
                     CoroutineScope(Dispatchers.Main).launch {
-                        adapterP.setData(filteredImages, filteredNames)
+                        adapterP.setData(filteredNames, filteredNames)
                     }
                 }
                 return true
@@ -152,7 +162,7 @@ class ManageMatch : AppCompatActivity() {
         })
 
     }
-    fun filterTournament() {
+    fun filterMatch() {
         filteredMatch.clear()
         filteredImages.clear()
         filteredNames.clear()
@@ -161,12 +171,12 @@ class ManageMatch : AppCompatActivity() {
             filteredMatch.addAll(
                 match.filter {
                     it.name != ""
-                }
+                } as ArrayList<Match>
             )
         }
         else {
             filteredMatch = match.filter {
-                it.name.contains(searchText, true)
+                it.name.lowercase().contains(searchText, true)
             } as ArrayList<Match>
         }
         filteredNames = filteredMatch.map { it.name } as ArrayList<String>
@@ -179,7 +189,7 @@ class ManageMatch : AppCompatActivity() {
         }
 
         CoroutineScope(Dispatchers.Main).launch {
-            adapterP.setData(filteredImages, filteredNames)
+            adapterP.setData(filteredNames, filteredNames)
         }
     }
 }

@@ -1,10 +1,9 @@
 package proyek.andro.adminActivity
-
-import android.animation.ValueAnimator.AnimatorUpdateListener
-import android.content.Intent
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import proyek.andro.R
+import android.content.Intent
+import android.graphics.Color
 import android.util.Log
 import android.view.View
 import android.widget.EditText
@@ -19,18 +18,17 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import proyek.andro.R
 import proyek.andro.adapter.SimpleListAdapter
-import proyek.andro.model.Team
-import proyek.andro.model.Tournament
+import proyek.andro.model.PlayerHistory
+import proyek.andro.model.TournamentPhase
 
-class ManageTournament : AppCompatActivity() {
-    private var tournament : ArrayList<Tournament> = ArrayList()
-    private var filteredTournament : ArrayList<Tournament> = ArrayList()
-    private var filteredImages : ArrayList<String> = ArrayList()
-    private var filteredNames : ArrayList<String> = ArrayList()
+class ManagePhase : AppCompatActivity() {
+    private var phases: ArrayList<TournamentPhase> = ArrayList()
 
-    private lateinit var rvTournament : RecyclerView
+    private var filteredPhases: ArrayList<TournamentPhase> = ArrayList()
+    private var filteredNames: ArrayList<String> = ArrayList()
+
+    private lateinit var rvPhases: RecyclerView
 
     private lateinit var search_view: SearchView
     private lateinit var etSearch: EditText
@@ -39,85 +37,81 @@ class ManageTournament : AppCompatActivity() {
     private lateinit var adapterP: SimpleListAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_manage_tournament)
-        val backBtn : ImageView = findViewById(R.id.backBtn)
-        val addBtn : FloatingActionButton = findViewById(R.id.addTournamentButton)
+        setContentView(R.layout.activity_manage_phase)
+
+        val backBtn: ImageView = findViewById(R.id.backBtn)
+        val addBtn: FloatingActionButton = findViewById(R.id.addPhaseBtn)
 
         backBtn.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
         addBtn.setOnClickListener {
-            val intent = Intent(this, AddTournament::class.java)
+            val intent = Intent(this, AddTournamentPhase::class.java)
             intent.putExtra("mode", "add")
             startActivity(intent)
         }
 
-        rvTournament = findViewById(R.id.viewTournament)
+        rvPhases = findViewById(R.id.rvPhases)
         CoroutineScope(Dispatchers.Main).launch {
-            tournament = Tournament().get(limit = 50)
-            filteredImages = tournament.map { it.logo } as ArrayList<String>
-            filteredNames = tournament.map { it.name } as ArrayList<String>
+            phases = TournamentPhase().get(limit = 100)
+            Log.d("phases", phases.toString())
 
-            Log.d("filterTeams", tournament.map { it.name }.toString())
-            Log.d("filterTeams", filteredNames.toString())
-            Log.d("filterTeams", filteredImages.toString())
+        }.invokeOnCompletion {
+            filteredNames = phases.map {
+                it.name
+            } as ArrayList<String>
 
-            adapterP = SimpleListAdapter(filteredImages, filteredNames, "logo/tournaments/")
+            filterPhase()
 
-            filterTournament()
+            adapterP = SimpleListAdapter(filteredNames, filteredNames, "logo/orgs/")
 
             adapterP.setOnItemClickCallback(object : SimpleListAdapter.OnItemClickCallback {
                 override fun onItemClicked(data: String) {
-                    val intent = Intent(this@ManageTournament, AddTournament::class.java)
+                    val intent = Intent(this@ManagePhase, AddTournamentPhase::class.java)
                     intent.putExtra("mode", "edit")
                     intent.putExtra("name", data)
                     startActivity(intent)
                 }
 
                 override fun delData(pos: Int) {
-                    val tour = filteredTournament.get(pos)
+                    val tournamentPhase = filteredPhases.get(pos)
 
-                    val alert = MaterialAlertDialogBuilder(this@ManageTournament)
-                        .setTitle("Delete Team")
-                        .setMessage("Are you sure you want to delete ${tour.name}?")
+                    val alert = MaterialAlertDialogBuilder(this@ManagePhase).setTitle("Delete Team")
+                        .setMessage("Are you sure you want to delete ${tournamentPhase.name}?")
                         .setNegativeButton("Cancel") { dialog, which ->
                             dialog.dismiss()
-                        }
-                        .setPositiveButton("Delete") { dialog, which ->
+                        }.setPositiveButton("Delete") { dialog, which ->
                             CoroutineScope(Dispatchers.Main).launch {
-                                tour.delete(tour.id)
 
-                                tournament.removeAt(pos)
-                                filteredImages.removeAt(pos)
+                                tournamentPhase.delete(tournamentPhase.id)
+
+                                phases.removeAt(pos)
                                 filteredNames.removeAt(pos)
-                                filteredTournament.removeAt(pos)
+                                filteredPhases.removeAt(pos)
 
-                                adapterP.setData(filteredImages, filteredNames)
+                                adapterP.setData(filteredNames, filteredNames)
 
                                 Snackbar.make(
-                                    addBtn,
-                                    R.string.teamdeleted,
-                                    Snackbar.LENGTH_SHORT
+                                    addBtn, "Match deleted successfully", Snackbar.LENGTH_SHORT
                                 ).apply {
                                     setBackgroundTint(resources.getColor(R.color.light, null))
                                     setTextColor(resources.getColor(R.color.black, null))
                                 }.show()
                             }
                         }
-
                     val dialog = alert.create()
                     dialog.show()
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK)
                     dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLACK)
                 }
+
             })
 
-            rvTournament.adapter = adapterP
-            rvTournament.layoutManager = LinearLayoutManager(
-                this@ManageTournament,
-                LinearLayoutManager.VERTICAL,
-                false
+
+            rvPhases.adapter = adapterP
+            rvPhases.layoutManager = LinearLayoutManager(
+                this@ManagePhase, LinearLayoutManager.VERTICAL, false
             )
         }
 
@@ -132,9 +126,9 @@ class ManageTournament : AppCompatActivity() {
 
                 if (query.toString() != searchText) {
                     searchText = query.toString()
-                    filterTournament()
+                    filterPhase()
                     CoroutineScope(Dispatchers.Main).launch {
-                        adapterP.setData(filteredImages, filteredNames)
+                        adapterP.setData(filteredNames, filteredNames)
                     }
                 }
 
@@ -144,45 +138,40 @@ class ManageTournament : AppCompatActivity() {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText.toString() == "" && searchText != "") {
                     searchText = newText.toString()
-                    filterTournament()
+                    filterPhase()
                     CoroutineScope(Dispatchers.Main).launch {
-                        adapterP.setData(filteredImages, filteredNames)
+                        adapterP.setData(filteredNames, filteredNames)
                     }
                 }
                 return true
             }
         })
     }
-    fun filterTournament() {
-        filteredTournament.clear()
-        filteredImages.clear()
+
+    fun filterPhase() {
+        filteredPhases.clear()
         filteredNames.clear()
 
         if (searchText == "") {
-            filteredTournament.addAll(
-                tournament.filter {
-                    it.name != ""
-                }
-            )
-        }
-        else {
-            filteredTournament = tournament.filter {
-                it.name.contains(searchText, true)
-            } as ArrayList<Tournament>
+            filteredPhases.addAll(phases.filter {
+                it.name != ""
+            } as ArrayList<TournamentPhase>)
+        } else {
+            filteredPhases = phases.filter {
+                it.name.contains(searchText, ignoreCase = true)
+            } as ArrayList<TournamentPhase>
         }
 
-        filteredImages = filteredTournament.map { it.logo } as ArrayList<String>
-        filteredNames = filteredTournament.map { it.name } as ArrayList<String>
+        filteredNames = filteredPhases.map { it.name } as ArrayList<String>
 
-        if (filteredTournament.isEmpty()) {
-            rvTournament.visibility = View.GONE
-        }
-        else {
-            rvTournament.visibility = View.VISIBLE
+        if (filteredPhases.isEmpty()) {
+            rvPhases.visibility = View.GONE
+        } else {
+            rvPhases.visibility = View.VISIBLE
         }
 
         CoroutineScope(Dispatchers.Main).launch {
-            adapterP.setData(filteredImages, filteredNames)
+            adapterP.setData(filteredNames, filteredNames)
         }
     }
 }

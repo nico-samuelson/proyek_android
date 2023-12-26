@@ -14,10 +14,10 @@ import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 import proyek.andro.R
 
-class SimpleListAdapter (
-    private var images : List<String>,
-    private var titles : List<String>,
-    private var imagePath : String,
+class SimpleListAdapter(
+    private var images: List<String>,
+    private var titles: List<String>,
+    private var imagePath: String,
 ) : RecyclerView.Adapter<SimpleListAdapter.ListViewHolder>() {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
@@ -25,17 +25,18 @@ class SimpleListAdapter (
 
     interface OnItemClickCallback {
         fun onItemClicked(data: String)
-        fun delData(pos : Int)
+        fun delData(pos: Int)
     }
 
     inner class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var image: ImageView = itemView.findViewById(R.id.listImage)
-        val title : TextView = itemView.findViewById(R.id.listName)
-        val delBtn : ImageView = itemView.findViewById(R.id.delBtn)
+        val title: TextView = itemView.findViewById(R.id.listName)
+        val delBtn: ImageView = itemView.findViewById(R.id.delBtn)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-        val view : View = LayoutInflater.from(parent.context).inflate(R.layout.rv_simple_list, parent, false)
+        val view: View =
+            LayoutInflater.from(parent.context).inflate(R.layout.rv_simple_list, parent, false)
         return ListViewHolder(view)
     }
 
@@ -43,24 +44,33 @@ class SimpleListAdapter (
         return titles.size
     }
 
-    override fun onBindViewHolder(holder: ListViewHolder, @SuppressLint("RecyclerView") position: Int) {
+    override fun onBindViewHolder(
+        holder: ListViewHolder,
+        @SuppressLint("RecyclerView") position: Int
+    ) {
         holder.title.text = titles.get(position)
 
-        storageRef.child(imagePath + images.get(position)).downloadUrl.addOnSuccessListener {
-            Picasso.get()
-                .load(it)
-                .placeholder(R.drawable.card_placeholder)
-                .networkPolicy(NetworkPolicy.OFFLINE)
-                .into(holder.image, object : Callback {
-                    override fun onSuccess() {}
-                    override fun onError(e: Exception?) {
-                        Picasso.get()
-                            .load(it)
-                            .placeholder(R.drawable.card_placeholder)
-                            .into(holder.image)
-                    }
-                })
-        }
+        storageRef.child(imagePath + images.get(position)).downloadUrl
+            .addOnSuccessListener {
+                Picasso.get()
+                    .load(it)
+                    .placeholder(R.drawable.card_placeholder)
+                    .networkPolicy(NetworkPolicy.OFFLINE)
+                    .into(holder.image, object : Callback {
+                        override fun onSuccess() {}
+                        override fun onError(e: Exception?) {
+                            Picasso.get()
+                                .load(it)
+                                .placeholder(R.drawable.card_placeholder)
+                                .into(holder.image)
+                        }
+                    })
+            }
+            .addOnFailureListener {
+                Picasso.get()
+                    .load(R.drawable.card_placeholder)
+                    .into(holder.image)
+            }
 
         holder.title.setOnClickListener { onItemClickCallback.onItemClicked(titles.get(position)) }
         holder.image.setOnClickListener { onItemClickCallback.onItemClicked(titles.get(position)) }
@@ -68,7 +78,7 @@ class SimpleListAdapter (
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setData(images : List<String>, titles : List<String>) {
+    fun setData(images: List<String>, titles: List<String>) {
         this.images = images
         this.titles = titles
 
