@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".adminActivity.ManagePhase">
 
-<<<<<<< Updated upstream
-=======
     <ImageView
         android:id="@+id/backBtn"
         android:layout_width="32dp"
@@ -130,5 +128,4 @@
             android:text="There's no team yet!"
             android:textColor="@color/white" />
     </LinearLayout>
->>>>>>> Stashed changes
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,19 +1,9 @@
 package proyek.andro.adminActivity
-
-<<<<<<< Updated upstream
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import proyek.andro.R
-
-class ManagePhase : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_manage_phase)
-=======
 import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.EditText
@@ -28,7 +18,6 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import proyek.andro.R
 import proyek.andro.adapter.SimpleListAdapter
 import proyek.andro.model.PlayerHistory
 import proyek.andro.model.TournamentPhase
@@ -184,6 +173,5 @@ class ManagePhase : AppCompatActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             adapterP.setData(filteredNames, filteredNames)
         }
->>>>>>> Stashed changes
     }
 }

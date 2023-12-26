@@ -15,7 +15,6 @@
         android:theme="@style/Theme.Proyek_android"
         tools:targetApi="31">
         <activity
-<<<<<<< Updated upstream
             android:name=".adminActivity.AddParticipant"
             android:exported="false" />
         <activity
@@ -25,14 +24,9 @@
             android:name=".adminActivity.ManagePhase"
             android:exported="false" />
         <activity
-=======
-            android:name=".adminActivity.ManagePhase"
-            android:exported="false" />
-        <activity
             android:name=".adminActivity.AddTournamentPhase"
             android:exported="false" />
         <activity
->>>>>>> Stashed changes
             android:name=".adminActivity.AddMatch"
             android:exported="false" />
         <activity
