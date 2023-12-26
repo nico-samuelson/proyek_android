@@ -64,6 +64,7 @@ class NewsFr : Fragment() {
                 intent.putExtra("author", data.author)
                 intent.putExtra("date", data.date)
                 intent.putExtra("content", data.content)
+                intent.putExtra("image", data.image)
                 startActivity(intent)
             }
 

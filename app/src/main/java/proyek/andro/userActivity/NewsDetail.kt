@@ -2,6 +2,7 @@ package proyek.andro.userActivity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.TextView
 import proyek.andro.R
 import proyek.andro.model.News
@@ -15,6 +16,7 @@ class NewsDetail : AppCompatActivity() {
         val authorNews = intent.getStringExtra("author")
         val dateNews = intent.getStringExtra("date")
         val contentNews = intent.getStringExtra("content")
+        val imageNews = intent.getStringExtra("image")
 
 
         val titleTextView = findViewById<TextView>(R.id.News_title)
@@ -25,6 +27,7 @@ class NewsDetail : AppCompatActivity() {
         authorTextView.text = authorNews
         val dateTextView = findViewById<TextView>(R.id.News_date)
         dateTextView.text = dateNews
+
 
     }
 }

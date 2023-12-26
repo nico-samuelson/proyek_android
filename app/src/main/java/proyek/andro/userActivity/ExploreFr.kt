@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,13 +30,16 @@ import proyek.andro.R
 import proyek.andro.adapter.ListAdapter
 import proyek.andro.adapter.MatchCarouselAdapter
 import proyek.andro.adapter.TournamentCarouselAdapter
+import proyek.andro.adminActivity.ManageTeams
 import proyek.andro.helper.StorageHelper
 import proyek.andro.model.Match
 import proyek.andro.model.Team
 import proyek.andro.model.Tournament
+import proyek.andro.model.UserFavorite
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
+import java.util.UUID
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -64,7 +68,6 @@ class ExploreFr : Fragment() {
     private var matchesTeams = ArrayList<Team>()
     private lateinit var ongoingGroups : LinearLayout
     private lateinit var upcomingGroups : LinearLayout
-
     private lateinit var parent : UserActivity
     var job: Job? = null
 
@@ -94,7 +97,27 @@ class ExploreFr : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         parent.getNavbar().menu.getItem(1).isChecked = true
-
+//        _ivFavorite.setOnClickListener {
+//            if (!statusFavorite) {
+//                _ivFavorite.setImageResource(R.drawable.ic_favorite_32)
+//                statusFavorite = true
+//                var user = parent.getUser()
+//                val selectedGames = parent.getGames().get(parent.getSelectedGame()).id
+//                val newFav = UserFavorite(
+//                    UUID.randomUUID().toString(),
+//                    user!!.id,
+//                    selectedGames
+//                )
+//                CoroutineScope(Dispatchers.Main).launch {
+//                    newFav.insertOrUpdate()
+//                }
+//            } else {
+//                _ivFavorite.setImageResource(R.drawable.love)
+//                statusFavorite = false
+//
+//            }
+//
+//        }
         val search_bar = view.findViewById<SearchBar>(R.id.search_bar)
         search_bar.setOnClickListener {
             val intent = Intent(parent, Search::class.java)

@@ -154,6 +154,7 @@ class ManageMatch : AppCompatActivity() {
     }
     fun filterTournament() {
         filteredMatch.clear()
+        filteredImages.clear()
         filteredNames.clear()
 
         if (searchText == "") {
@@ -168,7 +169,6 @@ class ManageMatch : AppCompatActivity() {
                 it.name.contains(searchText, true)
             } as ArrayList<Match>
         }
-
         filteredNames = filteredMatch.map { it.name } as ArrayList<String>
 
         if (filteredMatch.isEmpty()) {
