@@ -15,6 +15,18 @@
         android:theme="@style/Theme.Proyek_android"
         tools:targetApi="31">
         <activity
+            android:name=".adminActivity.AddMatch"
+            android:exported="false" />
+        <activity
+            android:name=".adminActivity.ManageMatch"
+            android:exported="false" />
+        <activity
+            android:name=".adminActivity.AddTournament"
+            android:exported="false" />
+        <activity
+            android:name=".adminActivity.ManageTournament"
+            android:exported="false" />
+        <activity
             android:name=".adminActivity.AddTeams"
             android:exported="false" />
         <activity

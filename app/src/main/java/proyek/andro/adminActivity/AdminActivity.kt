@@ -91,15 +91,15 @@ class AdminActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-//        CRUDTourneys.setOnClickListener {
-//            val intent = Intent(this, ManageTournaments::class.java)
-//            startActivity(intent)
-//        }
-//
-//        CRUDMatches.setOnClickListener {
-//            val intent = Intent(this, ManageMatches::class.java)
-//            startActivity(intent)
-//        }
+        CRUDTourneys.setOnClickListener {
+            val intent = Intent(this, ManageTournament::class.java)
+            startActivity(intent)
+        }
+
+        CRUDMatches.setOnClickListener {
+            val intent = Intent(this, ManageMatch::class.java)
+            startActivity(intent)
+        }
     }
 
     fun getUser(): User? {
