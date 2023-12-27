@@ -63,6 +63,8 @@ class ManagePhases : AppCompatActivity() {
 
             filterPhase()
 
+//            775923
+
             adapterP = SimpleListAdapter(filteredNames, filteredNames, "logo/orgs/")
 
             adapterP.setOnItemClickCallback(object : SimpleListAdapter.OnItemClickCallback {

@@ -15,6 +15,7 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import proyek.andro.R
 import proyek.andro.model.Tournament
 import proyek.andro.model.TournamentPhase
@@ -106,11 +107,13 @@ class AddTournamentPhase : AppCompatActivity() {
                     setTextColor(resources.getColor(R.color.black, null))
                 }.show()
             } else {
-                val name = etName.text.toString()
+                var name = etName.text.toString()
                 val tournament = etTournament.text.toString()
                 val tournamentId = tournament.split(" - ")[1]
                 val startDate = etStartDate.text.toString()
                 val endDate = etEndDate.text.toString()
+
+                name = name + " - " + tournamentId
 
                 if (mode == "add") {
                     CoroutineScope(Dispatchers.Main).launch {
@@ -127,6 +130,8 @@ class AddTournamentPhase : AppCompatActivity() {
                         startActivity(Intent(this@AddTournamentPhase, ManagePhases::class.java))
                     }
                 } else if (mode == "edit") {
+                    name = name.split(" - ")[0]
+                    name = name + " - " + tournamentId
                     phase?.name = name
                     phase?.tournament = tournamentId
                     phase?.start_date = startDate
@@ -143,7 +148,11 @@ class AddTournamentPhase : AppCompatActivity() {
 
     fun showEdit() {
         CoroutineScope(Dispatchers.Main).launch {
-            phase = TournamentPhase().findByTournament(name!!, tournaments.first().id)
+            phase = TournamentPhase().findByTournament(
+                id = name!!.split(" - ")[1]
+            ).filter {
+                it.name == name
+            }.firstOrNull()
 
             Log.d("phase", phase.toString())
 
@@ -152,7 +161,8 @@ class AddTournamentPhase : AppCompatActivity() {
             val tournament = tournaments.filter { it.id == phase?.tournament }.first()
 
             etTournament.setText(
-                tournament.name + " - " + tournament.id)
+                tournament.name + " - " + tournament.id
+            )
 
             (etTournament as MaterialAutoCompleteTextView).setSimpleItems(
                 tournaments
@@ -165,6 +175,7 @@ class AddTournamentPhase : AppCompatActivity() {
             etStartDate.text = phase?.start_date
             etEndDate.text = phase?.end_date
         }
+
     }
 
     fun validate(): Boolean {

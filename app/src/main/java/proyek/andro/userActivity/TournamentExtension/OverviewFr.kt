@@ -30,7 +30,7 @@ class OverviewFr : Fragment() {
     private lateinit var parent: TournamentPage
 
     lateinit var participantsRV: RecyclerView
-    lateinit var phasesRV : RecyclerView
+    lateinit var phasesRV: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,9 +54,11 @@ class OverviewFr : Fragment() {
         Log.d("phases", phases.toString())
 
         if (phases.isNotEmpty()) {
-            phases = phases.filter {
-                it.tournament == parent.getTournament()?.id
-            } as ArrayList<TournamentPhase>
+            phases = phases
+                .filter { it.tournament == parent.getTournament()?.id }
+                    as ArrayList<TournamentPhase>
+
+            val sortedPhases = ArrayList(phases.sortedBy { it.start_date })
 
             val linearLayoutManager = LinearLayoutManager(
                 parent,
@@ -65,7 +67,7 @@ class OverviewFr : Fragment() {
             )
             phasesRV.layoutManager = linearLayoutManager
 
-            val phasesAdapter = PhasesAdapter(phases)
+            val phasesAdapter = PhasesAdapter(sortedPhases)
             phasesRV.adapter = phasesAdapter
         }
 
@@ -75,31 +77,11 @@ class OverviewFr : Fragment() {
             LinearLayoutManager(
                 parent,
                 LinearLayoutManager.HORIZONTAL,
-                false)
+                false
+            )
         participantsRV.layoutManager = linearLayoutManager2
 
         val participantAdapter = ParticipantsAdapter(parent.getParticipants(), parent.getTeams())
         participantsRV.adapter = participantAdapter
-
-//        participants.add(Participant("A1", "EXL", "C9", "A", 1, 3))
-//        participants.add(Participant("A1", "EXL", "C9", "A", 1, 3))
-//        participants.add(Participant("A1", "EXL", "C9", "A", 1, 3))
-//        participants.add(Participant("A1", "EXL", "C9", "A", 1, 3))
-//        participants.add(Participant("A1", "EXL", "C9", "A", 1, 3))
-//        participants.add(Participant("A1", "EXL", "C9", "A", 1, 3))
-//        participants.add(Participant("A1", "EXL", "C9", "A", 1, 3))
-//        participants.add(Participant("A1", "EXL", "C9", "A", 1, 3))
-//        participants.add(Participant("A1", "EXL", "C9", "A", 1, 3))
-//        participants.add(Participant("A1", "EXL", "C9", "A", 1, 3))
-//        participants.add(Participant("A1", "EXL", "C9", "A", 1, 3))
-//        participants.add(Participant("A1", "EXL", "C9", "A", 1, 3))
-//        participants.add(Participant("A1", "EXL", "C9", "A", 1, 3))
-//        participants.add(Participant("A1", "EXL", "C9", "A", 1, 3))
-//        participants.add(Participant("A1", "EXL", "C9", "A", 1, 3))
-//        participants.add(Participant("A1", "EXL", "C9", "A", 1, 3))
-
-//        participantsRV.adapter = ParticipantsAdapter(participants, teams)
-
-//        participantsRV.adapter?.notifyDataSetChanged()
     }
 }

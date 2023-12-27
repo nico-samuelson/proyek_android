@@ -42,10 +42,10 @@ class ScheduleFr : Fragment() {
         UpcomingScheduleRV = view.findViewById(R.id.carousel_schedules)
         UpcomingScheduleRV.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
 
-//        val sortedMatches = ArrayList(parent.getMatches().sortedBy { it.time })
+        val sortedMatches = ArrayList(parent.getMatches().sortedBy { it.time })
 
         UpcomingScheduleRV.adapter = ScheduleUpcomingAdapter(
-            parent.getMatches(),
+            sortedMatches,
             parent.getTeams())
     }
 }
