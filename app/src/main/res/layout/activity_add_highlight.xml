@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".adminActivity.AddTournamentPhase">
+    tools:context=".adminActivity.AddHighlight">
+
     <ImageView
         android:id="@+id/backBtn"
         android:layout_width="32dp"
@@ -21,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:text="Add Tournament Phase"
+        android:text="Add Highlight"
         android:textColor="@color/white"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/backBtn"
@@ -45,10 +46,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Name">
+            android:hint="Title">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etName"
+                android:id="@+id/etTitle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textColor="@color/white" />
@@ -101,25 +102,11 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
             android:layout_weight="1"
-            android:hint="Start Date">
+            android:hint="Thumbnail">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etStartDate"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textColor="@color/white" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="End Date">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etEndDate"
+                android:id="@+id/etThumbnail"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textColor="@color/white" />
@@ -143,25 +130,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Detail">
+            android:hint="Link">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etDetail"
+                android:id="@+id/etLink"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textColor="@color/white" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="280dp"
-            android:layout_marginTop="16dp">
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvDetail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </ScrollView>
-
     </LinearLayout>
 
     <com.google.android.material.button.MaterialButton

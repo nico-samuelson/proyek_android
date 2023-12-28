@@ -31,6 +31,7 @@ class AdminActivity : AppCompatActivity() {
         val CRUDPhases: MaterialCardView = findViewById(R.id.managePhases)
         val CRUDMatches: MaterialCardView = findViewById(R.id.manageMatches)
         val CRUDParticipants : MaterialCardView = findViewById(R.id.manageParticipant)
+        val CRUDHighlights : MaterialCardView = findViewById(R.id.manageHighlights)
 
         val pageTitle: TextView = findViewById(R.id.pageTitle)
         val logoutBtn : MaterialButton = findViewById(R.id.logoutBtn)
@@ -107,6 +108,11 @@ class AdminActivity : AppCompatActivity() {
 
         CRUDParticipants.setOnClickListener {
             val intent = Intent(this, ManageParticipant::class.java)
+            startActivity(intent)
+        }
+
+        CRUDHighlights.setOnClickListener {
+            val intent = Intent(this, ManageHighlights::class.java)
             startActivity(intent)
         }
     }

@@ -35,8 +35,6 @@ class AddTournamentPhase : AppCompatActivity() {
     private var mode: String? = null
     private var name: String? = null
 
-    private lateinit var detail: List<String>
-
     private lateinit var etName: TextView
     private lateinit var etTournament: AutoCompleteTextView
     private lateinit var etStartDate: TextView
@@ -44,11 +42,9 @@ class AddTournamentPhase : AppCompatActivity() {
     private lateinit var rvDetail: RecyclerView
     private lateinit var etDetail: TextView
 
-
     var listDetail = listOf<String>()
     var AdapterDetail: SimpleListAdapter2? = null
 
-    //    private lateinit var etDetail : Spinner
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_tournament_phase)
@@ -60,34 +56,22 @@ class AddTournamentPhase : AppCompatActivity() {
         etDetail = findViewById(R.id.etDetail)
         rvDetail = findViewById(R.id.rvDetail)
 
-//        detail = listOf(
-//            "16 teams are divided into 4 groups", "Single Round Robin",
-//            "Kelvin",
-//            "Kelvin",
-//            "Kelvin",
-//        )
-//
-//        etDetail = findViewById(R.id.etDetail)
-//        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, detail)
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-//        etDetail.adapter = adapter
-
         val backBtn: ImageView = findViewById(R.id.backBtn)
         val submitBtn: MaterialButton = findViewById(R.id.submitBtn)
         val pageTitle: TextView = findViewById(R.id.pageTitle)
 
         mode = intent.getStringExtra("mode")
-        name = intent.getStringExtra("name")
+        name = intent.getStringExtra("phase")
 
         backBtn.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
         CoroutineScope(Dispatchers.Main).launch {
-            tournaments = Tournament().get(limit = 100)
+            tournaments = Tournament().get()
         }.invokeOnCompletion {
             (etTournament as MaterialAutoCompleteTextView).setSimpleItems(
-                tournaments.map { "${it.name} - ${it.id}" }.toTypedArray()
+                tournaments.map { it.name }.toTypedArray()
             )
 
             etStartDate.setOnClickListener {
@@ -107,7 +91,7 @@ class AddTournamentPhase : AppCompatActivity() {
             }
 
             if (mode == "edit") {
-                pageTitle.text = "Edit Match"
+                pageTitle.text = "Edit Tournament Phase"
                 submitBtn.text = "Save"
 
                 showEdit()
@@ -123,17 +107,14 @@ class AddTournamentPhase : AppCompatActivity() {
             } else {
                 var name = etName.text.toString()
                 val tournament = etTournament.text.toString()
-                val tournamentId = tournament.split(" - ")[1]
                 val startDate = etStartDate.text.toString()
                 val endDate = etEndDate.text.toString()
-
-                name = name + " - " + tournamentId
 
                 if (mode == "add") {
                     CoroutineScope(Dispatchers.Main).launch {
                         val newTournamentPhase = TournamentPhase(
                             UUID.randomUUID().toString(),
-                            tournamentId,
+                            tournaments.filter { it.name == tournament }.first().id,
                             name,
                             startDate,
                             endDate,
@@ -144,10 +125,8 @@ class AddTournamentPhase : AppCompatActivity() {
                         startActivity(Intent(this@AddTournamentPhase, ManagePhases::class.java))
                     }
                 } else if (mode == "edit") {
-                    name = name.split(" - ")[0]
-                    name = name + " - " + tournamentId
                     phase?.name = name
-                    phase?.tournament = tournamentId
+                    phase?.tournament = tournaments.filter { it.name == tournament }.first().id
                     phase?.start_date = startDate
                     phase?.end_date = endDate
                     phase?.detail = listDetail
@@ -190,11 +169,7 @@ class AddTournamentPhase : AppCompatActivity() {
 
     fun showEdit() {
         CoroutineScope(Dispatchers.Main).launch {
-            phase = TournamentPhase().findByTournament(
-                id = name!!.split(" - ")[1]
-            ).filter {
-                it.name == name
-            }.firstOrNull()
+            phase = TournamentPhase().find(name!!)
 
             Log.d("phase", phase.toString())
 
@@ -202,18 +177,14 @@ class AddTournamentPhase : AppCompatActivity() {
 
             val tournament = tournaments.filter { it.id == phase?.tournament }.first()
 
-            etTournament.setText(
-                tournament.name + " - " + tournament.id
-            )
+            etTournament.setText(tournament.name)
 
             (etTournament as MaterialAutoCompleteTextView).setSimpleItems(
                 tournaments
-                    .map { "${it.name} - ${it.id}" }
+                    .map { it.name }
                     .toTypedArray()
             )
-//            etTournament.setText(
-//                tournament.name + " - " + tournament.id
-//            )
+
             etStartDate.text = phase?.start_date
             etEndDate.text = phase?.end_date
 

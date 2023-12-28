@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".adminActivity.ManagePhases">
+    tools:context=".adminActivity.ManageHighlights">
 
     <ImageView
         android:id="@+id/backBtn"
@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="Manage Tournament Phase"
+        android:text="Manage Highlights"
         android:textColor="@color/white"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/backBtn"
@@ -62,7 +62,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_phases"
+            android:id="@+id/rv_highlights"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="0dp"
@@ -71,7 +71,7 @@
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addPhaseBtn"
+        android:id="@+id/addHighlightBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"

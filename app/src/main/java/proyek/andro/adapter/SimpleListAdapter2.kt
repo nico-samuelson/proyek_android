@@ -41,7 +41,8 @@ class SimpleListAdapter2 (
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         holder.title.text = titles.get(position)
 
-        holder.itemView.setOnClickListener { onItemClickCallback.delData(position) }
+        holder.itemView.setOnClickListener { onItemClickCallback.onItemClicked(titles.get(position)) }
+        holder.delBtn.setOnClickListener { onItemClickCallback.delData(position) }
     }
 
     @SuppressLint("NotifyDataSetChanged")

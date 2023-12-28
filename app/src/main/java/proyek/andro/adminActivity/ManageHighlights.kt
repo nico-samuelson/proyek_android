@@ -23,32 +23,24 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import proyek.andro.adapter.SimpleListAdapter
 import proyek.andro.adapter.SimpleListAdapter2
+import proyek.andro.model.Highlights
 import proyek.andro.model.Participant
 import proyek.andro.model.Team
 import proyek.andro.model.Tournament
 import proyek.andro.model.TournamentPhase
 
-class ManagePhases : AppCompatActivity() {
-    private var phases: ArrayList<TournamentPhase> = ArrayList()
-
-    private var filteredPhases: ArrayList<TournamentPhase> = ArrayList()
-    private var filteredNames: ArrayList<String> = ArrayList()
-
-    private lateinit var rvPhases: RecyclerView
-    private var searchText: String = ""
-
-    private lateinit var adapterP: SimpleListAdapter
+class ManageHighlights : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_manage_phase)
+        setContentView(R.layout.activity_manage_highlights)
 
         val etTournament = findViewById<MaterialAutoCompleteTextView>(R.id.etTournament)
-        val rvParticipant = findViewById<RecyclerView>(R.id.rv_phases)
-        val addBtn : FloatingActionButton = findViewById(R.id.addPhaseBtn)
+        val rvHighlight = findViewById<RecyclerView>(R.id.rv_highlights)
+        val addBtn : FloatingActionButton = findViewById(R.id.addHighlightBtn)
 
         var tournaments : ArrayList<Tournament> = ArrayList()
         var selectedTournament : Tournament? = null
-        var phases : ArrayList<TournamentPhase> = ArrayList()
+        var highlights : ArrayList<Highlights> = ArrayList()
 
         CoroutineScope(Dispatchers.Main).launch {
             tournaments = Tournament().get()
@@ -59,31 +51,30 @@ class ManagePhases : AppCompatActivity() {
             startActivity(Intent(this, AdminActivity::class.java))
         }
 
-        rvParticipant.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        rvHighlight.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
-        val adapterP = SimpleListAdapter2(phases.map { it.name })
+        val adapterP = SimpleListAdapter2(highlights.map { it.title })
 
         adapterP.setOnItemClickCallback(object : SimpleListAdapter2.OnItemClickCallback {
             override fun onItemClicked(data: String) {
-                val intent = Intent(this@ManagePhases, AddTournamentPhase::class.java)
+                val intent = Intent(this@ManageHighlights, AddHighlight::class.java)
                 intent.putExtra("mode", "edit")
-                intent.putExtra("phase", phases.filter { it.name == data && it.tournament == selectedTournament?.id }.firstOrNull()?.id)
+                intent.putExtra("highlight", highlights.filter { it.title == data && it.tournament == selectedTournament?.id }.firstOrNull()?.id)
                 startActivity(intent)
             }
 
             override fun delData(pos: Int) {
                 CoroutineScope(Dispatchers.Main).launch {
-                    val currentItem = phases.get(pos)
-//                    Log.d("currentItem", teams.filter { it.id == currentItem.team }.first().name)
-                    phases.remove(currentItem)
+                    val currentItem = highlights.get(pos)
+                    highlights.remove(currentItem)
                     currentItem.delete(currentItem.id)
                 }.invokeOnCompletion {
-                    adapterP.setData(phases.map { it.name })
+                    adapterP.setData(highlights.map { it.title })
                 }
             }
         })
 
-        rvParticipant.adapter = adapterP
+        rvHighlight.adapter = adapterP
 
         etTournament.setOnItemClickListener { parent, view, position, id ->
             findViewById<LinearLayout>(R.id.empty_view).visibility = View.GONE
@@ -91,12 +82,12 @@ class ManagePhases : AppCompatActivity() {
             selectedTournament = tournaments.filter { it.name == parent.getItemAtPosition(position).toString() }.firstOrNull()
 
             CoroutineScope(Dispatchers.Main).launch {
-                phases = TournamentPhase().get(
+                highlights = Highlights().get(
                     filter = Filter.equalTo("tournament", selectedTournament?.id),
                     order = arrayOf(arrayOf("tournament", "ASC"))
                 )
-                if (phases.size > 0) {
-                    adapterP.setData(phases.map { it.name })
+                if (highlights.size > 0) {
+                    adapterP.setData(highlights.map { it.title })
                 }
                 else {
                     findViewById<LinearLayout>(R.id.empty_view).visibility = View.VISIBLE
@@ -105,36 +96,9 @@ class ManagePhases : AppCompatActivity() {
         }
 
         addBtn.setOnClickListener {
-            val intent = Intent(this, AddTournamentPhase::class.java)
+            val intent = Intent(this, AddHighlight::class.java)
             intent.putExtra("mode", "add")
             startActivity(intent)
-        }
-    }
-
-    fun filterPhase() {
-        filteredPhases.clear()
-        filteredNames.clear()
-
-        if (searchText == "") {
-            filteredPhases.addAll(phases.filter {
-                it.name != ""
-            } as ArrayList<TournamentPhase>)
-        } else {
-            filteredPhases = phases.filter {
-                it.name.contains(searchText, ignoreCase = true)
-            } as ArrayList<TournamentPhase>
-        }
-
-        filteredNames = filteredPhases.map { it.name } as ArrayList<String>
-
-        if (filteredPhases.isEmpty()) {
-            rvPhases.visibility = View.GONE
-        } else {
-            rvPhases.visibility = View.VISIBLE
-        }
-
-        CoroutineScope(Dispatchers.Main).launch {
-            adapterP.setData(filteredNames, filteredNames)
         }
     }
 }

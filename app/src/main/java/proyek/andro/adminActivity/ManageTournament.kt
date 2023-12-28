@@ -44,7 +44,7 @@ class ManageTournament : AppCompatActivity() {
         val addBtn : FloatingActionButton = findViewById(R.id.addTournamentButton)
 
         backBtn.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
+            startActivity(Intent(this, AdminActivity::class.java))
         }
 
         addBtn.setOnClickListener {
