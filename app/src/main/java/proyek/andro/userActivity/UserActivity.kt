@@ -240,6 +240,12 @@ class UserActivity : AppCompatActivity() {
 
     fun setFavorites(favorites: ArrayList<UserFavorite>) {
         this.favorites = favorites
+
+        val gameFavorites = games.filter { it.id in favorites.map { fav -> fav.game } }
+        val gameNonFavorite = games.filter { it.id !in favorites.map { fav -> fav.game } }
+        games.clear()
+        gameFavorites.map { games.add(it) }
+        gameNonFavorite.map { games.add(it) }
     }
 
     fun getOrgs(): ArrayList<Organization> {

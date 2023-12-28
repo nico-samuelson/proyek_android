@@ -76,8 +76,8 @@ class AddFavoriteFr : Fragment() {
             parent.onBackPressedDispatcher.onBackPressed()
         }
         gamesAdapter.setOnItemClickCallback(object : ManageFavoriteAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: Game) {
-                if (favorites.size < 1) {
+            override fun onItemClicked(data: Game, holder : ManageFavoriteAdapter.ListViewHolder) {
+                if (data.id !in favorites.map { it.game }) {
                     CoroutineScope(Dispatchers.Main).launch {
                         val newFavorite = UserFavorite(
                             UUID.randomUUID().toString(),
@@ -85,39 +85,22 @@ class AddFavoriteFr : Fragment() {
                             data.id
                         )
                         newFavorite.insertOrUpdate()
-                        Log.d("favorite", newFavorite.user)
+//                        Log.d("favorite", newFavorite.user)
                         favorites.add(newFavorite)
                         gamesAdapter = ManageFavoriteAdapter(games,favorites)
-                        gamesAdapter.notifyDataSetChanged()
+                        parent.setFavorites(favorites)
+                        holder.manage.setImageResource(R.drawable.ic_delete_24)
                     }
                 } else {
-                    if (favorites.find { it.game == data?.id } != null) {
-//                        CoroutineScope(Dispatchers.Main).launch {
-//                            val delFav : UserFavorite? = favorites.filter { it.game == data.id }.first()
-//                            delFav!!.delete(favorites.filter { it.game == data.id }.first().id)
-//                        }
-                        Log.d("favorite", favorites.find { it.game == data.id }!!.id)
-                        Log.d("favorite", games.find { it.id == favorites.find { it.game == data.id }!!.game }!!.name)
-                        favorites = favorites.filter { it.game != data.id } as ArrayList<UserFavorite>
-                        gamesAdapter = ManageFavoriteAdapter(games,favorites)
-                        gamesAdapter.notifyDataSetChanged()
-                    } else {
                         CoroutineScope(Dispatchers.Main).launch {
-                            val newFavorite = UserFavorite(
-                                UUID.randomUUID().toString(),
-                                parent.getUser()!!.id,
-                                data.id
-                            )
-                            newFavorite.insertOrUpdate()
-                            favorites.add(newFavorite)
-                            gamesAdapter = ManageFavoriteAdapter(games,favorites)
-                            gamesAdapter.notifyDataSetChanged()
-                            Log.d("add Favorite", newFavorite.user)
+                            val delFav : UserFavorite? = favorites.filter { it.game == data.id }.first()
+                            delFav!!.delete(favorites.filter { it.game == data.id }.first().id)
+                            favorites = favorites.filter { it.game != data.id } as ArrayList<UserFavorite>
+                            parent.setFavorites(favorites)
+
+//                            gamesAdapter.notifyDataSetChanged()
+                            holder.manage.setImageResource(R.drawable.add)
                         }
-                        Log.d("favorite",data.name)
-
-
-                    }
                 }
             }
 

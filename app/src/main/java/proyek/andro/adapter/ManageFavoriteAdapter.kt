@@ -20,7 +20,7 @@ class ManageFavoriteAdapter(
     val storageRef = FirebaseStorage.getInstance().reference
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: Game)
+        fun onItemClicked(data: Game, holder : ManageFavoriteAdapter.ListViewHolder)
         fun delData(pos : Int)
     }
 
@@ -46,7 +46,7 @@ class ManageFavoriteAdapter(
         } else {
             holder.manage.setImageResource(R.drawable.add)
         }
-        holder.itemView.setOnClickListener { onItemClickCallback.onItemClicked(game) }
+        holder.itemView.setOnClickListener { onItemClickCallback.onItemClicked(game, holder) }
     }
     fun setOnItemClickCallback(onItemClickCallback: ManageFavoriteAdapter.OnItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback
