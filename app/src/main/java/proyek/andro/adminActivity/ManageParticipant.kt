@@ -42,7 +42,9 @@ class ManageParticipant : AppCompatActivity() {
             etTournament.setSimpleItems(tournaments.map { it.name }.toTypedArray())
         }
 
-        findViewById<ImageView>(R.id.backBtn).setOnClickListener { onBackPressedDispatcher.onBackPressed() }
+        findViewById<ImageView>(R.id.backBtn).setOnClickListener {
+            startActivity(Intent(this, AdminActivity::class.java))
+        }
 
         rvParticipant.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
@@ -53,10 +55,13 @@ class ManageParticipant : AppCompatActivity() {
 
             override fun delData(pos: Int) {
                 CoroutineScope(Dispatchers.Main).launch {
-                    val currentPart = participants.get(pos)
-                    Log.d("currentPart", teams.filter { it.id == currentPart.team }.first().name)
+                    val selectedTeam = teams.filter { it.id in participants.map { p -> p.team } }[pos]
+                    val currentPart = participants.find { it.team == selectedTeam.id }
+
+//                    Log.d("currentPart", teams.filter { it.id == currentPart?.team }.first().name)
+
                     participants.remove(currentPart)
-                    currentPart.delete(currentPart.id)
+                    currentPart?.delete(currentPart.id)
 
 
                 }.invokeOnCompletion {

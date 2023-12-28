@@ -114,7 +114,6 @@ class AddTournament : AppCompatActivity() {
                     "Upcoming",
                     "Ongoing",
                     "Finished",
-                    "Postponed",
                     "Canceled"
                 )
             )
@@ -151,7 +150,7 @@ class AddTournament : AppCompatActivity() {
                         uploadPhoto(logoURI!!, "logo/tournaments", inputLogo)
                     }.invokeOnCompletion {
                         val status =
-                            if (status == "Upcoming") 0 else if (status == "Ongoing") 1 else if (status == "Finished") 2 else if (status == "Postponed") 3 else 4
+                            if (status == "Upcoming") 0 else if (status == "Ongoing") 1 else if (status == "Finished") 2 else if (status == "Canceled") 3 else 4
 
                         val newTournament = Tournament(
                             UUID.randomUUID().toString(),
@@ -205,7 +204,7 @@ class AddTournament : AppCompatActivity() {
                     tournament?.location = locations
                     tournament?.venue = venues
                     tournament?.description = description
-                    tournament?.status = if (status == "Active") 1 else 0
+                    tournament?.status = if (status == "Upcoming") 0 else if (status == "Ongoing") 1 else if (status == "Finished") 2 else if (status == "Canceled") 3 else 4
 
                     CoroutineScope(Dispatchers.Main).launch {
                         tournament?.insertOrUpdate()
@@ -309,7 +308,13 @@ class AddTournament : AppCompatActivity() {
                 etPrizePool.text = tournament!!.prize_pool.toString()
                 etOrganizer.text = tournament!!.organizer
                 etType.setText(tournament!!.type)
-                etStatus.setText(if (tournament!!.status == 1L) "Active" else "Inactive", false)
+                etStatus.setText(
+                    if (tournament!!.status == 0L) "Upcoming"
+                    else if (tournament!!.status == 1L) "Ongoing"
+                    else if (tournament!!.status == 2L) "Finished"
+                    else if (tournament!!.status == 3L) "Canceled"
+                    else ""
+                )
                 etDescription.text = tournament!!.description
 
                 locations = tournament!!.location
@@ -339,7 +344,6 @@ class AddTournament : AppCompatActivity() {
                         "Upcoming",
                         "Ongoing",
                         "Finished",
-                        "Postponed",
                         "Canceled"
                     )
                 )

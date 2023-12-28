@@ -8,12 +8,14 @@ import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -43,9 +45,10 @@ class ManageMatch : AppCompatActivity() {
         setContentView(R.layout.activity_manage_match)
         val backBtn : ImageView = findViewById(R.id.backBtn)
         val addBtn : FloatingActionButton = findViewById(R.id.addMatchButton)
+        val loadingView : CircularProgressIndicator = findViewById(R.id.loading_indicator)
 
         backBtn.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
+            startActivity(Intent(this, AdminActivity::class.java))
         }
 
         addBtn.setOnClickListener {
@@ -55,6 +58,9 @@ class ManageMatch : AppCompatActivity() {
         }
 
         rvMatch = findViewById(R.id.viewMatch)
+
+        loadingView.visibility = View.VISIBLE
+
         CoroutineScope(Dispatchers.Main).launch {
             match = Match().get(limit = 50)
             playerHistories = PlayerHistory().get(limit = 3000)
@@ -120,6 +126,8 @@ class ManageMatch : AppCompatActivity() {
                     dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLACK)
                 }
             })
+
+            loadingView.visibility = View.GONE
 
             rvMatch.adapter = adapterP
             rvMatch.layoutManager = LinearLayoutManager(

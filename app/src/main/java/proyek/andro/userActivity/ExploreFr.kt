@@ -362,6 +362,7 @@ class ExploreFr : Fragment() {
             ongoingGroups.visibility = View.GONE
         }
 
+        Log.d("upcomingTourney", upcomingTournaments.map { it.name }.toString())
         // render upcoming section
         if (upcomingTournaments.size > 0) {
             val upcomingAdapter = ListAdapter(

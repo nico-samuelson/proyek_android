@@ -48,7 +48,7 @@ class ManageOrganizations : AppCompatActivity() {
         val addOrgButton: FloatingActionButton = findViewById(R.id.addOrgButton)
 
         backBtn.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
+            startActivity(Intent(this, AdminActivity::class.java))
         }
 
         addOrgButton.setOnClickListener {

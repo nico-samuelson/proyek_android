@@ -148,7 +148,9 @@ class ManagePlayers : AppCompatActivity() {
         etSearch.setHintTextColor(resources.getColor(R.color.disabled, null))
         etSearch.setTextColor(resources.getColor(R.color.white, null))
 
-        backBtn.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
+        backBtn.setOnClickListener {
+            startActivity(Intent(this, AdminActivity::class.java))
+        }
 
         // fab click listener
         addPlayerBtn.setOnClickListener {

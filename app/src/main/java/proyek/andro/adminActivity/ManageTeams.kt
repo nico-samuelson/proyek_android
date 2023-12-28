@@ -44,7 +44,7 @@ class ManageTeams : AppCompatActivity() {
         val addBtn : FloatingActionButton = findViewById(R.id.addTeamButton)
 
         backBtn.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
+            startActivity(Intent(this, AdminActivity::class.java))
         }
 
         addBtn.setOnClickListener {

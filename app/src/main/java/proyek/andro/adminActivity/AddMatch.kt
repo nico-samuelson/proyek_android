@@ -134,7 +134,15 @@ class AddMatch : AppCompatActivity() {
                 )
             }
 
-            (etStatus as MaterialAutoCompleteTextView).setSimpleItems(arrayOf("Active", "Inactive"))
+            (etStatus as MaterialAutoCompleteTextView).setSimpleItems(
+                arrayOf(
+                    "Upcoming",
+                    "Ongoing",
+                    "Finished",
+                    "Postponed",
+                    "Canceled"
+                )
+            )
             if (mode == "edit") {
                 pageTitle.text = "Edit Match"
                 submitBtn.text = "Save"
@@ -188,7 +196,7 @@ class AddMatch : AppCompatActivity() {
                             time,
                             score,
                             tournamentId,
-                            if (status == "Active") 1 else 0,
+                            if (status == "Upcoming") 0 else if (status == "Ongoing") 1 else if (status == "Finished") 2 else if (status == "Postponed") 3 else 4
                         )
 
                         var filteredPlayersTeam1 = players.filter {
@@ -236,7 +244,7 @@ class AddMatch : AppCompatActivity() {
                     match?.winner = winnerId
                     match?.score = score
                     match?.tournament = tournamentId
-                    match?.status = if (status == "Active") 1 else 0
+                    if (status == "Upcoming") 0 else if (status == "Ongoing") 1 else if (status == "Finished") 2 else if (status == "Postponed") 3 else 4
 
                     CoroutineScope(Dispatchers.Main).launch {
                         match?.insertOrUpdate()
@@ -277,7 +285,13 @@ class AddMatch : AppCompatActivity() {
 
                 etScore.text = match?.score
                 etTime.text = match?.time
-                etStatus.setText(if (match?.status == 1L) "Active" else "Inactive", false)
+                etStatus.setText(
+                    if (match?.status == 0L) "Upcoming"
+                    else if (match?.status == 1L) "Ongoing"
+                    else if (match?.status == 2L) "Finished"
+                    else if (match?.status == 3L) "Canceled"
+                    else ""
+                )
 
                 (etTeam1 as MaterialAutoCompleteTextView).setSimpleItems(
                     teams.map { "${it.name} - ${it.id}" }.toTypedArray()
@@ -295,6 +309,16 @@ class AddMatch : AppCompatActivity() {
                     teams.filter {
                         it.id == match?.team1 || it.id == match?.team2
                     }.map { "${it.name} - ${it.id}" }.toTypedArray()
+                )
+
+                (etStatus as MaterialAutoCompleteTextView).setSimpleItems(
+                    arrayOf(
+                        "Upcoming",
+                        "Ongoing",
+                        "Finished",
+                        "Postponed",
+                        "Canceled"
+                    )
                 )
 
                 (etTour as MaterialAutoCompleteTextView).setSimpleItems(
