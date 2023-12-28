@@ -17,9 +17,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import proyek.andro.R
-import proyek.andro.model.Game
 import proyek.andro.model.Match
-import proyek.andro.model.Organization
 import proyek.andro.model.Player
 import proyek.andro.model.PlayerHistory
 import proyek.andro.model.Team
@@ -199,7 +197,7 @@ class AddMatch : AppCompatActivity() {
                             if (status == "Upcoming") 0 else if (status == "Ongoing") 1 else if (status == "Finished") 2 else if (status == "Postponed") 3 else 4
                         )
 
-                        var filteredPlayersTeam1 = players.filter {
+                        val filteredPlayersTeam1 = players.filter {
                             it.team == team1ID
                         }
 
@@ -216,7 +214,7 @@ class AddMatch : AppCompatActivity() {
                             it.insertOrUpdate()
                         }
 
-                        var filteredPlayersTeam2 = players.filter {
+                        val filteredPlayersTeam2 = players.filter {
                             it.team == team2ID
                         }
 
@@ -244,7 +242,7 @@ class AddMatch : AppCompatActivity() {
                     match?.winner = winnerId
                     match?.score = score
                     match?.tournament = tournamentId
-                    if (status == "Upcoming") 0 else if (status == "Ongoing") 1 else if (status == "Finished") 2 else if (status == "Postponed") 3 else 4
+                    match?.status = if (status == "Upcoming") 0 else if (status == "Ongoing") 1 else if (status == "Finished") 2 else if (status == "Postponed") 3 else 4
 
                     CoroutineScope(Dispatchers.Main).launch {
                         match?.insertOrUpdate()

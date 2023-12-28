@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,7 +23,6 @@ import proyek.andro.R
 import proyek.andro.adapter.SimpleListAdapter
 import proyek.andro.model.Match
 import proyek.andro.model.PlayerHistory
-import proyek.andro.model.Tournament
 
 class ManageMatch : AppCompatActivity() {
     private var match : ArrayList<Match> = ArrayList()

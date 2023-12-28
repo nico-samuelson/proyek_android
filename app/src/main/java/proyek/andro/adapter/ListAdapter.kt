@@ -1,8 +1,6 @@
 package proyek.andro.adapter
 
 import android.annotation.SuppressLint
-import android.net.Uri
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,10 +16,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import proyek.andro.R
 import proyek.andro.helper.StorageHelper
-import proyek.andro.model.Tournament
-import java.time.LocalDate
-import java.time.format.TextStyle
-import java.util.Locale
 
 class ListAdapter (
     private var images : List<String>,

@@ -9,14 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.storage.FirebaseStorage
 import proyek.andro.R
 import proyek.andro.model.Game
-import proyek.andro.model.News
 import proyek.andro.model.UserFavorite
 
 class ManageFavoriteAdapter(
     private val listGames: ArrayList<Game>,
     private val listFavorite: ArrayList<UserFavorite>
 ) : RecyclerView.Adapter<ManageFavoriteAdapter.ListViewHolder>(){
-    private lateinit var onItemClickCallback: ManageFavoriteAdapter.OnItemClickCallback
+    private lateinit var onItemClickCallback: OnItemClickCallback
     val storageRef = FirebaseStorage.getInstance().reference
 
     interface OnItemClickCallback {
@@ -39,7 +38,7 @@ class ManageFavoriteAdapter(
     }
 
     override fun onBindViewHolder(holder: ManageFavoriteAdapter.ListViewHolder, position: Int) {
-        var game = listGames[position]
+        val game = listGames[position]
         holder.title.setText(game.name)
         if (listFavorite.find { it.game == game.id } != null) {
             holder.manage.setImageResource(R.drawable.ic_delete_24)
@@ -48,7 +47,7 @@ class ManageFavoriteAdapter(
         }
         holder.itemView.setOnClickListener { onItemClickCallback.onItemClicked(game, holder) }
     }
-    fun setOnItemClickCallback(onItemClickCallback: ManageFavoriteAdapter.OnItemClickCallback) {
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback
     }
 

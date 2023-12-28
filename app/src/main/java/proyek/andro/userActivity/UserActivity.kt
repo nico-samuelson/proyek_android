@@ -5,7 +5,6 @@ import android.content.res.ColorStateList
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.core.content.ContextCompat
 import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.firestore.Filter

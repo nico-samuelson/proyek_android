@@ -1,8 +1,6 @@
 package proyek.andro.userActivity
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,18 +8,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.progressindicator.CircularProgressIndicator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import proyek.andro.R
-import proyek.andro.adapter.FavoriteAdapter
 import proyek.andro.adapter.ManageFavoriteAdapter
-import proyek.andro.adapter.NewsAdapter
 import proyek.andro.model.Game
-import proyek.andro.model.News
 import proyek.andro.model.UserFavorite
 import java.util.UUID
 
@@ -36,7 +28,7 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class AddFavoriteFr : Fragment() {
-    lateinit var rvAddFavorite: RecyclerView
+    private lateinit var rvAddFavorite: RecyclerView
     lateinit var parent: UserActivity
     private var games = ArrayList<Game>()
     private var favorites = ArrayList<UserFavorite>()
@@ -93,7 +85,7 @@ class AddFavoriteFr : Fragment() {
                     }
                 } else {
                         CoroutineScope(Dispatchers.Main).launch {
-                            val delFav : UserFavorite? = favorites.filter { it.game == data.id }.first()
+                            val delFav : UserFavorite = favorites.filter { it.game == data.id }.first()
                             delFav!!.delete(favorites.filter { it.game == data.id }.first().id)
                             favorites = favorites.filter { it.game != data.id } as ArrayList<UserFavorite>
                             parent.setFavorites(favorites)

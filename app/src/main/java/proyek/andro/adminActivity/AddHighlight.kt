@@ -1,32 +1,20 @@
 package proyek.andro.adminActivity
 
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.content.Intent
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.KeyEvent
 import android.widget.AutoCompleteTextView
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
-import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import proyek.andro.R
-import proyek.andro.adapter.SimpleListAdapter2
 import proyek.andro.model.Highlights
 import proyek.andro.model.Tournament
-import proyek.andro.model.TournamentPhase
-import java.util.Calendar
 import java.util.UUID
 
 class AddHighlight : AppCompatActivity() {
@@ -83,7 +71,7 @@ class AddHighlight : AppCompatActivity() {
                     setTextColor(resources.getColor(R.color.black, null))
                 }.show()
             } else {
-                var title = etTitle.text.toString()
+                val title = etTitle.text.toString()
                 val tournament = etTournament.text.toString()
                 val thumbnail = etThumbnail.text.toString()
                 val link = etLink.text.toString()

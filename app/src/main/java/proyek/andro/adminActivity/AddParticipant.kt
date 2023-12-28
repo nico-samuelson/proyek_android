@@ -1,29 +1,19 @@
 package proyek.andro.adminActivity
 
 import android.content.Intent
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.AutoCompleteTextView
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.firebase.firestore.Filter
-import com.google.firebase.storage.FirebaseStorage
-import com.squareup.picasso.NetworkPolicy
-import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import proyek.andro.R
-import proyek.andro.helper.StorageHelper
-import proyek.andro.model.Game
 import proyek.andro.model.Participant
-import proyek.andro.model.Player
 import proyek.andro.model.Team
 import proyek.andro.model.Tournament
 import java.util.UUID
@@ -39,7 +29,6 @@ class AddParticipant : AppCompatActivity() {
     private var tournaments : ArrayList<Tournament> = ArrayList()
     private var mode : String? = null
     private var name : String? = null
-    private var player : Player? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_participant)

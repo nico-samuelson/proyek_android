@@ -10,9 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import proyek.andro.R
 import proyek.andro.adapter.NewsAdapter
-import proyek.andro.adapter.TournamentCarouselAdapter
 import proyek.andro.model.News
-import proyek.andro.model.Tournament
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -56,7 +54,7 @@ class NewsFr : Fragment() {
         news = parent.getNews()
         rvNews = view.findViewById(R.id.rvNews)
         rvNews.layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
-        var newsAdapter = NewsAdapter(news)
+        val newsAdapter = NewsAdapter(news)
         newsAdapter.setOnItemClickCallback(object : NewsAdapter.OnItemClickCallback {
             override fun onItemClicked(data: News) {
                 val intent = Intent(requireContext(),  NewsDetail::class.java)

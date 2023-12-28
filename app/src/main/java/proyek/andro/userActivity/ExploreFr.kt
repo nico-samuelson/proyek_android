@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,16 +29,13 @@ import proyek.andro.R
 import proyek.andro.adapter.ListAdapter
 import proyek.andro.adapter.MatchCarouselAdapter
 import proyek.andro.adapter.TournamentCarouselAdapter
-import proyek.andro.adminActivity.ManageTeams
 import proyek.andro.helper.StorageHelper
 import proyek.andro.model.Match
 import proyek.andro.model.Team
 import proyek.andro.model.Tournament
-import proyek.andro.model.UserFavorite
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
-import java.util.UUID
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

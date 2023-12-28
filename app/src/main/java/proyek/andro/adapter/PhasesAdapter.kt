@@ -3,7 +3,6 @@ package proyek.andro.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.TableLayout
 import android.widget.TableRow
@@ -64,7 +63,7 @@ class PhasesAdapter(
 
             row.addView(arrowRight)
 
-            var cell = TextView(holder.tlPhase.context)
+            val cell = TextView(holder.tlPhase.context)
             cell.maxLines = 2
             cell.text = data
             cell.textSize = 13f

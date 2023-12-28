@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,7 +21,6 @@ import proyek.andro.helper.StorageHelper
 import proyek.andro.model.Organization
 import proyek.andro.model.Player
 import proyek.andro.model.Team
-import proyek.andro.model.Tournament
 
 class TeamProfile : AppCompatActivity() {
     private var players : ArrayList<Player> = ArrayList()

@@ -48,7 +48,7 @@ class UserHomepageFr : Fragment() {
     lateinit var parent: UserActivity
     var job: Job? = null
 
-    private val organizations : ArrayList<Organization> = ArrayList()
+//    private val organizations : ArrayList<Organization> = ArrayList()
     lateinit var organizationsRV : RecyclerView
 //    private val players : ArrayList<Player> = ArrayList()
 //    lateinit var playersRV : RecyclerView

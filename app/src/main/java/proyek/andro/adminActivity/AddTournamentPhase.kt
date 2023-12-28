@@ -1,9 +1,7 @@
 package proyek.andro.adminActivity
 
 import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.content.Intent
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -16,11 +14,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
-import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import proyek.andro.R
 import proyek.andro.adapter.SimpleListAdapter2
 import proyek.andro.model.Tournament
@@ -105,7 +101,7 @@ class AddTournamentPhase : AppCompatActivity() {
                     setTextColor(resources.getColor(R.color.black, null))
                 }.show()
             } else {
-                var name = etName.text.toString()
+                val name = etName.text.toString()
                 val tournament = etTournament.text.toString()
                 val startDate = etStartDate.text.toString()
                 val endDate = etEndDate.text.toString()

@@ -3,31 +3,20 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import proyek.andro.R
 import android.content.Intent
-import android.graphics.Color
-import android.util.Log
 import android.view.View
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.firebase.firestore.Filter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import proyek.andro.adapter.SimpleListAdapter
 import proyek.andro.adapter.SimpleListAdapter2
 import proyek.andro.model.Highlights
-import proyek.andro.model.Participant
-import proyek.andro.model.Team
 import proyek.andro.model.Tournament
-import proyek.andro.model.TournamentPhase
 
 class ManageHighlights : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
@@ -23,8 +22,6 @@ import proyek.andro.R
 import proyek.andro.adapter.SimpleListAdapter
 import proyek.andro.helper.StorageHelper
 import proyek.andro.model.News
-import proyek.andro.model.Player
-import proyek.andro.model.Team
 
 class ManageNews : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,8 +35,8 @@ class ManageNews : AppCompatActivity() {
         val rvNews : RecyclerView = findViewById(R.id.viewNews)
 
         var news : ArrayList<News> = ArrayList()
-        var images : ArrayList<String> = ArrayList()
-        var names : ArrayList<String> = ArrayList()
+        val images : ArrayList<String> = ArrayList()
+        val names : ArrayList<String> = ArrayList()
 
         var filteredNews : ArrayList<News> = ArrayList()
         var filteredImages : ArrayList<String> = ArrayList()
@@ -47,7 +44,7 @@ class ManageNews : AppCompatActivity() {
 
         lateinit var adapterN : SimpleListAdapter
 
-        var search_view : SearchView = findViewById(R.id.search_view)
+        val search_view : SearchView = findViewById(R.id.search_view)
         val etSearch = search_view.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
         etSearch.setHintTextColor(resources.getColor(R.color.disabled, null))
         etSearch.setTextColor(resources.getColor(R.color.white, null))

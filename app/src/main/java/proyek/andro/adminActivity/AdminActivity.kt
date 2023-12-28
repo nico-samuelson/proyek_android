@@ -39,7 +39,7 @@ class AdminActivity : AppCompatActivity() {
         val sp = getSharedPreferences("login_session", MODE_PRIVATE)
 
         // log in as admin
-        val job = CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.Main).launch {
             val users = User().get<User>(
                 filter = Filter.and(
                     Filter.equalTo("role", 1L),

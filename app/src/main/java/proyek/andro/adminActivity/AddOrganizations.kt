@@ -18,7 +18,6 @@ import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.w3c.dom.Text
 import proyek.andro.R
 import proyek.andro.helper.StorageHelper
 import proyek.andro.model.Organization
@@ -93,7 +92,7 @@ class AddOrganizations : AppCompatActivity() {
                 if (mode == "add") {
                     if (imageURI != null) {
                         CoroutineScope(Dispatchers.Main).launch {
-                            val logo = uploadPhoto(imageURI!!)
+//                            val logo = uploadPhoto(imageURI!!)
                             val newOrg = Organization(
                                 UUID.randomUUID().toString(),
                                 name,
@@ -194,7 +193,7 @@ class AddOrganizations : AppCompatActivity() {
 
                 var signal = true
                 val formattedLogo =
-                    "logo_" + organization?.name?.replace(" ", "_")?.toLowerCase() + ".png"
+                    "logo_" + organization?.name?.replace(" ", "_")?.lowercase() + ".png"
 
                 storageRef.child("logo/orgs/${formattedLogo}").downloadUrl
                     .addOnSuccessListener {

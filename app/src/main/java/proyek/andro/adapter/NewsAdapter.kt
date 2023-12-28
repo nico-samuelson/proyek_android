@@ -1,25 +1,17 @@
 package proyek.andro.adapter
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import proyek.andro.R
 import proyek.andro.model.News
-import proyek.andro.userActivity.NewsDetail
-
 class NewsAdapter (
     private val listNews: ArrayList<News>
 ) : RecyclerView.Adapter<NewsAdapter.ListViewHolder> () {
-    private lateinit var onItemClickCallback: NewsAdapter.OnItemClickCallback
+    private lateinit var onItemClickCallback: OnItemClickCallback
     val storageRef = FirebaseStorage.getInstance().reference
     interface OnItemClickCallback {
         fun onItemClicked(data : News)
@@ -36,7 +28,7 @@ class NewsAdapter (
     }
 
     override fun onBindViewHolder(holder: NewsAdapter.ListViewHolder, position: Int) {
-        var news = listNews[position]
+        val news = listNews[position]
 
         holder._newsTitle.setText(news.title)
         holder._newsAuthor.setText(news.author)
@@ -47,7 +39,7 @@ class NewsAdapter (
     override fun getItemCount(): Int {
         return listNews.size
     }
-    fun setOnItemClickCallback(onItemClickCallback: NewsAdapter.OnItemClickCallback) {
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback
     }
 

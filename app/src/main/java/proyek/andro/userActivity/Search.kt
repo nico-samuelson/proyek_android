@@ -54,9 +54,9 @@ class Search : AppCompatActivity() {
         game_result.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
         // create rv adapter
-        var adapterT = ListAdapter(tournaments.map { it.logo }, tournaments.map { it.name }, tournaments.map { "Tournament" }, "logo/tournaments")
-        var adapterP = ListAdapter(players.map { it.photo }, players.map { it.name }, players.map { "Player" }, "")
-        var adapterG = ListAdapter(games.map { it.logo }, games.map { it.name }, games.map { "Game" }, "logo/games")
+        val adapterT = ListAdapter(tournaments.map { it.logo }, tournaments.map { it.name }, tournaments.map { "Tournament" }, "logo/tournaments")
+        val adapterP = ListAdapter(players.map { it.photo }, players.map { it.name }, players.map { "Player" }, "")
+        val adapterG = ListAdapter(games.map { it.logo }, games.map { it.name }, games.map { "Game" }, "logo/games")
 
         // set adapter onclick
         adapterT.setOnItemClickCallback(object : ListAdapter.OnItemClickCallback {

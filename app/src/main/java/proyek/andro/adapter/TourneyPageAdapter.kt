@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import proyek.andro.R
-import proyek.andro.model.Tournament
 import proyek.andro.userActivity.TournamentExtension.TourneyString
 
 class TourneyPageAdapter(

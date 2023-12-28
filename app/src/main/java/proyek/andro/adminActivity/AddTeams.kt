@@ -1,7 +1,6 @@
 package proyek.andro.adminActivity
 
 import android.content.Intent
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -12,8 +11,6 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.firebase.firestore.Filter
-import com.google.firebase.storage.FirebaseStorage
-import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,7 +18,6 @@ import proyek.andro.R
 import proyek.andro.model.Game
 import proyek.andro.model.Organization
 import proyek.andro.model.Team
-import java.util.Locale
 import java.util.UUID
 
 class AddTeams : AppCompatActivity() {
@@ -40,7 +36,7 @@ class AddTeams : AppCompatActivity() {
     private lateinit var etOrg: AutoCompleteTextView
     private lateinit var etDescription: TextView
 
-    private val storageRef = FirebaseStorage.getInstance().reference
+//    private val storageRef = FirebaseStorage.getInstance().reference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

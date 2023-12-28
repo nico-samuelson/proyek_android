@@ -1,6 +1,5 @@
 package proyek.andro.adminActivity
 
-import android.animation.ValueAnimator.AnimatorUpdateListener
 import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
@@ -21,7 +20,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import proyek.andro.R
 import proyek.andro.adapter.SimpleListAdapter
-import proyek.andro.model.Team
 import proyek.andro.model.Tournament
 
 class ManageTournament : AppCompatActivity() {

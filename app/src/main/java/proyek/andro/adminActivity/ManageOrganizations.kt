@@ -8,12 +8,10 @@ import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -24,7 +22,6 @@ import proyek.andro.R
 import proyek.andro.adapter.SimpleListAdapter
 import proyek.andro.helper.StorageHelper
 import proyek.andro.model.Organization
-import proyek.andro.model.Player
 
 class ManageOrganizations : AppCompatActivity() {
     private var organizations: ArrayList<Organization> = ArrayList()

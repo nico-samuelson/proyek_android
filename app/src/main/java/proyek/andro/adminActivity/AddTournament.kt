@@ -1,10 +1,8 @@
 package proyek.andro.adminActivity
 
 import android.content.Intent
-import android.hardware.camera2.CameraManager.TorchCallback
 import android.net.Uri
 import android.os.Bundle
-import android.support.annotation.ArrayRes
 import android.util.Log
 import android.view.KeyEvent
 import android.widget.AutoCompleteTextView
@@ -12,7 +10,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.ItemTouchUIUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
@@ -25,11 +22,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import proyek.andro.R
-import proyek.andro.adapter.SimpleListAdapter
 import proyek.andro.adapter.SimpleListAdapter2
 import proyek.andro.helper.StorageHelper
 import proyek.andro.model.Game
-import proyek.andro.model.Participant
 import proyek.andro.model.Team
 import proyek.andro.model.Tournament
 import java.util.UUID

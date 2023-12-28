@@ -3,19 +3,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import proyek.andro.R
 import android.content.Intent
-import android.graphics.Color
-import android.util.Log
 import android.view.View
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.firebase.firestore.Filter
 import kotlinx.coroutines.CoroutineScope
@@ -23,8 +16,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import proyek.andro.adapter.SimpleListAdapter
 import proyek.andro.adapter.SimpleListAdapter2
-import proyek.andro.model.Participant
-import proyek.andro.model.Team
 import proyek.andro.model.Tournament
 import proyek.andro.model.TournamentPhase
 
@@ -108,33 +99,6 @@ class ManagePhases : AppCompatActivity() {
             val intent = Intent(this, AddTournamentPhase::class.java)
             intent.putExtra("mode", "add")
             startActivity(intent)
-        }
-    }
-
-    fun filterPhase() {
-        filteredPhases.clear()
-        filteredNames.clear()
-
-        if (searchText == "") {
-            filteredPhases.addAll(phases.filter {
-                it.name != ""
-            } as ArrayList<TournamentPhase>)
-        } else {
-            filteredPhases = phases.filter {
-                it.name.contains(searchText, ignoreCase = true)
-            } as ArrayList<TournamentPhase>
-        }
-
-        filteredNames = filteredPhases.map { it.name } as ArrayList<String>
-
-        if (filteredPhases.isEmpty()) {
-            rvPhases.visibility = View.GONE
-        } else {
-            rvPhases.visibility = View.VISIBLE
-        }
-
-        CoroutineScope(Dispatchers.Main).launch {
-            adapterP.setData(filteredNames, filteredNames)
         }
     }
 }

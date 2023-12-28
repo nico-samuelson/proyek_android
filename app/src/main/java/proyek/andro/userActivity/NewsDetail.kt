@@ -13,10 +13,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import proyek.andro.R
-import proyek.andro.helper.StorageHelper
-import proyek.andro.model.News
-import java.io.Serializable
-import kotlin.math.log
 
 class NewsDetail : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +23,7 @@ class NewsDetail : AppCompatActivity() {
         val dateNews = intent.getStringExtra("date")
         val contentNews = intent.getStringExtra("content")
         val imageNews = intent.getStringExtra("image")
-        var imageURI : Uri? = null
+//        var imageURI : Uri? = null
         val storageRef = FirebaseStorage.getInstance().reference
         val imageV = findViewById<ImageView>(R.id.imageNews)
         Log.d("imageNews",imageNews!!)

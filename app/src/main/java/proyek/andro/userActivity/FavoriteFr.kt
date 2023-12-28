@@ -1,15 +1,11 @@
 package proyek.andro.userActivity
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -17,16 +13,13 @@ import com.google.android.material.progressindicator.CircularProgressIndicator
 import kotlinx.coroutines.Job
 import proyek.andro.R
 import proyek.andro.adapter.FavoriteAdapter
-import proyek.andro.adminActivity.AddNews
-
-import proyek.andro.model.Game
 import proyek.andro.model.UserFavorite
 
 class FavoriteFr : Fragment() {
     lateinit var rvFavorite: RecyclerView
     lateinit var parent: UserActivity
 
-    var favorites = ArrayList<Uri>()
+//    var favorites = ArrayList<Uri>()
 
     var job: Job? = null
 
@@ -137,9 +130,5 @@ class FavoriteFr : Fragment() {
 //        val adapter = FavoriteRVAdapter(parent.getFavorites())
 //        adapter.itemCount
 //        rvFavorite.adapter = adapter
-    }
-
-    fun showData() {
-
     }
 }

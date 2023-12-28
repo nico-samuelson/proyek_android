@@ -61,7 +61,7 @@ class Login : AppCompatActivity() {
             if (password.length == 0) tilPassword.error = "Password is required"
 
             if (email.length > 0 && password.length > 0) {
-                var job = CoroutineScope(Dispatchers.Main).launch {
+                val job = CoroutineScope(Dispatchers.Main).launch {
                     user = User().get(filter = Filter.equalTo("email", email), order = arrayOf(arrayOf("email", "ASC")))
                 }
 

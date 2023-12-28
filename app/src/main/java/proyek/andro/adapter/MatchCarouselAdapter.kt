@@ -1,7 +1,5 @@
 package proyek.andro.adapter
 
-import android.content.Context
-import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,25 +7,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.tasks.Task
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Callback
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
-import com.squareup.picasso.RequestCreator
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import proyek.andro.R
-import proyek.andro.helper.StorageHelper
 import proyek.andro.model.Match
 import proyek.andro.model.Team
-import proyek.andro.model.Tournament
-import java.time.LocalDate
-import java.time.format.TextStyle
-import java.util.Locale
-import kotlin.coroutines.resume
 
 class MatchCarouselAdapter (
     private val matches : ArrayList<Match>,
@@ -68,14 +54,14 @@ class MatchCarouselAdapter (
 
         if (match.score != "") {
             if (scores[0] > scores[1]) {
-                holder.team1Score.setTextColor(holder.itemView.context.resources.getColor(R.color.primary))
-                holder.team2Score.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
+                holder.team1Score.setTextColor(holder.itemView.context.resources.getColor(R.color.primary, null))
+                holder.team2Score.setTextColor(holder.itemView.context.resources.getColor(R.color.white, null))
             } else if (scores[0] < scores[1]) {
-                holder.team1Score.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
-                holder.team2Score.setTextColor(holder.itemView.context.resources.getColor(R.color.primary))
+                holder.team1Score.setTextColor(holder.itemView.context.resources.getColor(R.color.white, null))
+                holder.team2Score.setTextColor(holder.itemView.context.resources.getColor(R.color.primary, null))
             } else {
-                holder.team1Score.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
-                holder.team2Score.setTextColor(holder.itemView.context.resources.getColor(R.color.white))
+                holder.team1Score.setTextColor(holder.itemView.context.resources.getColor(R.color.white, null))
+                holder.team2Score.setTextColor(holder.itemView.context.resources.getColor(R.color.white, null))
             }
         }
 
