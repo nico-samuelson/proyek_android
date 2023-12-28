@@ -3,19 +3,25 @@ package proyek.andro.adminActivity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import android.widget.AutoCompleteTextView
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import proyek.andro.R
+import proyek.andro.adapter.SimpleListAdapter2
 import proyek.andro.model.Tournament
 import proyek.andro.model.TournamentPhase
 import java.util.Calendar
@@ -34,6 +40,12 @@ class AddTournamentPhase : AppCompatActivity() {
     private lateinit var etTournament: AutoCompleteTextView
     private lateinit var etStartDate: TextView
     private lateinit var etEndDate: TextView
+    private lateinit var rvDetail: RecyclerView
+    private lateinit var etDetail: TextView
+
+
+    var listDetail = listOf<String>()
+    var AdapterDetail: SimpleListAdapter2? = null
 
     //    private lateinit var etDetail : Spinner
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +56,8 @@ class AddTournamentPhase : AppCompatActivity() {
         etTournament = findViewById(R.id.etTournament)
         etStartDate = findViewById(R.id.etStartDate)
         etEndDate = findViewById(R.id.etEndDate)
+        etDetail = findViewById(R.id.etDetail)
+        rvDetail = findViewById(R.id.rvDetail)
 
 //        detail = listOf(
 //            "16 teams are divided into 4 groups", "Single Round Robin",
@@ -120,7 +134,7 @@ class AddTournamentPhase : AppCompatActivity() {
                             name,
                             startDate,
                             endDate,
-                            detail = listOf()
+                            listDetail
                         )
 
                         newTournamentPhase.insertOrUpdate()
@@ -131,6 +145,7 @@ class AddTournamentPhase : AppCompatActivity() {
                     phase?.tournament = tournamentId
                     phase?.start_date = startDate
                     phase?.end_date = endDate
+                    phase?.detail = listDetail
 
                     CoroutineScope(Dispatchers.Main).launch {
                         phase?.insertOrUpdate()
@@ -139,6 +154,33 @@ class AddTournamentPhase : AppCompatActivity() {
                 }
             }
         }
+        AdapterDetail = SimpleListAdapter2(listDetail)
+
+        AdapterDetail?.setOnItemClickCallback(object : SimpleListAdapter2.OnItemClickCallback {
+            override fun onItemClicked(data: String) {
+
+            }
+
+            override fun delData(pos: Int) {
+                listDetail = listDetail.filterIndexed {index, s ->  index != pos  }
+                AdapterDetail?.setData(listDetail)
+            }
+        })
+
+        etDetail.setOnKeyListener { v, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                listDetail = listDetail + etDetail.text.toString()
+                Log.d("venues", listDetail.toString())
+                AdapterDetail?.setData(listDetail)
+                etDetail.text = null
+                etDetail.clearFocus()
+            }
+            false
+
+        }
+
+        rvDetail.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false)
+        rvDetail.adapter = AdapterDetail
     }
 
     fun showEdit() {
@@ -164,6 +206,9 @@ class AddTournamentPhase : AppCompatActivity() {
 //            )
             etStartDate.text = phase?.start_date
             etEndDate.text = phase?.end_date
+
+            listDetail = phase!!.detail
+            AdapterDetail?.setData(listDetail)
         }
     }
 
@@ -172,7 +217,7 @@ class AddTournamentPhase : AppCompatActivity() {
             etName.text.toString().isEmpty() ||
             etTournament.text.toString().isEmpty() ||
             etStartDate.text.toString().isEmpty() ||
-            etEndDate.text.toString().isEmpty()
+            etEndDate.text.toString().isEmpty() || listDetail.size == 0
         ) {
             return false
         }

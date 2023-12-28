@@ -71,21 +71,23 @@ class AddFavoriteFr : Fragment() {
         var gamesAdapter = ManageFavoriteAdapter(games,favorites)
         gamesAdapter.setOnItemClickCallback(object : ManageFavoriteAdapter.OnItemClickCallback {
             override fun onItemClicked(data: Game) {
-                if (favorites.map { it.game == data.id }.first()) {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        data.delete(favorites.filter { it.game == data.id }.first().id)
-                    }
+                if (favorites.find { it.game == data?.id }?.id?.length!! >= 0) {
+//                    CoroutineScope(Dispatchers.Main).launch {
+//                        data.delete(favorites.filter { it.game == data.id }.first().id)
+//                    }
                     Log.d("delete Favorite", favorites.filter { it.game == data.id }.first().id)
+                    Log.d("delete Favorite", games.find { it.id == data.id }!!.name)
                 } else {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val newFavorite = UserFavorite(
-                            UUID.randomUUID().toString(),
-                            parent.getUser()!!.id,
-                            data.id
-                        )
-                        newFavorite.insertOrUpdate()
-                        Log.d("add Favorite", newFavorite.user)
-                    }
+//                    CoroutineScope(Dispatchers.Main).launch {
+//                        val newFavorite = UserFavorite(
+//                            UUID.randomUUID().toString(),
+//                            parent.getUser()!!.id,
+//                            data.id
+//                        )
+//                        newFavorite.insertOrUpdate()
+//                        Log.d("add Favorite", newFavorite.user)
+//                    }
+                    Log.d("insertFavorite",data.name)
 
                 }
             }
@@ -97,6 +99,7 @@ class AddFavoriteFr : Fragment() {
         })
         rvAddFavorite.adapter = gamesAdapter
     }
+
 
     companion object {
         /**

@@ -135,13 +135,26 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:gravity="center"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Detail">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etDetail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="@color/white" />
+        </com.google.android.material.textfield.TextInputLayout>
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/etDetail"
+            android:id="@+id/rvDetail"
+            android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
     </LinearLayout>

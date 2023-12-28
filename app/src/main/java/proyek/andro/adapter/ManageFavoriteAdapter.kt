@@ -41,7 +41,7 @@ class ManageFavoriteAdapter(
     override fun onBindViewHolder(holder: ManageFavoriteAdapter.ListViewHolder, position: Int) {
         var game = listGames[position]
         holder.title.setText(game.name)
-        if (listFavorite.map { it.game == game.id }.first()) {
+        if (listFavorite.find { it.game == game.id } != null) {
             holder.manage.setImageResource(R.drawable.ic_delete_24)
         } else {
             holder.manage.setImageResource(R.drawable.add)
