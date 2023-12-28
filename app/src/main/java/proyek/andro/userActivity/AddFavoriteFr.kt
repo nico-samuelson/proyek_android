@@ -11,6 +11,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -69,26 +70,54 @@ class AddFavoriteFr : Fragment() {
         rvAddFavorite = view.findViewById(R.id.rvManageFav)
         rvAddFavorite.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
         var gamesAdapter = ManageFavoriteAdapter(games,favorites)
+        val backBtn: ImageView = view.findViewById(R.id.backBtn)
+
+        backBtn.setOnClickListener {
+            parent.onBackPressedDispatcher.onBackPressed()
+        }
         gamesAdapter.setOnItemClickCallback(object : ManageFavoriteAdapter.OnItemClickCallback {
             override fun onItemClicked(data: Game) {
-                if (favorites.find { it.game == data?.id }?.id?.length!! >= 0) {
-//                    CoroutineScope(Dispatchers.Main).launch {
-//                        data.delete(favorites.filter { it.game == data.id }.first().id)
-//                    }
-                    Log.d("delete Favorite", favorites.filter { it.game == data.id }.first().id)
-                    Log.d("delete Favorite", games.find { it.id == data.id }!!.name)
+                if (favorites.size < 1) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val newFavorite = UserFavorite(
+                            UUID.randomUUID().toString(),
+                            parent.getUser()!!.id,
+                            data.id
+                        )
+                        newFavorite.insertOrUpdate()
+                        Log.d("favorite", newFavorite.user)
+                        favorites.add(newFavorite)
+                        gamesAdapter = ManageFavoriteAdapter(games,favorites)
+                        gamesAdapter.notifyDataSetChanged()
+                    }
                 } else {
-//                    CoroutineScope(Dispatchers.Main).launch {
-//                        val newFavorite = UserFavorite(
-//                            UUID.randomUUID().toString(),
-//                            parent.getUser()!!.id,
-//                            data.id
-//                        )
-//                        newFavorite.insertOrUpdate()
-//                        Log.d("add Favorite", newFavorite.user)
-//                    }
-                    Log.d("insertFavorite",data.name)
+                    if (favorites.find { it.game == data?.id } != null) {
+//                        CoroutineScope(Dispatchers.Main).launch {
+//                            val delFav : UserFavorite? = favorites.filter { it.game == data.id }.first()
+//                            delFav!!.delete(favorites.filter { it.game == data.id }.first().id)
+//                        }
+                        Log.d("favorite", favorites.find { it.game == data.id }!!.id)
+                        Log.d("favorite", games.find { it.id == favorites.find { it.game == data.id }!!.game }!!.name)
+                        favorites = favorites.filter { it.game != data.id } as ArrayList<UserFavorite>
+                        gamesAdapter = ManageFavoriteAdapter(games,favorites)
+                        gamesAdapter.notifyDataSetChanged()
+                    } else {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            val newFavorite = UserFavorite(
+                                UUID.randomUUID().toString(),
+                                parent.getUser()!!.id,
+                                data.id
+                            )
+                            newFavorite.insertOrUpdate()
+                            favorites.add(newFavorite)
+                            gamesAdapter = ManageFavoriteAdapter(games,favorites)
+                            gamesAdapter.notifyDataSetChanged()
+                            Log.d("add Favorite", newFavorite.user)
+                        }
+                        Log.d("favorite",data.name)
 
+
+                    }
                 }
             }
 
