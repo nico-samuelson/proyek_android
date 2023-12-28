@@ -62,4 +62,18 @@ class TournamentPhase : BaseModel {
             tournamentPhase
         }.firstOrNull()
     }
+
+    suspend fun findByTournament(id : String) : ArrayList<TournamentPhase> {
+        val data = ArrayList<TournamentPhase>()
+
+        val res = collectionRef.whereEqualTo("tournament", id)
+            .get()
+            .await()
+
+        res.forEach { result ->
+            data.add(convertToClass(result.data))
+        }
+
+        return data
+    }
 }
